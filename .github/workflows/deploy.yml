@@ -22,30 +22,35 @@ jobs:
 
     steps:
       - name: Baixar repositório
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Conferir ambiente
         run: |
+          echo "=== Node/NPM ==="
           node --version
           npm --version
+          echo "=== Pasta atual ==="
           pwd
+          echo "=== Arquivos da raiz ==="
           ls -la
+          echo "=== package.json ==="
           cat package.json
-
-      - name: Limpar cache local do npm
-        run: npm cache clean --force
+          echo "=== workflows ==="
+          ls -la .github/workflows || true
 
       - name: Instalar dependências
         run: npm install --no-audit --no-fund --legacy-peer-deps
 
       - name: Conferir Next instalado
         run: |
-          ls -la node_modules/.bin
+          echo "=== node_modules/.bin ==="
+          ls -la node_modules/.bin || true
+          echo "=== Next version ==="
           ./node_modules/.bin/next --version
 
       - name: Gerar site estático
@@ -56,6 +61,7 @@ jobs:
 
       - name: Conferir saída estática
         run: |
+          echo "=== Pasta out ==="
           test -d out
           ls -la out
 
