@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -28,7 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Conferir ambiente
         run: |
@@ -36,17 +35,24 @@ jobs:
           npm --version
           pwd
           ls -la
+          cat package.json
+
+      - name: Limpar cache local do npm
+        run: npm cache clean --force
 
       - name: Instalar dependências
-        run: npm install
+        run: npm install --no-audit --no-fund --legacy-peer-deps
 
-      - name: Conferir scripts do package.json
-        run: npm run
+      - name: Conferir Next instalado
+        run: |
+          ls -la node_modules/.bin
+          ./node_modules/.bin/next --version
 
       - name: Gerar site estático
         run: npm run build
         env:
           GITHUB_PAGES: "true"
+          NEXT_TELEMETRY_DISABLED: "1"
 
       - name: Conferir saída estática
         run: |

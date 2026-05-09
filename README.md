@@ -1,10 +1,6 @@
-# Falhas SP
+# Falhas SP — Dashboard de Ocorrências Metroferroviárias
 
-Dashboard público de ocorrências metroferroviárias de São Paulo, preparado para publicação no GitHub Pages do repositório:
-
-```text
-https://github.com/gabbass/falhas_sp
-```
+Dashboard público em Next.js para visualização das ocorrências metroferroviárias da RMSP.
 
 ## Rodar localmente
 
@@ -19,30 +15,35 @@ Acesse:
 http://localhost:3000
 ```
 
-## Publicar no GitHub Pages
+## Publicação no GitHub Pages
 
-Este projeto já está configurado para exportação estática do Next.js e publicação via GitHub Actions.
+Este projeto está configurado para o repositório:
 
-No GitHub, faça:
+```text
+https://github.com/gabbass/falhas_sp.git
+```
 
-1. Abra o repositório `gabbass/falhas_sp`.
-2. Vá em **Settings**.
-3. Entre em **Pages**.
-4. Em **Source**, selecione **GitHub Actions**.
-5. Salve.
-6. Faça push na branch `main`.
-
-O site público ficará em:
+Quando publicado pelo GitHub Actions, o painel fica em:
 
 ```text
 https://gabbass.github.io/falhas_sp/
 ```
 
-## Observação técnica
+No GitHub, confirme em:
 
-O arquivo `next.config.ts` aplica `basePath` e `assetPrefix` somente quando a variável `GITHUB_PAGES=true` estiver ativa. Assim:
+```text
+Settings → Pages → Source → GitHub Actions
+```
 
-- localmente roda em `/`;
-- no GitHub Pages roda em `/falhas_sp/`.
+## Build local estático
 
-O workflow `.github/workflows/deploy.yml` já define essa variável durante o build.
+```powershell
+$env:GITHUB_PAGES="true"
+npm run build
+```
+
+A saída estática será gerada em:
+
+```text
+out/
+```

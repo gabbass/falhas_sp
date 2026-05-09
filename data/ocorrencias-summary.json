@@ -17,7 +17,7 @@
     "horasOperacaoAnoPorLinha": 2548.417,
     "horasOperacaoPeriodoPorLinha": 2548.417,
     "metodoDuracao": "Cada status de uma linha permanece vigente até o próximo status observado da mesma linha. O intervalo é recortado para a janela operacional padrão de 04:00 a 24:00 e para o período parcial da base. Quando há registros duplicados no mesmo horário para a mesma linha, prevalece o status de maior severidade.",
-    "regraDisponibilidade": "Disponível = operação normal/circulação/atividade operacional. Evento especial = Operação Especial, destacado em azul. Com falha/parcial = velocidade reduzida, operação parcial, impacto pontual ou maiores intervalos. Falha total/paralisação = somente paralisação explícita/problema offline de circulação. Dados/Status indisponíveis ficam em categoria própria e não entram como falha. Operação Encerrada é mantida para exibir horário de fechamento e não entra no denominador operacional.",
+    "regraDisponibilidade": "Disponível = operação normal; Evento especial = operação diferenciada/especial; Ocorrência operacional = falhas ou impactos não programados; Manutenção programada = atividade planejada; Falha total/paralisação = paralisação explícita; Dados/Status indisponíveis ficam separados.",
     "observacaoDenominador": "O tempo total esperado de operação usa 20 horas por dia por linha, de 01/01/2026 até 08/05/2026 12:25. Como a data final é parcial, os filtros recalculam o denominador apenas para o período efetivamente coberto.",
     "cores": {
       "disponivel": "#007A5E",
@@ -71,7 +71,8 @@
     "estados": [
       "Disponível",
       "Evento especial",
-      "Com falha ou parcial",
+      "Ocorrência operacional",
+      "Manutenção programada",
       "Falha total / paralisação",
       "Dados/Status indisponíveis",
       "Operação encerrada"
@@ -879,11 +880,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.083
       }
@@ -1078,11 +1079,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 1.083
       }
@@ -1166,11 +1167,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.333
       }
@@ -1348,11 +1349,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.333
       }
@@ -1456,11 +1457,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 4.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 4.333
       }
@@ -1564,11 +1565,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.75
       }
@@ -1709,11 +1710,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.083
       }
@@ -1888,11 +1889,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.667
       }
@@ -1959,11 +1960,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 1.0
       }
@@ -1993,11 +1994,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -2138,11 +2139,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.833
       }
@@ -2210,11 +2211,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.167
       }
@@ -2843,11 +2844,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.5
       }
@@ -2914,11 +2915,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.667
       }
@@ -2948,11 +2949,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -3241,11 +3242,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -3307,11 +3308,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -3857,11 +3858,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.083
       }
@@ -4329,11 +4330,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {}
     },
     {
@@ -6100,11 +6101,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -6208,11 +6209,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.4,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.4
       }
@@ -6353,11 +6354,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.5
       }
@@ -6424,11 +6425,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.167
       }
@@ -6458,11 +6459,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.167
       }
@@ -7080,11 +7081,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -7151,11 +7152,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.25
       }
@@ -7222,11 +7223,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.167
       }
@@ -7256,11 +7257,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -7401,11 +7402,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -7509,11 +7510,11 @@
       "linha": "Linha 1-Azul",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.583
       }
@@ -8070,11 +8071,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de alagamento na via, os trens não estão circulando entre as Estações    Utinga   e    São Caetano Do Sul-Pref. Walter Braido  . Agradecemos a sua compreensão.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.083
       }
@@ -8087,11 +8088,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Utinga   e    São Caetano Do Sul-Pref. Walter Braido  , devido a    Alagamento  . Agradecemos a sua compreensão",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.083
       }
@@ -8409,11 +8410,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de alagamento na via, os trens não estão circulando entre as Estações    São Caetano Do Sul-Pref. Walter Braido   e    Pref. Celso Daniel-Santo André  . Agradecemos a sua compreensão.",
       "horas": 0.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.417
       }
@@ -8480,11 +8481,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Mauá   e    Rio Grande Da Serra  , devido a    Alagamento  . Agradecemos a sua compreensão",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -8586,7 +8587,7 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção, a circulação de trens entre as estações Luz e Palmeiras Barra Funda está interrompida. Como alternativa utilize a Linha 11-Coral.",
       "horas": 8.167,
@@ -8947,11 +8948,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Mauá   e    Rio Grande Da Serra  , devido a    Problemas Técnicos nos Equipamentos de Via  . Agradecemos a sua compreensão",
       "horas": 2.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 2.083
       }
@@ -9193,7 +9194,7 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação de trens entre as estações LUZ e Palmeiras- Barra Funda está interrompida. Como alternativa utilize a Linha 11-Coral.",
       "horas": 8.917,
@@ -9461,11 +9462,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Mauá   e    Rio Grande Da Serra  , devido a    Problemas Técnicos nos Equipamentos de Via  . Agradecemos a sua compreensão",
       "horas": 0.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.417
       }
@@ -10561,11 +10562,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a alagamento entre as estações Tamanduateí e Ipiranga a circulação de trens está interrompida. O percurso está sendo feito pelos ônibus da operação PAESE. entre Tamanduateí e Mooca.",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -10704,11 +10705,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos nos Equipamentos de Via  , os trens da Linha   10 - Turquesa   estão circulando com intervalos maiores entre as Estações    Prefeito Saladino   e   Guapituba  .",
       "horas": 1.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 1.75
       }
@@ -11392,7 +11393,7 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    11 - Coral  .",
       "horas": 8.317,
@@ -11858,11 +11859,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Palmeiras-Barra Funda   e    Luz  , devido a    Problemas Técnicos no Sistema de Energia  . Agradecemos a sua compreensão",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.583
       }
@@ -11964,7 +11965,7 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    11 - Coral  .",
       "horas": 19.833,
@@ -12090,11 +12091,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "DEVIDO A PROBLEMAS TÉCNICOS NO SISTEMA DE ENERGIA, OS TRENS SENTIDO RIO GRANDE DA SERRA, NÃO OBEDECEM PARADA NA ESTAÇÃO JUVENTUS-MOÓCA. AGRADECEMOS SUA COMPREENSÃO.",
       "horas": 10.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 10.667
       }
@@ -12669,11 +12670,11 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Mauá   e    Rio Grande Da Serra  , devido a    Problemas Técnicos no Sistema de Energia  . Agradecemos a sua compreensão",
       "horas": 6.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 6.917
       }
@@ -12812,7 +12813,7 @@
       "linha": "Linha 10-Turquesa",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação de trens entre as estações LUZ e Palmeiras Barra Funda está interrompida. Como alternativa utilize a Linha 11-Coral.",
       "horas": 8.833,
@@ -13045,11 +13046,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido as obras do Metrô na região da estação Penha, os trens da Linha 11-Coral não estão circulando entre as estações Corinthians-Itaquera e Tatuapé. Como alternativa utilize a Linha 3-Vermelha",
       "horas": 20.0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 20.0
       }
@@ -13082,11 +13083,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido as obras do Metrô na região da estação Penha, os trens da Linha 11-Coral não estão circulando entre as estações Corinthians-Itaquera e Tatuapé. Como alternativa utilize a Linha 3-Vermelha",
       "horas": 19.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 19.917
       }
@@ -13134,11 +13135,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido as obras do Metrô na região da estação Penha, os trens da Linha 11-Coral não estão circulando entre as estações Corinthians-Itaquera e Tatuapé. Como alternativa utilize a Linha 3-Vermelha",
       "horas": 19.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 19.75
       }
@@ -13169,11 +13170,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido as obras do Metrô na região da estação Penha, os trens da Linha 11-Coral não estão circulando entre as estações Corinthians-Itaquera e Tatuapé. Como alternativa utilize a Linha 3-Vermelha.",
       "horas": 20.0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 20.0
       }
@@ -13851,11 +13852,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Palmeiras-Barra Funda   e    Guaianases  , devido a    Problemas Técnicos  . Agradecemos a sua compreensão",
       "horas": 2.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 2.333
       }
@@ -13996,7 +13997,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "\"Devido a Serviços de Manutenção a circulação de trens entre as estações LUZ e Palmeiras - Barra Funda está interrompida. Como alternativa utilize a Linha (10-Turquesa).",
       "horas": 7.0,
@@ -14567,7 +14568,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a serviço de manutenção a circulação de trens entre as estações luz e Palmeiras Barra Funda está interrompida. Como alternativa utilize a linha 10 Turquesa",
       "horas": 0.417,
@@ -14601,7 +14602,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 6.417,
@@ -15159,7 +15160,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Serviços de Manutenção   a circulação de trens entre as Estações   Tatuapé   e    Corinthians-Itaquera   está interrompida. O percurso está sendo feito gratuitamente pel  o Metro",
       "horas": 0.25,
@@ -15193,7 +15194,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação de trens entre as Estações Tatuapé e Corinthians-Itaquera está interrompida. O percurso está sendo feito gratuitamente pelo Metro",
       "horas": 0.083,
@@ -15227,7 +15228,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação de trens entre as Estações Tatuapé e Corinthians-Itaquera está interrompida. O percurso está sendo feito gratuitamente pelo Metrô",
       "horas": 3.333,
@@ -15244,7 +15245,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 9.417,
@@ -15459,11 +15460,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha de sistema, os trens da Linha 11 Coral estão circulando com maiores intervalos entre as estações Brás e Tatuapé",
       "horas": 0.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.917
       }
@@ -15530,11 +15531,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos  , os trens da Linha   11 - Coral   estão circulando com intervalos maiores entre as Estações    Palmeiras-Barra Funda   e   Estudantes  .",
       "horas": 0.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.417
       }
@@ -16035,11 +16036,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Ato de Vandalismo  , os trens da Linha   11 - Coral   estão circulando com intervalos maiores entre as Estações    Guaianases   e   Estudantes  .",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.583
       }
@@ -16141,7 +16142,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 17.75,
@@ -16411,7 +16412,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 10.0,
@@ -16702,11 +16703,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos no Sistema de Energia  , os trens da Linha   11 - Coral   estão circulando com intervalos maiores entre as Estações    Suzano   e   Estudantes  .",
       "horas": 0.633,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.633
       }
@@ -16989,7 +16990,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 19.417,
@@ -17076,11 +17077,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Corinthians-Itaquera   e    Brás  , devido a    Problemas Técnicos no Sistema de Energia  . Agradecemos a sua compreensão",
       "horas": 1.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 1.333
       }
@@ -17219,11 +17220,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Suzano   e    Estudantes  , devido a    Problemas Técnicos  . Agradecemos a sua compreensão",
       "horas": 1.0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 1.0
       }
@@ -17253,11 +17254,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos  , os trens da Linha   11 - Coral   estão circulando com intervalos maiores entre as Estações    Palmeiras-Barra Funda   e   Estudantes  .",
       "horas": 1.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 1.333
       }
@@ -17287,11 +17288,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Palmeiras-Barra Funda   e    Luz  , devido a    Problemas Técnicos no Sistema de Energia  . Agradecemos a sua compreensão",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.5
       }
@@ -17321,11 +17322,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Palmeiras-Barra Funda   e    Luz  , devido a    Problemas Técnicos no Sistema de Energia  . Agradecemos a sua compreensão",
       "horas": 1.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 1.25
       }
@@ -17554,11 +17555,11 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Interferência Externa  , os trens não estão circulando entre as Estações   Braz Cubas   e   Estudantes  .",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -17682,7 +17683,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Serviços de Manutenção   a circulação de trens entre as Estações   Suzano   e    Jundiapeba   está interrompida. O percurso está sendo feito gratuitamente por ônibus estacionados em frente às estações.",
       "horas": 19.917,
@@ -17954,7 +17955,7 @@
       "linha": "Linha 11-Coral",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 9.083,
@@ -18871,11 +18872,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de    Interferência Externa   a circulação de trens entre as estações   Brás   e   Tatuapé   está interrompida. Os trens da Linha   12 - Safira   estão\nchegando e partindo da Estação   Tatuapé  . Utilize os trens da Linha   11 - Coral   para transferência.",
       "horas": 1.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 1.167
       }
@@ -18888,11 +18889,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de    Interferência Externa   a circulação de trens entre as estações   Brás   e   Tatuapé   está interrompida. Os trens da Linha   12 - Safira   estão\nchegando e partindo da Estação   Tatuapé . Utilize  os  trens  da  Linha  11 - Coral ou Linha 3 - Vermelha do Metrô  para  transferência.",
       "horas": 2.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 2.333
       }
@@ -18905,11 +18906,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de Interferência Externa a circulação de trens entre as estações Brás e Tatuapé está com velocidade reduzida e maiores intervalos. Como alternativa utilizem os trens da Linha 11 - Coral ou Linha 3 - Vermelha do Metrô.",
       "horas": 1.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 1.917
       }
@@ -18939,11 +18940,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de    Interferência Externa   a circulação de trens entre as estações   Brás   e   Tatuapé   está interrompida. Os trens da Linha   12 - Safira   estão\nchegando e partindo da Estação   Tatuapé  . Utilize os trens da Linha   11 - Coral   para transferência.",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.667
       }
@@ -18973,11 +18974,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Brás   e    Tatuapé  , devido a    Interferência Externa  . Agradecemos a sua compreensão",
       "horas": 2.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 2.917
       }
@@ -19533,11 +19534,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de    Problemas Técnicos  , os trens da Linha   12 - Safira   estão circulando com intervalos maiores entre as Estações    Itaim Paulista   e   Calmon Viana  .",
       "horas": 1.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 1.75
       }
@@ -19602,11 +19603,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Alagamento os trens da Linha 12 - Safira  não estão circulando entre as Estações Jardim Romano e  Engº.Manoel Feio .",
       "horas": 1.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 1.5
       }
@@ -20588,7 +20589,7 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Serviços de Manutenção  , os trens da linha   12 - Safira   estão circulando com intervalo médio de   20   minutos entre as estações    São Miguel Paulista   e   Calmon Viana  .",
       "horas": 0.167,
@@ -20840,11 +20841,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos  , os trens da Linha   12 - Safira   estão circulando com intervalos maiores entre as Estações    Brás   e   Calmon Viana  .",
       "horas": 0.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.417
       }
@@ -20894,7 +20895,7 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a serviços de manutenção, a circulação de trens da linha 12-Safira está interrompida entre as estações Brás e Tatuapé. O percurso está sendo feito gratuitamente pelo Metrô e Linha 11-Coral da CPTM.",
       "horas": 9.25,
@@ -21325,11 +21326,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Engº. Goulart   e    Tatuapé  , devido a    Problemas Técnicos nos Equipamentos de Via  . Agradecemos a sua compreensão",
       "horas": 2.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 2.083
       }
@@ -22107,11 +22108,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Engº. Manoel Feio   e    Calmon Viana  , devido a    Problemas Técnicos nos Equipamentos de Via  . Agradecemos a sua compreensão",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.167
       }
@@ -22141,11 +22142,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Engº. Manoel Feio   e    Calmon Viana  , devido a    Problemas Técnicos nos Equipamentos de Via  . Agradecemos a sua compreensão",
       "horas": 2.267,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 2.267
       }
@@ -22175,11 +22176,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Engº. Manoel Feio   e    Calmon Viana  , devido a    Ato de Vandalismo  . Agradecemos a sua compreensão",
       "horas": 2.517,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 2.517
       }
@@ -22495,11 +22496,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    São Miguel Paulista   e    Calmon Viana  , devido a    Pessoas na Via  . Agradecemos a sua compreensão",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.583
       }
@@ -22529,11 +22530,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos  , os trens da Linha   12 - Safira   estão circulando com intervalos maiores entre as Estações    Brás   e   Calmon Viana  .",
       "horas": 1.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 1.333
       }
@@ -23145,7 +23146,7 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Serviços de Manutenção   a circulação de trens entre as Estações   Brás   e    Tatuapé   está interrompida. O percurso está sendo feito gratuitamente pel  o Metro",
       "horas": 0.583,
@@ -23162,7 +23163,7 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção, a circulação de trens entre as Estações Brás e Tatuapé está interrompida. O percurso está sendo feito gratuitamente pelo Metrô.",
       "horas": 12.667,
@@ -23303,11 +23304,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos no Sistema de Energia  , os trens da Linha   12 - Safira   estão circulando com intervalos maiores entre as Estações    Itaim Paulista   e   Calmon Viana  .",
       "horas": 3.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 3.917
       }
@@ -23446,11 +23447,11 @@
       "linha": "Linha 12-Safira",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Brás   e    Calmon Viana  , devido a    Problemas Técnicos nos Equipamentos de Via  . Agradecemos a sua compreensão",
       "horas": 5.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-05": 5.667
       }
@@ -24505,11 +24506,11 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de Problemas Técnicos , os trens do Serviço Expresso Aeroporto da Linha 13-Jade estão com a operação temporariamente suspensa. A CPTM agradece a sua compreensão.",
       "horas": 3.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 3.167
       }
@@ -24650,7 +24651,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação de trens entre as estações Luz e Palmeiras - Barra Funda está  interrompida. Como  alternativa  utilize a Linha 10 - Turquesa.",
       "horas": 7.167,
@@ -24970,7 +24971,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Serviços de Manutenção  , os trens da linha   13 - Jade   estão circulando com intervalo médio de   60   minutos entre as estações    Engº. Goulart   e   Palmeiras-Barra Funda  .",
       "horas": 2.417,
@@ -25255,7 +25256,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 6.917,
@@ -25830,7 +25831,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 9.167,
@@ -26082,11 +26083,11 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a   Problemas Técnicos  , os trens da Linha   13 - Jade   estão circulando com intervalos maiores entre as Estações    Aeroporto-Guarulhos   e   Engº. Goulart  .",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.333
       }
@@ -26659,7 +26660,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 5.833,
@@ -26693,7 +26694,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação do Expresso Aeroporto está interrompida.",
       "horas": 6.583,
@@ -26980,7 +26981,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Palmeiras-Barra Funda   e    Luz   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 10.083,
@@ -27524,7 +27525,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a    Serviços de Manutenção   a circulação de trens entre as estações    Luz   e    Palmeiras-Barra Funda   está interrompida. Como alternativa utiliza a Linha    10 - Turquesa  .",
       "horas": 16.833,
@@ -28047,7 +28048,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação de trens entre as estações Luz e Palmeiras - Barra Funda está interrompida. Como alternativa utilize a linha 11 - Coral.",
       "horas": 6.25,
@@ -28081,7 +28082,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a Serviços de Manutenção a circulação de trens entre as estações Luz e Palmeiras - Barra Funda está interrompida. Como alternativa utilize a linha 11 - Coral. ou a linha 10 - Turquesa.",
       "horas": 1.75,
@@ -28370,7 +28371,7 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a serviços de manutenção os trens do expresso aeroporto da linha 13-Jade não estão circulando. Como alternativa, utilize a linha 12-Safira na estação Tatuapé e faça transferência na estação Engenheiro Goulart.",
       "horas": 15.917,
@@ -28603,11 +28604,11 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Estamos circulando com velocidade reduzida e maior tempo de parada entre as Estações    Palmeiras-Barra Funda   e    Aeroporto-Guarulhos  , devido a    Problemas Técnicos nos Equipamentos de Via  . Agradecemos a sua compreensão",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-05": 0.5
       }
@@ -28620,11 +28621,11 @@
       "linha": "Linha 13-Jade",
       "operador": "CPTM - Companhia Paulista de Trens Metropolitanos",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Por motivo de falha em equipamento de via, o Serviço Expresso Aeroporto está suspenso. Agradecemos sua compreensão.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-05": 0.083
       }
@@ -29179,11 +29180,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.25
       }
@@ -29836,11 +29837,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -29870,11 +29871,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Operação Parcial",
       "horas": 0.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.75
       }
@@ -30450,11 +30451,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Operação Parcial",
       "horas": 0.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.75
       }
@@ -30796,11 +30797,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.75
       }
@@ -30867,11 +30868,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.417
       }
@@ -31123,11 +31124,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.167
       }
@@ -31339,11 +31340,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -31559,11 +31560,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.583
       }
@@ -31593,11 +31594,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 2.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 2.667
       }
@@ -31627,11 +31628,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 1.083
       }
@@ -32210,11 +32211,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.5
       }
@@ -32352,11 +32353,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 7.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 7.083
       }
@@ -32467,11 +32468,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 2.783,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 2.783
       }
@@ -34334,11 +34335,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.133,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.133
       }
@@ -34660,11 +34661,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -35460,11 +35461,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.417
       }
@@ -35716,11 +35717,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-05": 0.167
       }
@@ -35750,11 +35751,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-05": 1.75
       }
@@ -35821,11 +35822,11 @@
       "linha": "Linha 15-Prata",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-05": 0.167
       }
@@ -35926,11 +35927,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.333
       }
@@ -36361,11 +36362,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.25
       }
@@ -36873,11 +36874,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.583
       }
@@ -37092,11 +37093,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.5
       }
@@ -37763,11 +37764,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.167
       }
@@ -37834,11 +37835,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -37868,11 +37869,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.667
       }
@@ -37902,11 +37903,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.5
       }
@@ -38010,11 +38011,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.917
       }
@@ -38044,11 +38045,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.25
       }
@@ -38263,11 +38264,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {}
     },
     {
@@ -39033,11 +39034,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -39104,11 +39105,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.083
       }
@@ -39283,11 +39284,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 6.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 6.583
       }
@@ -41090,11 +41091,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.5
       }
@@ -41564,11 +41565,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -42042,11 +42043,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -42261,11 +42262,11 @@
       "linha": "Linha 2-Verde",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.667
       }
@@ -42770,11 +42771,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -42858,11 +42859,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -43094,11 +43095,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -43239,11 +43240,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.333
       }
@@ -43347,11 +43348,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Operação Parcial",
       "horas": 4.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 4.083
       }
@@ -43364,11 +43365,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.833
       }
@@ -43472,11 +43473,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.833
       }
@@ -43762,11 +43763,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.583
       }
@@ -43870,11 +43871,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.25
       }
@@ -43978,11 +43979,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.667
       }
@@ -44087,11 +44088,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -44683,11 +44684,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.083
       }
@@ -44754,11 +44755,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 1.0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.0
       }
@@ -44862,11 +44863,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -45007,11 +45008,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 3.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 3.417
       }
@@ -45115,11 +45116,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {}
     },
     {
@@ -45147,11 +45148,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.25
       }
@@ -45366,11 +45367,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.667
       }
@@ -45400,11 +45401,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.167
       }
@@ -45471,11 +45472,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -45506,11 +45507,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -45833,11 +45834,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.083
       }
@@ -45978,11 +45979,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.917
       }
@@ -46123,11 +46124,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -46157,11 +46158,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -46265,11 +46266,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.083
       }
@@ -47888,11 +47889,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.333
       }
@@ -47922,11 +47923,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.083
       }
@@ -47956,11 +47957,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.15,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.15
       }
@@ -47990,11 +47991,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.083
       }
@@ -48024,11 +48025,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.017,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.017
       }
@@ -48416,11 +48417,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.25
       }
@@ -48668,11 +48669,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.25
       }
@@ -49183,11 +49184,11 @@
       "linha": "Linha 3-Vermelha",
       "operador": "Metrô de São Paulo",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade Reduzida",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -52012,11 +52013,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Os trens estão circulando com velocidade reduzida, devido a falha de trem na região da estação Butantã.",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.167
       }
@@ -52490,11 +52491,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido falha em equipamento de via na região da estação Luz estamos operando por via única entre as estações Higienópolis-Mackenzie e Luz.",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.25
       }
@@ -52857,11 +52858,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha em equipamento de Via na região da estação Faria Lima - PagBank, estamos operando com velocidade reduzida entre as estações Faria Lima - PagBank e Fradique - Coutinho.",
       "horas": 3.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 3.333
       }
@@ -53229,11 +53230,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha em equipamento de Via na região da estação Faria Lima - PagBank, estamos circulando com velocidade reduzida e maior tempo de parada.",
       "horas": 0.017,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.017
       }
@@ -53246,11 +53247,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha em equipamento de Via na região da estação Faria Lima - PagBank, estamos operando com velocidade reduzida entre as estações Faria Lima - PagBank e Fradique - Coutinho.",
       "horas": 0.15,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.15
       }
@@ -54494,11 +54495,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha no sistema de Sinalização estamos operando com velocidade reduzida e maior tempo de parada entre as estações Luz e Faria Lima - PagBank.",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.25
       }
@@ -54511,11 +54512,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha no sistema de Sinalização na estação Paulista - Pernambucanas, estamos operando com velocidade reduzida entre as estações.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -54528,11 +54529,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha no sistema de Sinalização estamos operando com velocidade reduzida na região da estação Paulista - Pernambucanas.",
       "horas": 0.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.75
       }
@@ -54599,11 +54600,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "06:53 - Site alterado: Status - Impacto pontual \nDevido a falha no sistema de sinalização estamos operando com velocidade reduzida e maior tempo de parada no trecho entre as estações Vila Sônia – Professora Elisabeth Tenreiro e Fradique Coutinho.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -54616,11 +54617,11 @@
       "linha": "Linha 4-Amarela",
       "operador": "ViaQuatro",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha no sistema de sinalização estamos operando com velocidade reduzida e maior tempo de parada no trecho entre as estações Vila Sônia – Professora Elisabeth Tenreiro e Fradique Coutinho.",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.667
       }
@@ -55217,11 +55218,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha elétrica na região de Santo Amaro, os trens da Linha 5  - Lilás estão circulando por via única entre as estações Santo Amaro e Largo Treze.",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.333
       }
@@ -55234,11 +55235,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha de rede aérea na região de Santo Amaro, os trens da Linha 5  - Lilás estão circulando por via única entre as estações Santo Amaro e Largo Treze.",
       "horas": 4.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 4.167
       }
@@ -55251,11 +55252,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha de rede área  na região de Santo Amaro, os trens da Linha 5 - Lilás estão circulando por via única entre as estações Capão Redondo e Largo Treze.",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.583
       }
@@ -55268,11 +55269,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha de rede área  na região de Santo Amaro, os trens da Linha 5 - Lilás estão circulando por via única entre as estações Capão Redondo e Largo Treze. Os Ônibus da operação PAESE  foram acionados para apoio na demanda de clientes.",
       "horas": 0.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.833
       }
@@ -55285,11 +55286,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha de rede aérea  na região de Santo Amaro, os trens da Linha 5 - Lilás estão circulando por via única entre as estações Capão Redondo e Largo Treze. Os Ônibus da operação PAESE  foram acionados para apoio na demanda de clientes.",
       "horas": 6.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 6.583
       }
@@ -55541,11 +55542,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à uma ocorrência no sistema elétrico, os trens estão com velocidade reduzida e maior tempo de parada nas estações.",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -56952,11 +56953,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha em equipamento de via, estamos operando com velocidade reduzida entre as estações Geovanni Gronchi e Santo Amaro.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -56969,11 +56970,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha em equipamento de via, estamos operando com velocidade reduzida entre as estações Giovanni Gronchi e Santo Amaro.",
       "horas": 1.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.75
       }
@@ -56986,11 +56987,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à interferência por terceiros (vandalismo) na região de Giovanni Gronchi, estamos circulando com velocidade reduzida entre as estações Santo Amaro e Giovanni Gronchi.",
       "horas": 2.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 2.833
       }
@@ -57748,11 +57749,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma ocorrência em equipamento de via na região de Brooklin, estamos operando com velocidade reduzida e maior tempo de parada entre as estações Brooklin e Campo Belo.",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -57765,11 +57766,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma ocorrência em equipamento de via na região de Brooklin, estamos operando com velocidade reduzida e maior tempo de parada entre as estações Brooklin e Campo Belo.",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.25
       }
@@ -57782,11 +57783,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma ocorrência em equipamento de via na região de Brooklin, estamos operando com impacto pontual entre as estações Brooklin e Campo Belo.",
       "horas": 3.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 3.083
       }
@@ -59262,11 +59263,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha em equipamento de via, estamos operando em via única na região de Santo Amaro.",
       "horas": 0.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.833
       }
@@ -59881,11 +59882,11 @@
       "linha": "Linha 5-Lilás",
       "operador": "ViaMobilidade 5",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha em equipamento de via, estamos operando em via única na região de Santo Amaro.",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.667
       }
@@ -60503,11 +60504,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à presença de pessoas na via na região da estação Botujuru, a circulação de trens se encontra com velocidade reduzida e maior tempo de parada no trecho entre Francisco Morato e Botujuru.",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.25
       }
@@ -60869,11 +60870,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Trens estão circulando com velocidade reduzida entre FDR e BTJ.",
       "horas": 13.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 13.667
       }
@@ -61532,11 +61533,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha no sistema de energia, os trens estão circulando com maiores intervalos entre Franco da Rocha e Jundiaí.",
       "horas": 3.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 3.833
       }
@@ -61566,11 +61567,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade reduzida no trecho entre FMO e JUN.",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.167
       }
@@ -61583,11 +61584,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha no sistema de alimentação elétrica, os trens da Linha 7 – Rubi circulam com velocidade reduzida e maior tempo de parada entre as estações Francisco Morato e Jundiaí.",
       "horas": 4.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 4.583
       }
@@ -61688,11 +61689,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha em trem na região de Franco da Rocha, os trens estão realizando maior tempo de parada entre as estações Franco da Rocha e Jundiaí.",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.583
       }
@@ -61967,11 +61968,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha de sinalização, os trens estão circulando com velocidade reduzida e maior tempo de parada.",
       "horas": 0.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.833
       }
@@ -62174,11 +62175,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a alagamento na via, a circulação de trens está interrompida entre as estações Botujuru e Campo Limpo Paulista está interrompida. Ônibus do PAESE foram acionados para atender o trecho afetado.",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.25
       }
@@ -62191,11 +62192,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a alagamento na via, a circulação de trens está interrompida entre as estações Botujuru e Campo Limpo Paulista. Ônibus do PAESE foram acionados para atender o trecho afetado.",
       "horas": 3.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 3.25
       }
@@ -62208,11 +62209,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a alagamento na região de Campo Limpo Paulista, estamos circulando com velocidade reduzida e maior tempo de parada entre as estações Francisco Morato e Jundiaí.",
       "horas": 3.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 3.083
       }
@@ -62225,11 +62226,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a alagamento na via, estamos circulando com velocidade reduzida e maior tempo de parada entre as estações Palmeiras–Barra Funda e Jundiaí.",
       "horas": 1.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.583
       }
@@ -62260,11 +62261,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido às fortes chuvas do fim de semana, os trens operam com velocidade reduzida entre Jundiaí e Francisco Morato, com maior tempo de parada e transferência obrigatória em Francisco Morato.",
       "horas": 20.0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 20.0
       }
@@ -62295,11 +62296,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido às fortes chuvas do fim de semana, os trens operam com velocidade reduzida entre Jundiaí e Francisco Morato, com maior tempo de parada e transferência obrigatória em Francisco Morato.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.083
       }
@@ -62434,11 +62435,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Falha de sinalização em decorrências a fortes chuvas. Os trens da linha 07 - Rubi, estão circulando com velocidade reduzida entre as estações Palmeiras - Barra Funda e Jundiaí.",
       "horas": 0.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.417
       }
@@ -62451,11 +62452,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Falha de sinalização em decorrência das fortes chuvas. Os trens da Linha 07 - Rubi, estão circulando com velocidade reduzida e maior tempo de parada entre as estações Palmeiras - Barra Funda e Jundiaí",
       "horas": 3.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 3.667
       }
@@ -62486,11 +62487,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Falha de sinalização em decorrência das fortes chuvas. Os trens da Linha 07 - Rubi, estão circulando com velocidade reduzida e maior tempo de parada entre as estações Palmeiras - Barra Funda e Jundiaí",
       "horas": 20.0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 20.0
       }
@@ -62521,11 +62522,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Falha de sinalização em decorrência das fortes chuvas. Os trens da Linha 07 - Rubi, estão circulando com velocidade reduzida e maior tempo de parada entre as estações Palmeiras - Barra Funda e Jundiaí",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.167
       }
@@ -62643,11 +62644,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a manutenção na região de Botujuru, estamos operando com velocidade reduzida e maior tempo de parada entre as estações Francisco Morato e Jundiaí.",
       "horas": 7.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 7.75
       }
@@ -63026,11 +63027,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha em um trem na estação Lapa, a linha está operando com maiores intervalos e velocidade reduzida.",
       "horas": 0.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 0.75
       }
@@ -63115,11 +63116,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, trens da linha 7 - Rubi circularão com intervalos de 15 minutos entre as estações Palmeiras-Barra Funda e Caieiras e de 30 minutos entre as estações Caieiras e Jundiaí",
       "horas": 2.0,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 2.0
       }
@@ -63184,11 +63185,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha no sistema de alimentação elétrica, os trens da Linha 7 – Rubi circulam com velocidade reduzida e maior tempo de parada entre as estações Palmeiras–Barra Funda e Jundiaí.",
       "horas": 0.417,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.417
       }
@@ -63201,11 +63202,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a uma falha no sistema de alimentação elétrica, os trens da Linha 7 – Rubi circulam por via única e velocidade reduzida entre as estações Franco da Rocha e Francisco Morato.",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.333
       }
@@ -63218,11 +63219,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Falha elétrica entre Franco da Rocha e Francisco Morato gera velocidade reduzida e via única. Para seguir viagem aos destinos Barra Funda ou Jundiaí, a transferência é obrigatória em Franco da Rocha.",
       "horas": 2.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 2.667
       }
@@ -63777,11 +63778,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Velocidade reduzida e maior tempo de parada entre Perus e Caieiras devido à presença de usuário na via.",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.667
       }
@@ -63846,11 +63847,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Trens circulando com velocidade reduzida devido à falha de alimentação elétrica.",
       "horas": 0.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.167
       }
@@ -63863,11 +63864,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Os trens estão circulando com velocidade reduzida devido à falha no sistema de alimentação elétrica",
       "horas": 0.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.75
       }
@@ -63932,11 +63933,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha em equipamento de via, estamos circulando por via única entre as estações Pirituba e Vila Aurora",
       "horas": 0.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.25
       }
@@ -63949,11 +63950,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à falha em veiculo de manutenção, estamos circulando por via única entre as estações Pirituba e Vila Aurora",
       "horas": 0.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.5
       }
@@ -63983,11 +63984,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido às fortes chuvas na região de Campo Limpo Paulista, os trens estão circulando com maiores intervalos e velocidade reduzida na região.",
       "horas": 6.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 6.667
       }
@@ -64384,11 +64385,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a manutenção, os trens circulam por via única entre Perus e Caieiras. Com intervalos entre Palmeiras - Barra Funda e Vila Aurora de 15 minutos e entre Vila Aurora e Jundiaí de 30 minutos.",
       "horas": 19.867,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 19.867
       }
@@ -64419,11 +64420,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a manutenção, os trens circulam por via única entre Perus e Caieiras. Com intervalos entre Palmeiras - Barra Funda e Vila Aurora de 15 minutos e entre Vila Aurora e Jundiaí de 30 minutos.",
       "horas": 0,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {}
     },
     {
@@ -65098,11 +65099,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha de trem na estação Lapa, a linha opera com maiores intervalos e maior tempo de parada nas estações.",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.667
       }
@@ -65516,11 +65517,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Circulação de Trens",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens circulam em via singela entre as estações Perus e Caieiras. Embarques e desembarques na mesma plataforma nestas estações.",
       "horas": 19.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 19.917
       }
@@ -65691,11 +65692,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Circulação de Trens",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens circulam em via singela entre as estações Perus e Caieiras. Embarques e desembarques na mesma plataforma nestas estações.",
       "horas": 20.0,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 20.0
       }
@@ -65761,11 +65762,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Circulação de Trens",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens circulam por via única entre as estações Perus e Caieiras. Embarques e desembarques na mesma plataforma nestas estações",
       "horas": 5.833,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 5.833
       }
@@ -65778,11 +65779,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Circulação de Trens",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens circulam por via única em Perus e Caieiras e entre Botujuru e Campo Limpo Paulista. A transferência em Francisco Morato é obrigatória.",
       "horas": 7.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 7.75
       }
@@ -65795,11 +65796,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Circulação de Trens",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens circulam por via única em Perus e Caieiras.",
       "horas": 0.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 0.583
       }
@@ -65812,11 +65813,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Circulação de Trens",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens circulam por via única entre as estações Perus e Caieiras. Embarques e desembarques na mesma plataforma nestas estações.",
       "horas": 5.833,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 5.833
       }
@@ -65899,11 +65900,11 @@
       "linha": "Linha 7-Rubi",
       "operador": "TIC Trens",
       "status": "Velocidade Reduzida",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido a falha no sistema de sinalização, ocasionada por furto de cabos, os trens estão circulando com maiores intervalos entre Francisco Morato e Jundiaí",
       "horas": 10.75,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-05": 10.75
       }
@@ -66431,11 +66432,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 3.167,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 3.167
       }
@@ -66485,11 +66486,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 19.833,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 19.833
       }
@@ -66574,11 +66575,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência na rede aérea na região de Itapevi, a linha 8-Diamante está com circulação de trens em via única entre as estações Itapevi e Jandira. Ônibus do sistema PAESE foram acionados para reforçar o atendimento nesse trecho.",
       "horas": 3.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 3.333
       }
@@ -66591,11 +66592,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência na rede aérea na região de Itapevi, a linha 8-Diamante está com circulação de trens em via única entre as estações Itapevi e Jandira.",
       "horas": 2.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 2.917
       }
@@ -66769,11 +66770,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 2.083,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 2.083
       }
@@ -66806,11 +66807,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 19.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 19.917
       }
@@ -66897,11 +66898,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido as condições climáticas (ventos fortes e queda de árvores), no trecho entre as estações Antônio João e Barueri, estamos operando com circulação interrompida entre as respectivas estações. Ônibus da operação PAESE foram acionados para atender o trecho.",
       "horas": 3.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 3.667
       }
@@ -66988,11 +66989,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 0.583
       }
@@ -67079,11 +67080,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 3.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 3.917
       }
@@ -67133,11 +67134,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 19.667,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 19.667
       }
@@ -67224,11 +67225,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 0.75
       }
@@ -67313,11 +67314,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido queda de árvore provocada por fortes chuvas e ventos, a circulação de trens está interrompida entre as estações Antônio João e Barueri. Ônibus da operação PAESE foram acionados.",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.333
       }
@@ -67330,11 +67331,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido queda de árvore externa provocada por fortes chuvas e ventos, a circulação de trens está interrompida entre as estações Santa Terezinha e Barueri. Ônibus da operação PAESE foram acionados.",
       "horas": 0.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-01": 0.917
       }
@@ -67421,11 +67422,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Barra Funda.",
       "horas": 10.417,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 10.417
       }
@@ -67438,11 +67439,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 3.667,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 3.667
       }
@@ -67475,11 +67476,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 19.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 19.917
       }
@@ -67995,11 +67996,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 8-Diamante estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 1.25,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 1.25
       }
@@ -68062,11 +68063,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 8-Diamante estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 2.667,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 2.667
       }
@@ -68079,11 +68080,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 8-Diamante estarão abertas apenas para desembarque e transferência.\r\nDevido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.083,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 0.083
       }
@@ -68096,11 +68097,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 8-Diamante estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.5,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 0.5
       }
@@ -68113,11 +68114,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 8-Diamante estarão abertas apenas para desembarque e transferência.\r\nDevido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.083,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 0.083
       }
@@ -68130,11 +68131,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 8-Diamante estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 1.5,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 1.5
       }
@@ -68349,11 +68350,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Barueri e Itapevi.",
       "horas": 5.083,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 5.083
       }
@@ -68472,11 +68473,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 4.5,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 4.5
       }
@@ -68580,11 +68581,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido avaria de trem entre as estações Barueri e Antônio João a circulação de trens no trecho está interrompida. Ônibus da operação PAESE foram acionados para atender o trecho entre as estações Barueri e Santa Terezinha.",
       "horas": 3.167,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 3.167
       }
@@ -68597,11 +68598,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido avaria de trem entre as estações Barueri e Antônio João a circulação de trens nesse trecho está com maiores intervalos. Ônibus da operação PAESE estão reforçando o trecho entre as estações Barueri e Santa Terezinha.",
       "horas": 1.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-02": 1.583
       }
@@ -68812,11 +68813,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 7.5,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 7.5
       }
@@ -69101,11 +69102,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Itapevi e Júlio Prestes.",
       "horas": 15.933,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 15.933
       }
@@ -69192,11 +69193,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.75
       }
@@ -69316,11 +69317,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Itapevi e Júlio Prestes.",
       "horas": 0.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.583
       }
@@ -69368,11 +69369,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 1.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 1.583
       }
@@ -69422,11 +69423,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 9.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 9.583
       }
@@ -69456,11 +69457,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 2.417,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 2.417
       }
@@ -69545,11 +69546,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido intercorrência com veículo de manutenção na região de Antônio João, a circulação de trens está interrompida entre as estações Antônio João e Santa Terezinha. Ônibus do sistema PAESE foram acionados.",
       "horas": 0.583,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-03": 0.583
       }
@@ -69616,11 +69617,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.583
       }
@@ -69670,11 +69671,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.417,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.417
       }
@@ -69776,11 +69777,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 1.083,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 1.083
       }
@@ -69827,11 +69828,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 18.417,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 18.417
       }
@@ -69933,11 +69934,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 0.45,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.45
       }
@@ -70096,11 +70097,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 2.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 2.75
       }
@@ -70133,11 +70134,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 19.95,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 19.95
       }
@@ -70335,11 +70336,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 16.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 16.75
       }
@@ -70387,11 +70388,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 5.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 5.917
       }
@@ -70458,7 +70459,7 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 8.417,
@@ -70492,7 +70493,7 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 6.25,
@@ -70729,11 +70730,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência no sistema de energia, estamos temporariamente sem circulação de trens no trecho entre as estações Presidente Altino e Barueri da linha 8 - Diamante, e entre Presidente Altino e Osasco da linha 9 - Esmeralda. Ônibus do sistema PAESE foram acionados para atender esse trecho.",
       "horas": 0.833,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.833
       }
@@ -70746,11 +70747,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência no sistema de energia, estamos temporariamente sem circulação de trens no trecho entre as estações Barueri e Carapicuíba da linha 8 - Diamante, e entre Presidente Altino e Osasco da linha 9 - Esmeralda. Ônibus do sistema PAESE foram acionados para atender esse trecho.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -70763,11 +70764,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência no sistema de energia, estamos temporariamente sem circulação de trens no trecho entre as estações Barueri e Carapicuíba da linha 8 - Diamante ônibus do sistema PAESE foram acionados para atender esse trecho.",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -70780,11 +70781,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência no sistema de energia, estamos temporariamente sem circulação de trens no trecho entre as estações Barueri e Santa Terezinha da linha 8 - Diamante ônibus do sistema PAESE foram acionados para atender esse trecho.",
       "horas": 0.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.333
       }
@@ -70832,11 +70833,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 18.333,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 18.333
       }
@@ -70866,11 +70867,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 1.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 1.583
       }
@@ -71134,11 +71135,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 9.5,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 9.5
       }
@@ -71188,11 +71189,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 19.833,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 19.833
       }
@@ -71279,11 +71280,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 19.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 19.583
       }
@@ -71368,11 +71369,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à interferência externa na região da Lapa, estamos circulando com maiores intervalos na Linha 8 - Diamante.",
       "horas": 1.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 1.25
       }
@@ -71696,11 +71697,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 2.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 2.75
       }
@@ -71767,11 +71768,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 13.0,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 13.0
       }
@@ -71821,11 +71822,11 @@
       "linha": "Linha 8-Diamante",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 8-Diamante circulam com maiores intervalos entre as estações Júlio Prestes e Itapevi.",
       "horas": 7.167,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 7.167
       }
@@ -72157,11 +72158,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 2.333,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 2.333
       }
@@ -72448,11 +72449,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 3.167,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 3.167
       }
@@ -72502,11 +72503,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 0.5,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 0.5
       }
@@ -72536,11 +72537,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 11.167,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 11.167
       }
@@ -72588,11 +72589,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 0.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 0.917
       }
@@ -72786,11 +72787,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 2.167,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 2.167
       }
@@ -72823,11 +72824,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 19.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 19.917
       }
@@ -73062,11 +73063,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 3.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 3.917
       }
@@ -73116,11 +73117,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 16.083,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 16.083
       }
@@ -73170,11 +73171,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 1.083,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 1.083
       }
@@ -73224,11 +73225,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 0.417,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 0.417
       }
@@ -73387,11 +73388,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Grajaú e Varginha.",
       "horas": 10.5,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 10.5
       }
@@ -73404,11 +73405,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 3.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-01": 3.583
       }
@@ -73441,11 +73442,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 19.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 19.917
       }
@@ -73565,11 +73566,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 0.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 0.917
       }
@@ -73978,11 +73979,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 9-Esmeralda estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 1.25,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 1.25
       }
@@ -74045,11 +74046,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 9-Esmeralda estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 2.667,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 2.667
       }
@@ -74062,11 +74063,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 9-Esmeralda estarão abertas apenas para desembarque e transferência.\r\nDevido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 0.083,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 0.083
       }
@@ -74079,11 +74080,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 9-Esmeralda estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 0.5,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 0.5
       }
@@ -74096,11 +74097,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 9-Esmeralda estarão abertas apenas para desembarque e transferência.\r\nDevido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 0.083,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 0.083
       }
@@ -74113,11 +74114,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Especial",
-      "estado": "Evento especial",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "A partir da meia-noite (0h), as estações da Linha 9-Esmeralda estarão abertas apenas para desembarque e transferência.\nDevido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Osasco e Varginha.",
       "horas": 1.5,
-      "cor": "#1C2C8C",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 1.5
       }
@@ -74421,11 +74422,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 2.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-02": 2.75
       }
@@ -75039,11 +75040,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 0.75,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.75
       }
@@ -75198,11 +75199,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda regressam da estação Presidente Altino.",
       "horas": 2.167,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 2.167
       }
@@ -75361,11 +75362,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 0.5,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.5
       }
@@ -75415,11 +75416,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 0.167,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.167
       }
@@ -75644,11 +75645,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos e regressam da estação Presidente Altino.",
       "horas": 0.283,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 0.283
       }
@@ -75844,11 +75845,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 19.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-03": 19.917
       }
@@ -76046,11 +76047,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 19.833,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 19.833
       }
@@ -76135,7 +76136,7 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 11.75,
@@ -76169,7 +76170,7 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 6.25,
@@ -76406,11 +76407,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação Parcial",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência no sistema de energia, estamos temporariamente sem circulação de trens no trecho entre as estações Presidente Altino e Barueri da linha 8 - Diamante, e entre Presidente Altino e Osasco da linha 9 - Esmeralda. Ônibus do sistema PAESE foram acionados para atender esse trecho.",
       "horas": 0.917,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.917
       }
@@ -76460,11 +76461,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 18.25,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 18.25
       }
@@ -76494,11 +76495,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos entre as estações Varginha e Osasco.",
       "horas": 1.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 1.583
       }
@@ -76945,11 +76946,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à manutenção programada entre as estações SAM e MRB, na via 2, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 1.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-04": 1.917
       }
@@ -76999,11 +77000,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à intercorrência de rede aérea entre as estações AUT e JUR, os trens estão circulando por via única e maiores intervalos entre as estações VAG e JUR. Ônibus da operação PAESE foram acionados para reforçar o trecho.\nCirculação de trens entre as estações JUR e OSA normal.",
       "horas": 5.333,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 5.333
       }
@@ -77016,11 +77017,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à intercorrência de rede aérea entre as estações AUT e JUR, os trens estão circulando por via única e maiores intervalos entre as estações VAG e JUR. Circulação de trens entre as estações JUR e OSA permanece normal.",
       "horas": 3.5,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 3.5
       }
@@ -77124,11 +77125,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à intercorrência com um trem próximo a estação Berrini.",
       "horas": 0.667,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.667
       }
@@ -77141,11 +77142,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido ao descarrilamento parcial de um carro de um trem na região da estação Berrini, estamos operando em via única no trecho.\nEquipes de manutenção estão no local e a previsão de restabelecimento do trecho é até as 4h00 da manhã desta segunda-feira (27).",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -77158,11 +77159,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Operação com Impacto Pontual",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido ao descarrilamento parcial de um carro de um trem na região da estação Berrini, estamos operando em via única no trecho.\nEquipes de manutenção estão no local e a previsão de restabelecimento do trecho é até às 4h00 da manhã desta segunda-feira (27).",
       "horas": 0.083,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 0.083
       }
@@ -77212,11 +77213,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Ocorrência operacional",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido ao descarrilamento parcial de um carro de um trem na região da estação Berrini no final da noite de 26/4, estamos operando em via única no trecho.\nÔnibus PAESE de reforço foram acionados no trecho entre Granja Julieta a Pinheiros.\nEquipes de manutenção estão no local para o restabelecimento do serviço.",
       "horas": 2.25,
-      "cor": "#FFD200",
+      "cor": "#F57C00",
       "meses": {
         "2026-04": 2.25
       }
@@ -77392,11 +77393,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 14.333,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 14.333
       }
@@ -77427,7 +77428,7 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 0.083,
@@ -77461,7 +77462,7 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 3.167,
@@ -77495,11 +77496,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 9.25,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 9.25
       }
@@ -77549,7 +77550,7 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Maiores Intervalos",
-      "estado": "Com falha ou parcial",
+      "estado": "Manutenção programada",
       "classificacao": "Problema (Offline)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 4.833,
@@ -77566,11 +77567,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 1.667,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 1.667
       }
@@ -77583,11 +77584,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda estão circulando com maiores intervalos e retornando da estação Presidente Altino.",
       "horas": 13.0,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 13.0
       }
@@ -77674,11 +77675,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Circulação em via única das 23h à meia noite devido à manutenção de rede área, com embarque e desembarque pela mesma plataforma nas estações Morumbi-Claro e Granja Julieta e intervalos de cerca de 15 minutos.",
       "horas": 0.917,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 0.917
       }
@@ -77763,11 +77764,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Manutenção de via permanente, das 11h00 às 15h00. Operação em via única, com embarque e desembarque pela mesma plataforma na estação Socorro e intervalos médios entre trens de 12 minutos entre as estações Socorro e Varginha.",
       "horas": 0.183,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 0.183
       }
@@ -77780,11 +77781,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Manutenção de via permanente, das 12h00 às 15h00. Operação em via única, com embarque e desembarque pela mesma plataforma na estação Socorro e intervalos médios entre trens de 12 minutos entre as estações Socorro e Varginha.",
       "horas": 3.567,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 3.567
       }
@@ -77814,11 +77815,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Devido à atividade programada, os trens da Linha 9-Esmeralda circulam com maiores intervalos.",
       "horas": 0.583,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {
         "2026-05": 0.583
       }
@@ -77868,11 +77869,11 @@
       "linha": "Linha 9-Esmeralda",
       "operador": "ViaMobilidade 8 e 9",
       "status": "Atividade Programada",
-      "estado": "Disponível",
+      "estado": "Manutenção programada",
       "classificacao": "Operacional (Online)",
       "descricao": "Circulação em via única das 12h30 às 15h00, devido a manutenção de via, com embarque e desembarque pela mesma plataforma na Estação Socorro. No trecho entre Socorro e Varginha, os intervalos médios entre trens estão em 12 minutos.",
       "horas": 0,
-      "cor": "#007A5E",
+      "cor": "#FFD200",
       "meses": {}
     }
   ],
