@@ -17,72 +17,49 @@ concurrency:
 
 jobs:
   build:
-    name: Build static Next.js app
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar repositório
-        uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
-
-      - name: Conferir ambiente
-        run: |
-          echo "=== Node/NPM ==="
-          node --version
-          npm --version
-          echo "=== Pasta atual ==="
-          pwd
-          echo "=== Arquivos da raiz ==="
-          ls -la
-          echo "=== package.json ==="
-          cat package.json
-          echo "=== workflows ==="
-          ls -la .github/workflows || true
+          node-version: '20'
+          cache: 'npm'
 
       - name: Instalar dependências
-        run: npm install --no-audit --no-fund --legacy-peer-deps
+        run: npm ci
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Conferir Next instalado
-        run: |
-          echo "=== node_modules/.bin ==="
-          ls -la node_modules/.bin || true
-          echo "=== Next version ==="
-          ./node_modules/.bin/next --version
-
-      - name: Gerar site estático
+      - name: Build
         run: npm run build
         env:
           GITHUB_PAGES: "true"
           NEXT_TELEMETRY_DISABLED: "1"
+          NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Conferir saída estática
-        run: |
-          echo "=== Pasta out ==="
-          test -d out
-          ls -la out
-
-      - name: Configurar GitHub Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Enviar artefato do GitHub Pages
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy
     runs-on: ubuntu-latest
     needs: build
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Publicar no GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
