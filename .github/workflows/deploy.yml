@@ -12,29 +12,49 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
   build:
+    name: Build static Next.js app
     runs-on: ubuntu-latest
 
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v4
 
-      - name: Configurar Node
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
+      - name: Conferir ambiente
+        run: |
+          node --version
+          npm --version
+          pwd
+          ls -la
 
       - name: Instalar dependências
         run: npm install
+
+      - name: Conferir scripts do package.json
+        run: npm run
 
       - name: Gerar site estático
         run: npm run build
         env:
           GITHUB_PAGES: "true"
+
+      - name: Conferir saída estática
+        run: |
+          test -d out
+          ls -la out
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
 
       - name: Enviar artefato do GitHub Pages
         uses: actions/upload-pages-artifact@v3
@@ -42,12 +62,13 @@ jobs:
           path: ./out
 
   deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-    needs: build
 
     steps:
       - name: Publicar no GitHub Pages
