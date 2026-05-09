@@ -31,13 +31,13 @@ jobs:
           cache: 'npm'
 
       - name: Instalar dependências
-        run: npm ci
+        run: npm install --no-audit --no-fund --legacy-peer-deps
         env:
           NEXT_TELEMETRY_DISABLED: "1"
           NODE_OPTIONS: --max-old-space-size=4096
 
       - name: Build
-        run: npm run build
+        run: npx next build
         env:
           GITHUB_PAGES: "true"
           NEXT_TELEMETRY_DISABLED: "1"
