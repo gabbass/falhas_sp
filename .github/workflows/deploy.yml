@@ -28,16 +28,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      - name: Instalar dependências
-        run: npm install --no-audit --no-fund --legacy-peer-deps
+      - name: Forçar registry público e instalar
+        run: |
+          npm config set registry https://registry.npmjs.org/
+          rm -f package-lock.json
+          npm install --no-audit --no-fund --legacy-peer-deps
         env:
           NEXT_TELEMETRY_DISABLED: "1"
           NODE_OPTIONS: --max-old-space-size=4096
 
+      - name: Confirmar instalação
+        run: |
+          ls -la node_modules/.bin
+          ./node_modules/.bin/next --version
+
       - name: Build
-        run: npx next build
+        run: ./node_modules/.bin/next build
         env:
           GITHUB_PAGES: "true"
           NEXT_TELEMETRY_DISABLED: "1"
