@@ -3206,6 +3206,7 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                 </button>
                 <DocumentacaoPopup />
                 <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
+                <AnaliseIaPopup />
               </div>
             </div>
           </div>

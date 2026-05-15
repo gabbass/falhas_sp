@@ -80,6 +80,8 @@ A rota raiz agora lê `?ano=2024` no componente servidor e renderiza a visão an
 - A documentação metodológica agora é aberta em popup próprio, no mesmo padrão de “Eventos relevantes”, preservando Base analisada apenas para 2025, 2024 e Comparativo.
 - Percentuais exibidos no painel e nas variações comparativas usam até 2 casas decimais.
 
+
+- Foi incorporado o popup **Análise IA**, exibindo a leitura analítica revisada do painel no mesmo padrão visual dos demais modais.
 - Foi incorporado o popup **Eventos relevantes**, alimentado pela planilha `ocorrencias_relevantes_metro_cptm_privadas_2024_2025_atualizado.xlsx`, com filtros internos por ano e abertura dos links das matérias em nova aba.
 
 - A modal de Documentação exibe as seções metodológicas em cartões próprios, sem colapso indevido de conteúdo.
