@@ -47,3 +47,11 @@ A saída estática será gerada em:
 ```text
 out/
 ```
+
+## Base de dados atual
+
+- Fonte do arquivo tratado: `ocorrencias_metro_20250101_20251231.xlsx`.
+- Período: `01/01/2025` a `31/12/2025`.
+- Registros originais: 8.305.
+- Registros normalizados após deduplicação por linha/horário: 8.117.
+- Janela operacional usada no cálculo: `04:00 às 24:00`, ou seja, 20 horas/dia por linha.
