@@ -1,0 +1,101 @@
+{
+  "metadata": {
+    "fonte": "ocorrencias_relevantes_metro_cptm_privadas_2024_2025_com_eventos.xlsx — aba Eventos 2024-2025",
+    "descricao": "Eventos estruturais e institucionais relevantes para a leitura do período 2024-2025.",
+    "totalEventos": 9,
+    "total2024": 2,
+    "total2025": 7
+  },
+  "eventos": [
+    {
+      "ano": "2025",
+      "data": "2025-11-26",
+      "dataLabel": "26/11/2025",
+      "operador": "TIC Trens",
+      "linhas": "Linha 7-Rubi",
+      "eventoEstrutural": "TIC Trens assume integralmente a operação, administração e manutenção da Linha 7-Rubi",
+      "tituloFonte": "Governo de SP avança no projeto do Trem Intercidades Norte com início da operação da Linha 7-Rubi pela TIC Trens",
+      "link": "https://www.agenciasp.sp.gov.br/tic-trens-inicia-operacao-e-manutencao-da-linha-7-rubi-nesta-quarta-feira-26/"
+    },
+    {
+      "ano": "2025",
+      "data": "2025-11-26",
+      "dataLabel": "26/11/2025",
+      "operador": "TIC Trens",
+      "linhas": "Linha 7-Rubi",
+      "eventoEstrutural": "TIC Trens anuncia pacote inicial de manutenção com 21 mil dormentes e 10 km de trilhos",
+      "tituloFonte": "TIC Trens inicia operação e manutenção da Linha 7–Rubi nesta quarta-feira (26)",
+      "link": "https://www.tictrens.com.br/noticias/tic-trens-inicia-operacao-e-manutencao-da-linha-7-rubi-nesta-quarta-feira-26-2610"
+    },
+    {
+      "ano": "2025",
+      "data": "2025-08-28",
+      "dataLabel": "28/08/2025",
+      "operador": "TIC Trens / CPTM",
+      "linhas": "Linha 7-Rubi",
+      "eventoEstrutural": "Início da operação supervisionada da TIC Trens na Linha 7-Rubi, sob orientação da CPTM",
+      "tituloFonte": "Linhas 7-Rubi e 10-Turquesa passam a ter a Barra Funda como terminal a partir desta quinta (28)",
+      "link": "https://www.agenciasp.sp.gov.br/linhas-7-rubi-e-10-turquesa-passam-a-ter-a-barra-funda-como-terminal-a-partir-desta-quinta-28-entenda-as-mudancas/"
+    },
+    {
+      "ano": "2025",
+      "data": "2025-05-29",
+      "dataLabel": "29/05/2025",
+      "operador": "ViaMobilidade",
+      "linhas": "Linhas 8-Diamante e 9-Esmeralda",
+      "eventoEstrutural": "Aditivo contratual prevê investimento adicional para implantação do sistema de sinalização ETCS-N2",
+      "tituloFonte": "Fato Relevante - Aditivo Linhas 8 - 9",
+      "link": "https://mzgroup.com.br/fatosrelevantes/fato-relevante-aditivo-linhas-8-9/"
+    },
+    {
+      "ano": "2025",
+      "data": "2025-05-19",
+      "dataLabel": "19/05/2025",
+      "operador": "CPTM",
+      "linhas": "Linha 11-Coral",
+      "eventoEstrutural": "CPTM normaliza a circulação após construir via emergencial na região de Suzano com dois meses de antecedência",
+      "tituloFonte": "CPTM normaliza a circulação da Linha 11-Coral com dois meses de antecedência",
+      "link": "https://www.cptm.sp.gov.br/cptm/noticias/cptm-normaliza-a-circulacao-da-linha-11-coral-com-dois-meses-de-antecedencia"
+    },
+    {
+      "ano": "2025",
+      "data": "2025-03-06",
+      "dataLabel": "06/03/2025",
+      "operador": "ViaMobilidade",
+      "linhas": "Linhas 8-Diamante e 9-Esmeralda",
+      "eventoEstrutural": "ViaMobilidade conclui a entrega dos 36 novos trens destinados às Linhas 8 e 9",
+      "tituloFonte": "ViaMobilidade conclui entrega dos 36 novos trens para as linhas 8-Diamante e 9-Esmeralda",
+      "link": "https://diariodotransporte.com.br/2025/03/06/viamobilidade-conclui-entrega-dos-36-novos-trens-para-as-linhas-8-diamante-e-9-esmeralda/"
+    },
+    {
+      "ano": "2025",
+      "data": "2025-02-27",
+      "dataLabel": "27/02/2025",
+      "operador": "Metrô",
+      "linhas": "Linha 15-Prata",
+      "eventoEstrutural": "Metrô informa a chegada do segundo e do terceiro novos trens da Linha 15-Prata ao Pátio Oratório",
+      "tituloFonte": "Novos trens para a Linha 15-Prata",
+      "link": "https://www.metro.sp.gov.br/2025/02/27/novos-trens-para-a-linha-15-prata/"
+    },
+    {
+      "ano": "2024",
+      "data": "2024-11-27",
+      "dataLabel": "27/11/2024",
+      "operador": "Metrô",
+      "linhas": "Linha 15-Prata",
+      "eventoEstrutural": "Primeiro novo trem da Linha 15-Prata chega a São Paulo para reforço da frota",
+      "tituloFonte": "Novo trem da Linha 15-Prata chega a São Paulo em megaoperação logística",
+      "link": "https://www.metro.sp.gov.br/2024/11/27/novo-trem-da-linha-15-prata-chega-a-sao-paulo-em-megaoperacao-logistica/"
+    },
+    {
+      "ano": "2024",
+      "data": "2024-07-03",
+      "dataLabel": "03/07/2024",
+      "operador": "Metrô",
+      "linhas": "Linha 15-Prata",
+      "eventoEstrutural": "Primeiro novo trem da Linha 15-Prata é entregue ao Metrô na China",
+      "tituloFonte": "Novo trem da Linha 15-Prata é entregue ao Metrô, na China onde foi fabricado",
+      "link": "https://www.metro.sp.gov.br/2024/07/04/novo-trem-da-linha-15-prata-e-entregue-ao-metro-na-china-onde-foi-fabricado/"
+    }
+  ]
+}

@@ -10,7 +10,6 @@ export type LinhaRanking = {
   qtdFalhas: number;
   qtdIndisponibilidade: number;
   uptimePct: number;
-  impactoPct: number;
 };
 
 export type ProblemaRecorrente = {
