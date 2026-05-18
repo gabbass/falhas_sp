@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Cell,
   ComposedChart,
-  Legend,
   Line,
   LineChart,
   LabelList,
@@ -291,7 +290,7 @@ type LinhaComparativa = {
 
 const COMPARATIVO_2025_2024: MetricaComparativa[] = [
   {
-    label: "Disponibilidade",
+    label: "Disponibilidade total",
     valor2025: data2025Comparacao.kpis.disponibilidadePct,
     valor2024: data2024Comparacao.kpis.disponibilidadePct,
     formato: "pct",
@@ -334,7 +333,7 @@ const COMPARATIVO_2025_2024: MetricaComparativa[] = [
 
 const METRICAS_COMPARATIVO_LINHA: MetricaLinhaComparativa[] = [
   {
-    label: "Disponibilidade",
+    label: "Disponibilidade total",
     chave: "disponibilidadePct",
     formato: "pct",
     sentidoNarrativo: "maior-melhor",
@@ -880,7 +879,7 @@ function buildWordCloud(eventos: Evento[]): PalavraNuvem[] {
     })
     .filter((item) => item.qtd >= 2)
     .sort((a, b) => b.qtd - a.qtd || a.palavra.localeCompare(b.palavra, "pt-BR"))
-    .slice(0, 70);
+    .slice(0, 42);
 }
 
 function calcMediaEntreFalhasPorLinha(eventos: Evento[]): Map<string, number> {
@@ -2058,7 +2057,7 @@ function RankingTable({ rows }: { rows: LinhaRanking[] }) {
               <th>#</th>
               <th>Linha</th>
               <th>Operador</th>
-              <th>Disponibilidade</th>
+              <th>Disponibilidade total</th>
               <th>Disponível</th>
               <th>Especial</th>
               <th>Manutenção</th>
@@ -3131,45 +3130,35 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
           </div>
         </div>
       ) : null}
-      <section className="hero">
-        <div className="hero-card">
-          <span className="badge">
-            Ocorrências metroferroviárias · base {ANO_ATIVO}
-          </span>
-          <h1>Painel de disponibilidade e ocorrências nas linhas metroferroviárias</h1>
-          <p>
-            Este painel resume, em linguagem operacional, quanto tempo as linhas
-            ficaram disponíveis, quanto tempo tiveram eventos programados,
-            ocorrências, paralisações ou falta de dados do sistema. Período analisado: {data.metadata.periodoLabel}.
-            A comparação usa {fmtHoras(HORAS_DIA)} horas
-            de operação por dia, na janela padrão de {JANELA_OPERACIONAL_LABEL}.
-            Fonte dos dados:{" "}
-            <a href="https://ccm.artesp.sp.gov.br" target="_blank" rel="noreferrer">
-              ccm.artesp.sp.gov.br
-            </a>.
-          </p>
-        </div>
-        <div className="hero-side hero-card">
-          <strong>Legenda operacional</strong>
-          <p className="legend-intro">Cada cor representa uma situação operacional monitorada. Disponível e eventos especiais ficam concentrados nos cartões, distribuições, evolução mensal e tabela analítica.</p>
-          <div className="legend-block">
-            <span style={{ background: CORES["Manutenção programada"] }} /> Manutenção
-            programada
+      <section className="hero dashboard-hero">
+        <div className="hero-card hero-thumb-card">
+          <div className="hero-thumb-media">
+            <img
+              src="/images/thumb-disponibilidade.jpg"
+              alt="Multidão em estação metroferroviária de São Paulo"
+            />
           </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Ocorrência operacional"] }} /> Ocorrência
-            operacional
-          </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Falha total / paralisação"] }} />{" "}
-            Falha total / paralisação
-          </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Indefinido"] }} />{" "}
-            Indefinido
-          </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Evento especial"] }} /> Eventos especiais
+          <div className="hero-thumb-copy">
+            <div className="hero-title-line">
+              <img
+                className="hero-panel-mark"
+                src="/images/painel_1.svg"
+                alt="Painel 1"
+              />
+              <h1>Painel de disponibilidade e ocorrências no metrô e trens de São Paulo</h1>
+            </div>
+            <p>
+              Este é o primeiro painel de análise sobre a situação de transporte público na Região Metropolitana. Veja, de forma simples, como metrô e trens de São Paulo operaram no período analisado: tempo disponível, ocorrências, manutenções, paralisações e lacunas de dados, com filtros para explorar linhas, operadores e momentos do dia.
+              <br />
+              Período analisado: 01/01/2024 a 31/12/2025.
+              <br />
+              A comparação usa 19,5 horas de operação por dia, na janela padrão de 04:30 às 00:00.
+              <br />
+              Fonte dos dados:{" "}
+              <a href="https://ccm.artesp.sp.gov.br" target="_blank" rel="noreferrer">
+                ccm.artesp.sp.gov.br
+              </a>.
+            </p>
           </div>
         </div>
       </section>
@@ -3391,6 +3380,30 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
           icon={<ListChecks size={22} />}
         />
       </section>
+      <section className="hero-card operational-legend-line" aria-label="Legenda operacional">
+        <div className="operational-legend-head">
+          <strong>Legenda operacional</strong>
+          <p className="legend-intro">Cada cor representa uma situação operacional monitorada. Disponível e eventos especiais ficam concentrados nos cartões, distribuições, evolução mensal e tabela analítica.</p>
+        </div>
+        <div className="operational-legend-items">
+          <div className="legend-block">
+            <span style={{ background: CORES["Manutenção programada"] }} /> Manutenção programada
+          </div>
+          <div className="legend-block">
+            <span style={{ background: CORES["Ocorrência operacional"] }} /> Ocorrência operacional
+          </div>
+          <div className="legend-block">
+            <span style={{ background: CORES["Falha total / paralisação"] }} /> Falha total / paralisação
+          </div>
+          <div className="legend-block">
+            <span style={{ background: CORES["Indefinido"] }} /> Indefinido
+          </div>
+          <div className="legend-block">
+            <span style={{ background: CORES["Evento especial"] }} /> Eventos especiais
+          </div>
+        </div>
+      </section>
+
 
       <section className="grid-2">
         <div className="panel panel-focus">
@@ -3413,7 +3426,6 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                 ))}
               </Pie>
               <Tooltip formatter={(value: number) => `${fmtHoras(value)} h`} />
-              <Legend />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -3437,7 +3449,6 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                 ))}
               </Pie>
               <Tooltip formatter={(value: number) => `${fmtInt(value)} registro(s)`} />
-              <Legend />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -3465,7 +3476,6 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                 width={130}
               />
               <Tooltip formatter={(value: number) => `${fmtHoras(value)} h`} />
-              <Legend />
               <Bar
                 dataKey="horasManutencaoProgramada"
                 stackId="a"
@@ -3509,7 +3519,6 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                 width={130}
               />
               <Tooltip />
-              <Legend />
               <Bar
                 dataKey="qtdManutencaoProgramada"
                 stackId="q"
@@ -3571,7 +3580,6 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                   payload?.[0]?.payload?.nome ?? String(_label)
                 }
               />
-              <Legend />
               <Bar
                 dataKey="horasManutencaoProgramada"
                 stackId="tempoOperador"
@@ -3622,7 +3630,6 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                   payload?.[0]?.payload?.nome ?? String(_label)
                 }
               />
-              <Legend />
               <Bar
                 dataKey="qtdManutencaoProgramada"
                 stackId="qtdOperador"
@@ -3742,11 +3749,9 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
           recorteDias={recorteDiasMapa}
         />
         <div className="chart-footnote scatter-footnote">
-          <span className="legend-dot" style={{ background: CORES["Ocorrência operacional"] }} />
-          Cor = categoria operacional. Tamanho do ponto = duração aproximada. Clique em um ponto para ver a ocorrência, a duração calculada e, quando houver, o efeito cascata associado a outra linha.
+          Tamanho do ponto = duração aproximada. Clique em um ponto para ver a ocorrência, a duração calculada e, quando houver, o efeito cascata associado a outra linha.
         </div>
         <div className="chart-footnote scatter-footnote scatter-disclaimer">
-          <span className="legend-dot" style={{ background: CORES["Evento especial"] }} />
           As faixas de pico são referência de leitura: janeiro não considera pico estudantil e sábados/domingos não têm pico declarado. Em “Somente dias úteis”, as faixas ficam mais fortes para destacar os períodos críticos. O posicionamento do ponto usa sempre o horário de início do evento. Dados indisponíveis aparecem apenas quando esse status é selecionado no filtro global ou no filtro local de evento.
         </div>
       </section>
@@ -3772,21 +3777,16 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
           </label>
         </div>
         <small>
-          Este filtro atua somente no histograma temporal. O mapa horário possui controle próprio logo acima.
+          Os Filtros globais também alteram este histograma. Este seletor apenas refina a linha exibida; o mapa horário possui controle próprio logo acima.
         </small>
         <HeatmapDisponibilidade
           eventos={agregado.eventosFiltrados}
           linhaSelecionada={linhaHistograma}
         />
-        <div className="chart-footnote scatter-footnote availability-heatmap-legend">
-          <span className="legend-dot" style={{ background: CORES["Disponível"] }} /> Disponível
-          <span className="legend-dot" style={{ background: CORES["Manutenção programada"] }} /> Manutenção
-          <span className="legend-dot" style={{ background: CORES["Ocorrência operacional"] }} /> Ocorrência operacional
-          <span className="legend-dot" style={{ background: CORES["Falha total / paralisação"] }} /> Falha total
-        </div>
       </section>
 
-      <section className="grid-2" style={{ marginTop: 18 }}>
+      <section className="grid-2 monthly-wordcloud-layout" style={{ marginTop: 18 }}>
+        <div className="stacked-panel-column">
         <div className="panel">
           <h2>Evolução mensal</h2>
           <p>Mostra a evolução mês a mês dos estados operacionais principais. Maio aparece menor porque a base vai somente até a data parcial informada, não até o fim do mês.</p>
@@ -3802,7 +3802,6 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
               <XAxis dataKey="mesLabel" stroke="#475569" />
               <YAxis stroke="#475569" />
               <Tooltip formatter={(value: number) => `${fmtHoras(value)} h`} />
-              <Legend />
               <Line
                 type="monotone"
                 dataKey="horasDisponivel"
@@ -3846,8 +3845,42 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
             </LineChart>
           </ResponsiveContainer>
         </div>
+        <div className="panel word-cloud-panel">
+        <div className="panel-heading-row">
+          <div>
+            <h2>Nuvem de palavras</h2>
+            <p>
+              Mostra os termos que mais aparecem nas descrições úteis dos eventos. O tamanho indica frequência; a classificação operacional segue a legenda geral.
+            </p>
+            <p className="word-cloud-disclaimer">
+              A nuvem ignora palavras muito comuns, operação normal, operação encerrada e dados indisponíveis, para destacar termos com significado operacional.
+            </p>
+          </div>
+          <div className="occurrence-summary">
+            <strong>{fmtInt(agregado.palavras.length)}</strong> termo(s)
+          </div>
+        </div>
+        <div className="word-cloud" aria-label="Nuvem de palavras das ocorrências">
+          {agregado.palavras.map((item, index) => {
+            const maiorQtd = Math.max(...agregado.palavras.map((palavra) => palavra.qtd), 1);
+            const size = 14 + Math.round((item.qtd / maiorQtd) * 24);
+            return (
+              <span
+                key={`${item.palavra}-${index}`}
+                style={{ color: item.cor, fontSize: `${size}px` }}
+                title={`${item.palavra}: ${fmtInt(item.qtd)} ocorrência(s). Estado mais comum: ${item.estadoMaisComum}`}
+              >
+                {item.palavra}
+              </span>
+            );
+          })}
+        </div>
 
-        <div className="panel chart-panel-pro">
+      
+        </div>
+        </div>
+
+        <div className="panel chart-panel-pro problem-types-panel">
           <h2>Tipos de registro por tempo acumulado</h2>
           <p>Classifica somente manutenções programadas, ocorrências operacionais e paralisações. Evento especial e dados indisponíveis ficam fora desta leitura para não confundir serviço ofertado com interrupções ou restrições.</p>
           <div className="problem-ranking problem-ranking--hours" role="list">
@@ -3885,45 +3918,14 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
             })}
           </div>
           <div className="chart-footnote">
-            <span
-              className="legend-dot"
-              style={{ background: CORES["Ocorrência operacional"] }}
-            />
             Barra = horas acumuladas do tipo de registro. Texto à direita = quantidade de registros daquele tipo.
           </div>
-        </div>
-      </section>
-
-      <section className="panel word-cloud-panel" style={{ marginTop: 18 }}>
-        <div className="panel-heading-row">
-          <div>
-            <h2>Nuvem de palavras</h2>
-            <p>
-              Mostra os termos que mais aparecem nas descrições úteis dos eventos. O tamanho indica frequência; a cor indica o estado operacional em que a palavra mais apareceu.
-            </p>
+          <div className="problem-types-thumb" aria-label="Imagem de apoio do cartão de tipos de registro">
+            <img
+              src="/images/thumb-tipos-registro.jpg"
+              alt="Plataforma ferroviária movimentada em São Paulo"
+            />
           </div>
-          <div className="occurrence-summary">
-            <strong>{fmtInt(agregado.palavras.length)}</strong> termo(s)
-          </div>
-        </div>
-        <div className="word-cloud" aria-label="Nuvem de palavras das ocorrências">
-          {agregado.palavras.map((item, index) => {
-            const maiorQtd = Math.max(...agregado.palavras.map((palavra) => palavra.qtd), 1);
-            const size = 14 + Math.round((item.qtd / maiorQtd) * 24);
-            return (
-              <span
-                key={`${item.palavra}-${index}`}
-                style={{ color: item.cor, fontSize: `${size}px` }}
-                title={`${item.palavra}: ${fmtInt(item.qtd)} ocorrência(s). Estado mais comum: ${item.estadoMaisComum}`}
-              >
-                {item.palavra}
-              </span>
-            );
-          })}
-        </div>
-        <div className="chart-footnote word-cloud-footnote">
-          <span className="legend-dot" style={{ background: CORES["Ocorrência operacional"] }} />
-          A nuvem ignora palavras muito comuns, operação normal, operação encerrada e dados indisponíveis, para destacar termos com significado operacional.
         </div>
       </section>
 

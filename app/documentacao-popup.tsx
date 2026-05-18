@@ -125,12 +125,17 @@ const formulas = [
     uso: "Mostra degradação de serviço por eventos operacionais não classificados como manutenção programada ou paralisação total.",
   },
   {
-    titulo: "Disponibilidade percentual geral",
+    titulo: "Disponibilidade total percentual geral",
     formula: "disponibilidade_% = horas_disponíveis / horas_esperadas_total × 100",
     uso: "Indicador dos cartões principais. Mantém evento especial fora do numerador para não inflar a disponibilidade-base.",
   },
   {
-    titulo: "Disponibilidade percentual por linha/tabela",
+    titulo: "Disponibilidade parcial — conceito de leitura",
+    formula: "disponibilidade_parcial = disponibilidade_total + ocorrência_operacional + manutenção_programada",
+    uso: "A disponibilidade parcial não substitui a disponibilidade total. Ela serve para leituras em que serviço com restrição e manutenção entram como condição parcialmente ofertada, preservando a separação conceitual entre operação plena e operação não totalmente interrompida.",
+  },
+  {
+    titulo: "Disponibilidade total percentual por linha/tabela",
     formula: "disponibilidade_linha_% = horas_disponíveis / horas_totais_da_linha × 100",
     uso: "Na tabela analítica por linha, evento especial segue em coluna própria e não entra no numerador da disponibilidade.",
   },
@@ -398,8 +403,8 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
                               <h3>Filtros globais</h3>
                               <p>
                                 Filtros de linha, operador e status alteram cartões, gráficos, rankings,
-                                evolução mensal, mapa horário das ocorrências, histograma temporal de disponibilidade e tabelas. Os filtros locais das tabelas apenas refinam a
-                                visualização daquela tabela.
+                                evolução mensal, mapa horário das ocorrências, histograma temporal de disponibilidade, nuvem de palavras e tabelas. Os filtros locais apenas refinam
+                                a visualização do componente em que aparecem.
                               </p>
                             </div>
                           </div>
@@ -415,7 +420,9 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
                             <li>Rankings de tipos de falha excluem Disponível, Evento especial e Indefinido.</li>
                             <li>A lista pesquisável de falhas e paralisações considera apenas manutenção programada, ocorrência operacional, falha parcial e falha total/paralisação.</li>
                             <li>O <b>Comparativo 2025 × 2024</b> é tratado como uma base analisada própria. Quando selecionado, a página exibe apenas os cartões e a tabela comparativa, sem misturar KPIs ou gráficos anuais.</li>
-                            <li>O <b>histograma temporal de disponibilidade</b> usa dias no eixo horizontal, faixas de 30 minutos no eixo vertical e cor por estado dominante. A malha completa nasce como <b>Disponível</b>; os eventos restritivos sobrepõem apenas as células atingidas. Quando dois estados se cruzam na mesma célula, prevalece o estado mais crítico para leitura operacional. Ele compartilha o mesmo filtro de linha do <b>mapa horário das ocorrências</b>, sempre depois da aplicação dos Filtros globais.</li>
+                            <li>O <b>histograma temporal de disponibilidade</b> usa dias no eixo horizontal, faixas horárias no eixo vertical e cor por estado dominante. A malha completa nasce como <b>Disponível</b>; os eventos restritivos sobrepõem apenas as células atingidas. Quando dois estados se cruzam na mesma célula, prevalece o estado mais crítico para leitura operacional. Os <b>Filtros globais</b> são aplicados primeiro; depois, o seletor local refina apenas a linha exibida no histograma.</li>
+                            <li>A <b>nuvem de palavras</b> ignora palavras muito comuns, operação normal, operação encerrada e dados indisponíveis, para destacar termos com significado operacional. O tamanho representa frequência; a classificação operacional segue a legenda geral.</li>
+                            <li>Quando o painel mencionar apenas <b>Disponibilidade</b>, o rótulo correto é <b>Disponibilidade total</b>. <b>Disponibilidade parcial</b> é um conceito distinto: disponibilidade total + ocorrência operacional + manutenção programada.</li>
                           </ul>
                         </section>
 
