@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: "export",
   trailingSlash: true,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGitHubPages ? "/falhas_sp" : "",
+  },
   images: {
     unoptimized: true,
   },

@@ -35,6 +35,8 @@ import EventosRelevantesPopup from "./eventos-relevantes-popup";
 import DocumentacaoPopup from "./documentacao-popup";
 import AnaliseIaPopup from "./analise-ia-popup";
 
+const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const data2024Comparacao = data;
 
 
@@ -3134,7 +3136,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
         <div className="hero-card hero-thumb-card">
           <div className="hero-thumb-media">
             <img
-              src="/images/thumb-disponibilidade.jpg"
+              src={`${assetBase}/images/thumb-disponibilidade.jpg`}
               alt="Multidão em estação metroferroviária de São Paulo"
             />
           </div>
@@ -3142,7 +3144,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
             <div className="hero-title-line">
               <img
                 className="hero-panel-mark"
-                src="/images/painel_1.svg"
+                src={`${assetBase}/images/painel_1.svg`}
                 alt="Painel 1"
               />
               <h1>Painel de disponibilidade e ocorrências no metrô e trens de São Paulo</h1>
@@ -3922,7 +3924,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
           </div>
           <div className="problem-types-thumb" aria-label="Imagem de apoio do cartão de tipos de registro">
             <img
-              src="/images/thumb-tipos-registro.jpg"
+              src={`${assetBase}/images/thumb-tipos-registro.jpg`}
               alt="Plataforma ferroviária movimentada em São Paulo"
             />
           </div>
