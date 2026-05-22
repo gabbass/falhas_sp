@@ -2476,3 +2476,18 @@ td {
   transform: scale(1.002);
 }
 
+/* Popup de análise humana */
+.analise-humana-trigger { white-space: nowrap; }
+.analise-humana-header {
+  background: linear-gradient(135deg, rgba(0,122,94,.08), rgba(28,44,140,.05));
+}
+.analise-humana-body {
+  grid-template-columns: minmax(0, 1fr);
+}
+.analise-humana-footer a,
+.analise-ia-footer a {
+  color: #1C2C8C;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

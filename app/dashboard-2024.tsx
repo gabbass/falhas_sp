@@ -33,6 +33,7 @@ import { type ReactNode, useEffect, useMemo, useState, useTransition } from "rea
 import { useRouter } from "next/navigation";
 import EventosRelevantesPopup from "./eventos-relevantes-popup";
 import DocumentacaoPopup from "./documentacao-popup";
+import AnaliseHumanaPopup from "./analise-humana-popup";
 import AnaliseIaPopup from "./analise-ia-popup";
 
 const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -3025,6 +3026,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 </button>
                 <DocumentacaoPopup />
                 <EventosRelevantesPopup anoInicial="todos" />
+                <AnaliseHumanaPopup />
                 <AnaliseIaPopup />
               </div>
             </div>
@@ -3197,6 +3199,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 </button>
                 <DocumentacaoPopup />
                 <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
+                <AnaliseHumanaPopup />
                 <AnaliseIaPopup />
               </div>
             </div>
