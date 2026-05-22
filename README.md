@@ -57,8 +57,7 @@ out/
 - As **distâncias médias entre eventos** usam **tempo operacional acumulado** dentro dessa mesma janela; a madrugada fora de operação é excluída dos intervalos.
 
 
-## Regra de classificação atualizada
-
+## Regra de classificação
 Descrições com **“Serviços de Manutenção”**, **“obras de melhoria”** e **“obras de modernização”** são classificadas como **Manutenção programada**. Para obras de melhoria e modernização, a regra prevalece mesmo quando o status bruto da fonte indicar paralisação, pois o painel interpreta o evento como intervenção programada.
 
 ## Correção de hidratação por ano
@@ -69,7 +68,7 @@ A rota raiz agora lê `?ano=2024` no componente servidor e renderiza a visão an
 - **Manutenção programada:** registros textuais com manutenção programada, atividade programada, obras de melhoria, obras de modernização ou serviços de manutenção são classificados nesta categoria. A expressão “falha em veículo de manutenção” continua como ocorrência operacional.
 
 
-## Nova classe de qualidade do dado
+## Classe de qualidade do dado
 
 - **Indefinido:** evento com `Duração_Indefinida = true` na base v3.
 - Cor adotada: `#9E9E9E`.
@@ -77,12 +76,3 @@ A rota raiz agora lê `?ano=2024` no componente servidor e renderiza a visão an
 - Status brutos como `Dados/Status Indisponíveis` seguem pertencendo à classificação operacional definida pela base; a nova classe cinza é exclusiva para **duração indefinida por gap de coleta**.
 
 
-- A documentação metodológica agora é aberta em popup próprio, no mesmo padrão de “Eventos relevantes”, preservando Base analisada apenas para 2025, 2024 e Comparativo.
-- Percentuais exibidos no painel e nas variações comparativas usam até 2 casas decimais.
-
-
-- Foi incorporado o popup **Análise IA**, exibindo a leitura analítica revisada do painel no mesmo padrão visual dos demais modais.
-- Foi incorporado o popup **Eventos relevantes**, alimentado pela planilha `ocorrencias_relevantes_metro_cptm_privadas_2024_2025_atualizado.xlsx`, com filtros internos por ano e abertura dos links das matérias em nova aba.
-
-- A modal de Documentação exibe as seções metodológicas em cartões próprios, sem colapso indevido de conteúdo.
-- O histograma temporal mantém o estilo visual original de grade/heatmap, mas agora resume linhas no eixo Y e 4 slots da jornada operacional de 19h30 no eixo X. Operação normal é o padrão/fallback; ocorrências sobrepõem a célula com a cor do evento dominante.
