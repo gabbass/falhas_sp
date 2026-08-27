@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "data:generate": "node scripts/python-runner.mjs scripts/ccm_summary.py --input ../caminhos_sp/data_raw/saida_ccm_20260818_213615/ocorrencias_ccm_2024_2025_1sem2026.json --output-dir data/generated",
+    "data:revalidate": "node scripts/python-runner.mjs scripts/revalidate_ccm.py --generated-dir data/generated --baseline-dir data --report data/generated/revalidation.json --markdown data/generated/revalidation.md",
+    "test:data": "node scripts/python-runner.mjs -m unittest discover -s tests -p test_*.py"
   },
   "dependencies": {
     "next": "^15.0.0",
@@ -19,5 +22,8 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "typescript": "^5.6.0"
+  },
+  "allowScripts": {
+    "sharp@0.34.5": true
   }
 }

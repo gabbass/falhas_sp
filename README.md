@@ -5,7 +5,7 @@
 
 Dashboard público em **Next.js** para visualização, análise e documentação das ocorrências metroferroviárias da Região Metropolitana de São Paulo.
 
-O painel apresenta indicadores de disponibilidade operacional, manutenção programada, ocorrências operacionais, falhas/paralisações, eventos especiais, registros indefinidos e comparativos entre 2024 e 2025.
+O painel apresenta indicadores de disponibilidade operacional, manutenção programada, ocorrências operacionais, falhas/paralisações, eventos especiais, registros indefinidos e o comparativo do primeiro semestre de 2024, 2025 e 2026.
 
 O objetivo do projeto é tornar os dados mais compreensíveis ao público, preservando rastreabilidade metodológica e separando claramente:
 
@@ -134,8 +134,10 @@ falhas_sp-main/
 │  ├─ page.tsx
 │  ├─ layout.tsx
 │  ├─ home-dashboard-router.tsx
+│  ├─ dashboard-2026.tsx
 │  ├─ dashboard-2025.tsx
 │  ├─ dashboard-2024.tsx
+│  ├─ comparativo-primeiro-semestre.tsx
 │  ├─ documentacao-popup.tsx
 │  ├─ eventos-relevantes-popup.tsx
 │  ├─ analise-humana-popup.tsx
@@ -146,6 +148,9 @@ falhas_sp-main/
 ├─ data/
 │  ├─ ocorrencias-summary.json
 │  ├─ ocorrencias-summary-2024.json
+│  ├─ ocorrencias-summary-2026.json
+│  ├─ ocorrencias-summary-2025-1sem.json
+│  ├─ ocorrencias-summary-2024-1sem.json
 │  └─ eventos-relevantes.json
 │
 ├─ lib/
@@ -170,7 +175,8 @@ A rota principal é:
 /
 ```
 
-Por padrão, ela abre o painel de **2025**.
+Por padrão, ela abre o painel do **primeiro semestre de 2026**. A mesma visão
+também pode ser acessada explicitamente por `/?ano=2026`.
 
 Também é possível acessar:
 
@@ -180,13 +186,15 @@ Também é possível acessar:
 
 para abrir a visão de 2024.
 
+Use `/?ano=2025` para abrir a visão anual de 2025.
+
 E:
 
 ```text
 /?ano=comparativo
 ```
 
-para abrir a visão comparativa **2025 × 2024**.
+para abrir a comparação entre os **primeiros semestres de 2026, 2025 e 2024**.
 
 O roteamento é feito em:
 
@@ -209,6 +217,9 @@ Ele consome arquivos JSON já tratados:
 ```text
 data/ocorrencias-summary.json
 data/ocorrencias-summary-2024.json
+data/ocorrencias-summary-2026.json
+data/ocorrencias-summary-2025-1sem.json
+data/ocorrencias-summary-2024-1sem.json
 data/eventos-relevantes.json
 ```
 
@@ -1437,3 +1448,66 @@ Gabriel Bassotto Quintiliano
 
 **Gabriel Bassotto Quintiliano**  
 <https://www.linkedin.com/in/gabriel-bassotto/>
+
+---
+
+## 25. Atualização a partir da CCM/ARTESP
+
+O repositório possui um pipeline versionado para transformar a extração
+consolidada da CCM no contrato JSON consumido pelo dashboard.
+
+### 25.1. Gerar arquivos de prévia
+
+```powershell
+npm run data:generate
+```
+
+Os arquivos são escritos em `data/generated/`, que não é versionado. O comando
+gera as bases anuais de 2024 e 2025 e os recortes de primeiro semestre de 2024,
+2025 e 2026, mas não substitui
+automaticamente os dados publicados.
+
+O gerador:
+
+- ordena os registros por linha e data;
+- encerra cada estado no próximo registro da mesma linha;
+- recorta durações na janela 04:30–00:00;
+- transforma intervalos superiores a 72 horas em `Indefinido`, sem horas;
+- classifica `Circulação de Trens` e `Maiores Intervalos` pela descrição;
+- classifica `Operação Diferenciada` como evento especial;
+- usa `Dados Indisponíveis`, `Status Desconhecido` e
+  `Status não disponível` apenas para fechar o ciclo anterior;
+- recalcula KPIs, rankings, séries mensais e amostras.
+
+### 25.2. Revalidar 2024 e 2025
+
+```powershell
+npm run data:revalidate
+```
+
+São gerados:
+
+```text
+data/generated/revalidation.json
+data/generated/revalidation.md
+```
+
+A revalidação confere contrato, durações negativas, fechamento sem contagem,
+gaps de coleta, denominador, fórmula de disponibilidade e reconciliação mensal.
+Ela também compara cada KPI e cada chave `data + linha + status` com os arquivos
+publicados.
+
+### 25.3. Testes das regras
+
+```powershell
+npm run test:data
+```
+
+O launcher procura Python 3 em `PYTHON`, no runtime local do Codex e nos comandos
+usuais `python3`, `python` e `py -3`.
+
+### 25.4. Publicação
+
+Os summaries em `data/generated/` devem ser revisados antes da publicação. Após
+aprovação do relatório, copie explicitamente os arquivos anuais aprovados para
+`data/`, execute os testes, a checagem TypeScript e o build estático.

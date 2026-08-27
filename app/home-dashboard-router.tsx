@@ -3,6 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import DashboardOcorrencias2024 from "./dashboard-2024";
 import DashboardOcorrencias2025 from "./dashboard-2025";
+import DashboardOcorrencias2026 from "./dashboard-2026";
+import ComparativoPrimeiroSemestre from "./comparativo-primeiro-semestre";
 
 export default function HomeDashboardRouter() {
   const searchParams = useSearchParams();
@@ -13,8 +15,12 @@ export default function HomeDashboardRouter() {
   }
 
   if (anoParam === "comparativo") {
-    return <DashboardOcorrencias2025 modo="comparativo" />;
+    return <ComparativoPrimeiroSemestre />;
   }
 
-  return <DashboardOcorrencias2025 />;
+  if (anoParam === "2025") {
+    return <DashboardOcorrencias2025 />;
+  }
+
+  return <DashboardOcorrencias2026 />;
 }

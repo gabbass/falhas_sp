@@ -1,0 +1,89 @@
+{
+  "fonte": "C:\\git\\caminhos_sp\\data_raw\\saida_ccm_20260818_213615\\ocorrencias_ccm_2024_2025_1sem2026.json",
+  "periodos": {
+    "2024_1sem": {
+      "arquivo": "ocorrencias-summary-2024-1sem.json",
+      "registrosEntrada": 4154,
+      "registrosEmitidos": 4154,
+      "kpis": {
+        "horasTotaisOperacao": 46137.0,
+        "horasDisponivel": 43939.305,
+        "horasEventoEspecial": 22.862,
+        "horasManutencaoProgramada": 1917.561,
+        "horasFalhaParcial": 261.668,
+        "horasFalhaTotal": 18.466,
+        "horasIndefinidas": 0.0,
+        "horasFalha": 280.134,
+        "qtdRegistros": 4154,
+        "qtdDisponivel": 1916,
+        "qtdEventoEspecial": 31,
+        "qtdManutencaoProgramada": 206,
+        "qtdFalhaParcial": 241,
+        "qtdFalhaTotal": 4,
+        "qtdIndefinidos": 39,
+        "qtdFalhas": 451,
+        "qtdEncerramentos": 1717,
+        "disponibilidadePct": 95.237,
+        "falhaParcialPct": 0.567,
+        "falhaTotalPct": 0.04,
+        "mediaHorasAteNovaFalha": 143.978
+      }
+    },
+    "2025_1sem": {
+      "arquivo": "ocorrencias-summary-2025-1sem.json",
+      "registrosEntrada": 4075,
+      "registrosEmitidos": 4075,
+      "kpis": {
+        "horasTotaisOperacao": 45883.5,
+        "horasDisponivel": 44600.566,
+        "horasEventoEspecial": 52.965,
+        "horasManutencaoProgramada": 508.533,
+        "horasFalhaParcial": 771.401,
+        "horasFalhaTotal": 3.0,
+        "horasIndefinidas": 0.0,
+        "horasFalha": 774.401,
+        "qtdRegistros": 4075,
+        "qtdDisponivel": 1880,
+        "qtdEventoEspecial": 121,
+        "qtdManutencaoProgramada": 102,
+        "qtdFalhaParcial": 279,
+        "qtdFalhaTotal": 4,
+        "qtdIndefinidos": 56,
+        "qtdFalhas": 385,
+        "qtdEncerramentos": 1633,
+        "disponibilidadePct": 97.204,
+        "falhaParcialPct": 1.681,
+        "falhaTotalPct": 0.007,
+        "mediaHorasAteNovaFalha": 120.417
+      }
+    },
+    "2026_1sem": {
+      "arquivo": "ocorrencias-summary-2026.json",
+      "registrosEntrada": 5781,
+      "registrosEmitidos": 5476,
+      "kpis": {
+        "horasTotaisOperacao": 45883.5,
+        "horasDisponivel": 44153.745,
+        "horasEventoEspecial": 57.865,
+        "horasManutencaoProgramada": 1304.773,
+        "horasFalhaParcial": 422.897,
+        "horasFalhaTotal": 2.085,
+        "horasIndefinidas": 0.0,
+        "horasFalha": 424.982,
+        "qtdRegistros": 5476,
+        "qtdDisponivel": 2547,
+        "qtdEventoEspecial": 81,
+        "qtdManutencaoProgramada": 194,
+        "qtdFalhaParcial": 298,
+        "qtdFalhaTotal": 2,
+        "qtdIndefinidos": 19,
+        "qtdFalhas": 494,
+        "qtdEncerramentos": 2335,
+        "disponibilidadePct": 96.23,
+        "falhaParcialPct": 0.922,
+        "falhaTotalPct": 0.005,
+        "mediaHorasAteNovaFalha": 133.907
+      }
+    }
+  }
+}

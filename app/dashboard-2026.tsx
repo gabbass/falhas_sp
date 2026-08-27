@@ -1,6 +1,6 @@
 "use client";
 
-import data from "../data/ocorrencias-summary.json";
+import data from "../data/ocorrencias-summary-2026.json";
 import data2024Comparacao from "../data/ocorrencias-summary-2024.json";
 import {
   Bar,
@@ -42,7 +42,7 @@ const data2025Comparacao = data;
 
 
 type AnoDados = "2024" | "2025" | "2026" | "comparativo";
-const ANO_ATIVO: "2025" = "2025";
+const ANO_ATIVO: "2026" = "2026";
 
 type EstadoOperacional =
   | "Disponível"
@@ -2631,7 +2631,7 @@ function HeatmapDisponibilidade({
   );
 }
 
-export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "painel" | "comparativo" }) {
+export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "painel" | "comparativo" }) {
   const [ordenacao, setOrdenacao] = useState<Ordenacao>("tempo");
   const [linha, setLinha] = useState("todas");
   const [operador, setOperador] = useState("todos");
@@ -3203,7 +3203,7 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
             <p>
               Este é o primeiro painel de análise sobre a situação de transporte público na Região Metropolitana. Veja, de forma simples, como metrô e trens de São Paulo operaram no período analisado: tempo disponível, ocorrências, manutenções, paralisações e lacunas de dados, com filtros para explorar linhas, operadores e momentos do dia.
               <br />
-              Período analisado: 01/01/2024 a 31/12/2025.
+              Período analisado nesta visão: 01/01/2026 a 30/06/2026.
               <br />
               A comparação usa 19,5 horas de operação por dia, na janela padrão de 04:30 às 00:00.
               <br />
@@ -3255,7 +3255,7 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                   Comparativo 1º semestre · 2026 × 2025 × 2024
                 </button>
                 <DocumentacaoPopup />
-                <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
+                <EventosRelevantesPopup anoInicial="todos" />
                 <AnaliseHumanaPopup />
                 <AnaliseIaPopup />
               </div>

@@ -1223,6 +1223,34 @@ td {
   margin: 0 0 18px;
 }
 
+.interactive-chart .recharts-sector,
+.interactive-chart .recharts-rectangle,
+.interactive-chart .recharts-line-curve,
+.interactive-chart-mark {
+  cursor: pointer;
+}
+
+.interactive-chart .recharts-sector:hover,
+.interactive-chart .recharts-rectangle:hover,
+.interactive-chart .recharts-line-curve:hover,
+.interactive-chart-mark:hover,
+.interactive-chart-mark:focus-visible {
+  filter: brightness(.92) saturate(1.08);
+  outline: 2px solid rgba(28, 44, 140, .5);
+  outline-offset: 2px;
+}
+
+.chart-interaction-hint {
+  margin: 12px 0 18px;
+  padding: 10px 14px;
+  border: 1px solid rgba(28, 44, 140, .18);
+  border-radius: 12px;
+  background: rgba(238, 242, 255, .72);
+  color: #334155;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .comparison-year-controls {
   margin: 0 0 18px;
   padding: 16px 18px;

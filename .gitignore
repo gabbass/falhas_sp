@@ -1,0 +1,7 @@
+data/generated/
+node_modules/
+.next/
+out/
+.pnpm-store/
+__pycache__/
+*.py[cod]

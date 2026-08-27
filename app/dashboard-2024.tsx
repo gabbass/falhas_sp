@@ -41,7 +41,7 @@ const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const data2024Comparacao = data;
 
 
-type AnoDados = "2024" | "2025" | "comparativo";
+type AnoDados = "2024" | "2025" | "2026" | "comparativo";
 const ANO_ATIVO: "2024" = "2024";
 
 type EstadoOperacional =
@@ -226,9 +226,7 @@ const EVENTOS = data.events as Evento[];
 const LINHAS = data.options.linhas as string[];
 const OPERADORES = data.options.operadores as string[];
 const ESTADOS = data.options.estados as EstadoOperacional[];
-const ESTADOS_FILTRO_GLOBAL = ESTADOS.filter(
-  (estado) => estado !== "Disponível" && estado !== "Evento especial",
-);
+const ESTADOS_FILTRO_GLOBAL = ESTADOS;
 const ESTADOS_CLASSIFICADOS = ESTADOS.filter(
   (estado) => estado !== "Disponível" && estado !== "Evento especial",
 );
@@ -1064,10 +1062,12 @@ function TimeScatterChart({
   eventos,
   incluirDadosIndisponiveis,
   recorteDias,
+  onSelectEvento,
 }: {
   eventos: Evento[];
   incluirDadosIndisponiveis: boolean;
   recorteDias: RecorteDiasMapa;
+  onSelectEvento?: (evento: Evento) => void;
 }) {
   const [eventoSelecionadoId, setEventoSelecionadoId] = useState<number | null>(null);
   const inicioPeriodo = Date.parse(`${data.metadata.periodoInicio}T00:00:00`);
@@ -1189,7 +1189,10 @@ function TimeScatterChart({
             }}
             aria-label={`${evento.dataLabel}, ${evento.linha}, ${evento.estado}, ${fmtHoras(getHorasContabilizadas(evento))} horas`}
             title={`${evento.dataLabel} • ${evento.linha} • ${displayOperadorName(evento.operador)} • ${evento.estado} • ${labelOrigemEvento(evento)} • ${fmtHoras(getHorasContabilizadas(evento))} h • ${getDescricaoBase(evento)}`}
-            onClick={() => setEventoSelecionadoId(evento.id)}
+            onClick={() => {
+              setEventoSelecionadoId(evento.id);
+              onSelectEvento?.(evento);
+            }}
           />
         ))}
       </div>
@@ -2365,9 +2368,11 @@ function criarCelulaHeatmap(
 function HeatmapDisponibilidade({
   eventos,
   linhaSelecionada,
+  onSelectCell,
 }: {
   eventos: Evento[];
   linhaSelecionada: string;
+  onSelectCell?: (linha: string, estado: EstadoOperacional) => void;
 }) {
   const resultado = useMemo(() => {
     const eventosBase = eventos.filter(
@@ -2598,6 +2603,17 @@ function HeatmapDisponibilidade({
                     height={alturaCelula - 1.2}
                     rx="1"
                     fill={celula.cor}
+                    className="interactive-chart-mark"
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Filtrar por ${celula.linha} e ${celula.estado}`}
+                    onClick={() => onSelectCell?.(celula.linha, celula.estado)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        onSelectCell?.(celula.linha, celula.estado);
+                      }
+                    }}
                   >
                     <title>{celula.tooltip}</title>
                   </rect>
@@ -2638,6 +2654,31 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
   const [anoSelecionado, setAnoSelecionado] = useState<AnoDados>(modo === "comparativo" ? "comparativo" : ANO_ATIVO);
   const [isAnoPendente, iniciarTransicaoAno] = useTransition();
   const router = useRouter();
+
+  const filtrarPorEstado = (novoEstado: string) => {
+    setStatus(novoEstado);
+  };
+
+  const filtrarPorLinhaEEstado = (novaLinha: string, novoEstado: string) => {
+    setLinha(novaLinha);
+    setStatus(novoEstado);
+  };
+
+  const filtrarPorOperadorEEstado = (novoOperador: string, novoEstado: string) => {
+    setOperador(novoOperador);
+    setStatus(novoEstado);
+  };
+
+  const filtrarPorEvento = (evento: Evento) => {
+    setLinha(evento.linha);
+    setOperador(evento.operador);
+    setStatus(evento.estado);
+  };
+
+  const payloadGrafico = (entrada: unknown): Record<string, unknown> => {
+    const item = entrada as { payload?: Record<string, unknown> } | null;
+    return item?.payload ?? (entrada as Record<string, unknown>) ?? {};
+  };
 
   const trocarAno = (novoAno: AnoDados) => {
     if (novoAno === anoSelecionado) return;
@@ -3002,6 +3043,14 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
               <div className="hero-tabbar" aria-label="Base analisada e atalhos do painel">
                 <button
                   type="button"
+                  className={anoSelecionado === "2026" ? "is-active" : ""}
+                  onClick={() => trocarAno("2026")}
+                  aria-pressed={anoSelecionado === "2026"}
+                >
+                  2026 · 1º semestre
+                </button>
+                <button
+                  type="button"
                   className={anoSelecionado === "2025" ? "is-active" : ""}
                   onClick={() => trocarAno("2025")}
                   aria-pressed={anoSelecionado === "2025"}
@@ -3022,7 +3071,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                   onClick={() => trocarAno("comparativo")}
                   aria-pressed={anoSelecionado === "comparativo"}
                 >
-                  Comparativo 2025 × 2024
+                  Comparativo 1º semestre · 2026 × 2025 × 2024
                 </button>
                 <DocumentacaoPopup />
                 <EventosRelevantesPopup anoInicial="todos" />
@@ -3175,6 +3224,14 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
               <div className="hero-tabbar" aria-label="Base analisada e atalhos do painel">
                 <button
                   type="button"
+                  className={anoSelecionado === "2026" ? "is-active" : ""}
+                  onClick={() => trocarAno("2026")}
+                  aria-pressed={anoSelecionado === "2026"}
+                >
+                  2026 · 1º semestre
+                </button>
+                <button
+                  type="button"
                   className={anoSelecionado === "2025" ? "is-active" : ""}
                   onClick={() => trocarAno("2025")}
                   aria-pressed={anoSelecionado === "2025"}
@@ -3195,7 +3252,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                   onClick={() => trocarAno("comparativo")}
                   aria-pressed={anoSelecionado === "comparativo"}
                 >
-                  Comparativo 2025 × 2024
+                  Comparativo 1º semestre · 2026 × 2025 × 2024
                 </button>
                 <DocumentacaoPopup />
                 <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
@@ -3409,6 +3466,11 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
         </div>
       </section>
 
+      <p className="chart-interaction-hint">
+        Clique em setores, barras, linhas, pontos, células ou palavras para aplicar o recorte
+        correspondente aos Filtros globais. Use “Limpar filtros” para voltar à visão completa.
+      </p>
+
 
       <section className="grid-2">
         <div className="panel panel-focus">
@@ -3417,7 +3479,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
             Mostra a divisão das horas esperadas de operação. É a melhor leitura para entender a gravidade temporal: um evento longo pesa mais que um evento curto.
           </p>
           <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
+            <PieChart className="interactive-chart">
               <Pie
                 data={dadosGraficoDisponibilidade}
                 dataKey="horas"
@@ -3425,6 +3487,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 innerRadius={72}
                 outerRadius={112}
                 paddingAngle={2}
+                onClick={(entrada) => filtrarPorEstado(String(payloadGrafico(entrada).categoria ?? "todos"))}
               >
                 {dadosGraficoDisponibilidade.map((item) => (
                   <Cell key={item.categoria} fill={item.cor} />
@@ -3440,7 +3503,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
             Mostra quantos registros ocorreram em cada categoria operacional. É útil para frequência, mas não mede gravidade: muitos eventos curtos podem somar menos horas que poucos eventos longos. Dados indisponíveis ficam separados para não distorcer a comparação entre operadores.
           </p>
           <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
+            <PieChart className="interactive-chart">
               <Pie
                 data={dadosGraficoDisponibilidade}
                 dataKey="quantidade"
@@ -3448,6 +3511,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 innerRadius={72}
                 outerRadius={112}
                 paddingAngle={2}
+                onClick={(entrada) => filtrarPorEstado(String(payloadGrafico(entrada).categoria ?? "todos"))}
               >
                 {dadosGraficoDisponibilidade.map((item) => (
                   <Cell key={item.categoria} fill={item.cor} />
@@ -3465,6 +3529,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
           <p>Ordena as linhas pelo maior tempo acumulado de manutenção programada, ocorrências operacionais e paralisações. Disponível e eventos especiais ficam fora desta leitura.</p>
           <ResponsiveContainer width="100%" height={330}>
             <BarChart
+              className="interactive-chart"
               data={chartLinhasTempo}
               layout="vertical"
               margin={{ left: 95, right: 20, top: 10, bottom: 10 }}
@@ -3486,18 +3551,21 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stackId="a"
                 name="Manutenção programada"
                 fill={CORES["Manutenção programada"]}
+                onClick={(entrada) => filtrarPorLinhaEEstado(String(payloadGrafico(entrada).nome), "Manutenção programada")}
               />
               <Bar
                 dataKey="horasFalhaParcial"
                 stackId="a"
                 name="Ocorrências"
                 fill={CORES["Ocorrência operacional"]}
+                onClick={(entrada) => filtrarPorLinhaEEstado(String(payloadGrafico(entrada).nome), "Ocorrência operacional")}
               />
               <Bar
                 dataKey="horasFalhaTotal"
                 stackId="a"
                 name="Falha total"
                 fill={CORES["Falha total / paralisação"]}
+                onClick={(entrada) => filtrarPorLinhaEEstado(String(payloadGrafico(entrada).nome), "Falha total / paralisação")}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -3508,6 +3576,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
           <p>Ordena as linhas pelo número de registros operacionais. Use junto com o ranking por tempo para separar frequência de gravidade.</p>
           <ResponsiveContainer width="100%" height={330}>
             <BarChart
+              className="interactive-chart"
               data={chartLinhasQtd}
               layout="vertical"
               margin={{ left: 95, right: 20, top: 10, bottom: 10 }}
@@ -3529,18 +3598,21 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stackId="q"
                 name="Qtd. manutenção programada"
                 fill={CORES["Manutenção programada"]}
+                onClick={(entrada) => filtrarPorLinhaEEstado(String(payloadGrafico(entrada).nome), "Manutenção programada")}
               />
               <Bar
                 dataKey="qtdFalhaParcial"
                 stackId="q"
                 name="Qtd. ocorrência operacional"
                 fill={CORES["Ocorrência operacional"]}
+                onClick={(entrada) => filtrarPorLinhaEEstado(String(payloadGrafico(entrada).nome), "Ocorrência operacional")}
               />
               <Bar
                 dataKey="qtdFalhaTotal"
                 stackId="q"
                 name="Qtd. falha total"
                 fill={CORES["Falha total / paralisação"]}
+                onClick={(entrada) => filtrarPorLinhaEEstado(String(payloadGrafico(entrada).nome), "Falha total / paralisação")}
               />
               {incluirDadosIndisponiveisNosGraficos && (
                 <Bar
@@ -3548,6 +3620,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                   stackId="q"
                   name="Qtd. dados indisponíveis"
                   fill={CORES["Indefinido"]}
+                  onClick={(entrada) => filtrarPorLinhaEEstado(String(payloadGrafico(entrada).nome), "Indefinido")}
                 />
               )}
             </BarChart>
@@ -3561,6 +3634,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
           <p>Compara operadores pelo tempo acumulado de manutenção programada, ocorrências operacionais e paralisações. Dados indisponíveis ficam fora desta comparação principal; o nome completo aparece ao passar o mouse.</p>
           <ResponsiveContainer width="100%" height={operadorTempoChartHeight}>
             <BarChart
+              className="interactive-chart"
               data={chartOperadoresTempo}
               layout="vertical"
               margin={{ left: 24, right: 28, top: 10, bottom: 10 }}
@@ -3590,18 +3664,21 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stackId="tempoOperador"
                 name="Manutenção programada"
                 fill={CORES["Manutenção programada"]}
+                onClick={(entrada) => filtrarPorOperadorEEstado(String(payloadGrafico(entrada).nome), "Manutenção programada")}
               />
               <Bar
                 dataKey="horasFalhaParcial"
                 stackId="tempoOperador"
                 name="Ocorrências"
                 fill={CORES["Ocorrência operacional"]}
+                onClick={(entrada) => filtrarPorOperadorEEstado(String(payloadGrafico(entrada).nome), "Ocorrência operacional")}
               />
               <Bar
                 dataKey="horasFalhaTotal"
                 stackId="tempoOperador"
                 name="Falha total"
                 fill={CORES["Falha total / paralisação"]}
+                onClick={(entrada) => filtrarPorOperadorEEstado(String(payloadGrafico(entrada).nome), "Falha total / paralisação")}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -3612,6 +3689,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
           <p>Compara operadores pela quantidade de registros operacionais. Essa visão mede frequência, não necessariamente duração.</p>
           <ResponsiveContainer width="100%" height={operadorQtdChartHeight}>
             <BarChart
+              className="interactive-chart"
               data={chartOperadoresQtd}
               layout="vertical"
               margin={{ left: 24, right: 28, top: 10, bottom: 10 }}
@@ -3640,18 +3718,21 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stackId="qtdOperador"
                 name="Qtd. manutenção programada"
                 fill={CORES["Manutenção programada"]}
+                onClick={(entrada) => filtrarPorOperadorEEstado(String(payloadGrafico(entrada).nome), "Manutenção programada")}
               />
               <Bar
                 dataKey="qtdFalhaParcial"
                 stackId="qtdOperador"
                 name="Qtd. ocorrência operacional"
                 fill={CORES["Ocorrência operacional"]}
+                onClick={(entrada) => filtrarPorOperadorEEstado(String(payloadGrafico(entrada).nome), "Ocorrência operacional")}
               />
               <Bar
                 dataKey="qtdFalhaTotal"
                 stackId="qtdOperador"
                 name="Qtd. falha total"
                 fill={CORES["Falha total / paralisação"]}
+                onClick={(entrada) => filtrarPorOperadorEEstado(String(payloadGrafico(entrada).nome), "Falha total / paralisação")}
               />
               {incluirDadosIndisponiveisNosGraficos && (
                 <Bar
@@ -3659,6 +3740,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                   stackId="qtdOperador"
                   name="Qtd. dados indisponíveis"
                   fill={CORES["Indefinido"]}
+                  onClick={(entrada) => filtrarPorOperadorEEstado(String(payloadGrafico(entrada).nome), "Indefinido")}
                 />
               )}
             </BarChart>
@@ -3752,6 +3834,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
           eventos={eventosMapaHorario}
           incluirDadosIndisponiveis={incluirDadosIndisponiveisNosGraficos}
           recorteDias={recorteDiasMapa}
+          onSelectEvento={filtrarPorEvento}
         />
         <div className="chart-footnote scatter-footnote">
           Tamanho do ponto = duração aproximada. Clique em um ponto para ver a ocorrência, a duração calculada e, quando houver, o efeito cascata associado a outra linha.
@@ -3787,6 +3870,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
         <HeatmapDisponibilidade
           eventos={agregado.eventosFiltrados}
           linhaSelecionada={linhaHistograma}
+          onSelectCell={filtrarPorLinhaEEstado}
         />
       </section>
 
@@ -3797,6 +3881,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
           <p>Mostra a evolução mês a mês dos estados operacionais principais. Maio aparece menor porque a base vai somente até a data parcial informada, não até o fim do mês.</p>
           <ResponsiveContainer width="100%" height={310}>
             <LineChart
+              className="interactive-chart"
               data={agregado.mensal}
               margin={{ left: 10, right: 20, top: 10, bottom: 15 }}
             >
@@ -3814,6 +3899,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stroke={CORES["Disponível"]}
                 strokeWidth={3}
                 dot={false}
+                onClick={() => filtrarPorEstado("Disponível")}
               />
               <Line
                 type="monotone"
@@ -3822,6 +3908,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stroke={CORES["Evento especial"]}
                 strokeWidth={3}
                 dot={false}
+                onClick={() => filtrarPorEstado("Evento especial")}
               />
               <Line
                 type="monotone"
@@ -3830,6 +3917,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stroke={CORES["Manutenção programada"]}
                 strokeWidth={3}
                 dot={false}
+                onClick={() => filtrarPorEstado("Manutenção programada")}
               />
               <Line
                 type="monotone"
@@ -3838,6 +3926,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stroke={CORES["Ocorrência operacional"]}
                 strokeWidth={3}
                 dot={false}
+                onClick={() => filtrarPorEstado("Ocorrência operacional")}
               />
               <Line
                 type="monotone"
@@ -3846,6 +3935,7 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 stroke={CORES["Falha total / paralisação"]}
                 strokeWidth={3}
                 dot={false}
+                onClick={() => filtrarPorEstado("Falha total / paralisação")}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -3874,6 +3964,16 @@ export default function DashboardOcorrencias2024({ modo = "painel" }: { modo?: "
                 key={`${item.palavra}-${index}`}
                 style={{ color: item.cor, fontSize: `${size}px` }}
                 title={`${item.palavra}: ${fmtInt(item.qtd)} ocorrência(s). Estado mais comum: ${item.estadoMaisComum}`}
+                role="button"
+                tabIndex={0}
+                className="interactive-chart-mark"
+                onClick={() => filtrarPorEstado(item.estadoMaisComum)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    filtrarPorEstado(item.estadoMaisComum);
+                  }
+                }}
               >
                 {item.palavra}
               </span>
