@@ -39,10 +39,22 @@ function linhasPorNome(data: Summary) {
   return new Map(data.rankings.linhas.map((linha) => [linha.nome, linha]));
 }
 
+function numeroLinha(nome: string) {
+  return Number(nome.match(/linha\s*0*(\d+)/i)?.[1] ?? Number.MAX_SAFE_INTEGER);
+}
+
+function displayLinhaName(nome: string) {
+  return nome.replace(/^(Linha\s+)0*(\d+)/i, (_match, prefixo: string, numero: string) =>
+    `${prefixo}${numero.padStart(2, "0")}`,
+  );
+}
+
 export default function ComparativoPrimeiroSemestre() {
   const router = useRouter();
   const mapas = bases.map((base) => linhasPorNome(base.data as Summary));
-  const nomesLinhas = Array.from(new Set(mapas.flatMap((mapa) => Array.from(mapa.keys())))).sort();
+  const nomesLinhas = Array.from(new Set(mapas.flatMap((mapa) => Array.from(mapa.keys())))).sort(
+    (a, b) => numeroLinha(a) - numeroLinha(b) || a.localeCompare(b, "pt-BR"),
+  );
 
   const navegar = (ano: "2024" | "2025" | "2026" | "comparativo") => {
     router.push(`/?ano=${ano}`, { scroll: false });
@@ -101,7 +113,7 @@ export default function ComparativoPrimeiroSemestre() {
               <tbody>
                 {nomesLinhas.map((nome) => (
                   <tr key={nome}>
-                    <td><strong>{nome}</strong></td>
+                    <td><strong>{displayLinhaName(nome)}</strong></td>
                     {mapas.map((mapa, indice) => {
                       const linha = mapa.get(nome);
                       return (

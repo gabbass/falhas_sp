@@ -23,6 +23,7 @@ import {
   Clock3,
   Filter,
   Gauge,
+  Info,
   ListChecks,
   Search,
   TrainFront,
@@ -222,8 +223,24 @@ const HORAS_ANO_LINHA = round3(
   calcularDiasPeriodo(data.metadata.periodoInicio, data.metadata.periodoFim) *
     HORAS_DIA,
 );
+
+function numeroLinha(nome: string): number {
+  const match = nome.match(/linha\s*0*(\d+)/i);
+  return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
+}
+
+function compararLinhas(a: string, b: string): number {
+  return numeroLinha(a) - numeroLinha(b) || a.localeCompare(b, "pt-BR");
+}
+
+function displayLinhaName(nome: string): string {
+  return nome.replace(/^(Linha\s+)0*(\d+)/i, (_match, prefixo: string, numero: string) =>
+    `${prefixo}${numero.padStart(2, "0")}`,
+  );
+}
+
 const EVENTOS = data.events as Evento[];
-const LINHAS = data.options.linhas as string[];
+const LINHAS = [...(data.options.linhas as string[])].sort(compararLinhas);
 const OPERADORES = data.options.operadores as string[];
 const ESTADOS = data.options.estados as EstadoOperacional[];
 const ESTADOS_FILTRO_GLOBAL = ESTADOS;
@@ -380,7 +397,7 @@ const COMPARATIVO_POR_LINHA: LinhaComparativa[] = Array.from(
       linha2024,
     };
   })
-  .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+  .sort((a, b) => compararLinhas(a.nome, b.nome));
 
 const fmtComparativoValor = (valor: number, formato: MetricaComparativa["formato"]) => {
   if (formato === "pct") return fmtPct(valor);
@@ -1125,7 +1142,7 @@ function TimeScatterChart({
     ? pontos
         .filter((evento) => evento.dataHora === eventoSelecionado.dataHora)
         .sort((a, b) => {
-          const linha = a.linha.localeCompare(b.linha, "pt-BR");
+          const linha = compararLinhas(a.linha, b.linha);
           if (linha !== 0) return linha;
           return b.horas - a.horas;
         })
@@ -1983,10 +2000,20 @@ function KpiCard({
 }) {
   return (
     <div className="kpi">
-      <small>{label}</small>
-      <strong>{value}</strong>
-      <span>{detail}</span>
       <div className="kpi-icon">{icon}</div>
+      <div className="kpi-label-row">
+        <small>{label}</small>
+        <span className="kpi-info">
+          <button
+            type="button"
+            aria-label={`Informações sobre ${label}: ${detail}`}
+          >
+            <Info size={15} aria-hidden="true" />
+          </button>
+          <span className="kpi-tooltip" role="tooltip">{detail}</span>
+        </span>
+      </div>
+      <strong>{value}</strong>
     </div>
   );
 }
@@ -2379,9 +2406,7 @@ function HeatmapDisponibilidade({
       (evento) => linhaSelecionada === "todas" || evento.linha === linhaSelecionada,
     );
 
-    const linhas = Array.from(new Set(eventosBase.map((evento) => evento.linha))).sort((a, b) =>
-      a.localeCompare(b, "pt-BR"),
-    );
+    const linhas = Array.from(new Set(eventosBase.map((evento) => evento.linha))).sort(compararLinhas);
 
     if (linhaSelecionada !== "todas" && !linhas.includes(linhaSelecionada)) {
       linhas.unshift(linhaSelecionada);
@@ -2651,6 +2676,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
   const [operadorMapa, setOperadorMapa] = useState("todos");
   const [estadoMapa, setEstadoMapa] = useState("todos");
   const [origemMapa, setOrigemMapa] = useState("todas");
+  const [resumoFiltrosAberto, setResumoFiltrosAberto] = useState(false);
   const [anoSelecionado, setAnoSelecionado] = useState<AnoDados>(modo === "comparativo" ? "comparativo" : ANO_ATIVO);
   const [isAnoPendente, iniciarTransicaoAno] = useTransition();
   const router = useRouter();
@@ -2739,7 +2765,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
   const linhasTemporaisDisponiveis = useMemo(() => {
     return Array.from(
       new Set(agregado.eventosFiltrados.map((evento) => evento.linha)),
-    ).sort((a, b) => a.localeCompare(b, "pt-BR"));
+    ).sort(compararLinhas);
   }, [agregado.eventosFiltrados]);
 
   useEffect(() => {
@@ -2858,12 +2884,13 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
         b.horasFalhaTotal - a.horasFalhaTotal,
     )
     .slice(0, 10)
-    .map((item) =>
-      limparDadosIndisponiveisParaGrafico(
+    .map((item) => ({
+      ...limparDadosIndisponiveisParaGrafico(
         item,
         incluirDadosIndisponiveisNosGraficos,
       ),
-    );
+      nomeLabel: displayLinhaName(item.nome),
+    }));
   const chartLinhasQtd = [...agregado.linhas]
     .sort(
       (a, b) =>
@@ -2873,12 +2900,13 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
         b.qtdFalhaTotal - a.qtdFalhaTotal,
     )
     .slice(0, 10)
-    .map((item) =>
-      limparDadosIndisponiveisParaGrafico(
+    .map((item) => ({
+      ...limparDadosIndisponiveisParaGrafico(
         item,
         incluirDadosIndisponiveisNosGraficos,
       ),
-    );
+      nomeLabel: displayLinhaName(item.nome),
+    }));
   const chartOperadoresTempo = [...agregado.operadores]
     .sort((a, b) => horasRegistrosClassificados(b) - horasRegistrosClassificados(a))
     .slice(0, 8)
@@ -3017,7 +3045,49 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
     status !== "todos",
   ].filter(Boolean).length;
 
+  const totalFiltrosAtivos = [
+    linha !== "todas",
+    operador !== "todos",
+    status !== "todos",
+    buscaTabela !== "",
+    operadorTabela !== "todos",
+    statusTabela !== "todos",
+    buscaOcorrencia !== "",
+    linhaOcorrencia !== "todas",
+    operadorOcorrencia !== "todos",
+    estadoOcorrencia !== "todos",
+    tipoOcorrencia !== "todos",
+    origemOcorrencia !== "todas",
+    recorteDiasMapa !== "todos",
+    linhaMapa !== "todas",
+    operadorMapa !== "todos",
+    estadoMapa !== "todos",
+    origemMapa !== "todas",
+    linhaHistograma !== "todas",
+  ].filter(Boolean).length;
+
+  const resumoFiltrosAtivos: Array<{ label: string; value: string }> = [];
+  if (linha !== "todas") resumoFiltrosAtivos.push({ label: "Linha global", value: displayLinhaName(linha) });
+  if (operador !== "todos") resumoFiltrosAtivos.push({ label: "Operador global", value: displayOperadorName(operador) });
+  if (status !== "todos") resumoFiltrosAtivos.push({ label: "Estado global", value: status });
+  if (buscaTabela) resumoFiltrosAtivos.push({ label: "Busca na tabela", value: buscaTabela });
+  if (operadorTabela !== "todos") resumoFiltrosAtivos.push({ label: "Operador da tabela", value: displayOperadorName(operadorTabela) });
+  if (statusTabela !== "todos") resumoFiltrosAtivos.push({ label: "Situação da tabela", value: statusTabela.replaceAll("_", " ") });
+  if (buscaOcorrencia) resumoFiltrosAtivos.push({ label: "Busca em ocorrências", value: buscaOcorrencia });
+  if (linhaOcorrencia !== "todas") resumoFiltrosAtivos.push({ label: "Linha das ocorrências", value: displayLinhaName(linhaOcorrencia) });
+  if (operadorOcorrencia !== "todos") resumoFiltrosAtivos.push({ label: "Operador das ocorrências", value: displayOperadorName(operadorOcorrencia) });
+  if (estadoOcorrencia !== "todos") resumoFiltrosAtivos.push({ label: "Estado das ocorrências", value: estadoOcorrencia });
+  if (tipoOcorrencia !== "todos") resumoFiltrosAtivos.push({ label: "Tipo de ocorrência", value: tipoOcorrencia });
+  if (origemOcorrencia !== "todas") resumoFiltrosAtivos.push({ label: "Origem das ocorrências", value: origemOcorrencia === "cascata" ? "Somente efeito cascata" : "Somente originárias" });
+  if (recorteDiasMapa !== "todos") resumoFiltrosAtivos.push({ label: "Dias do mapa", value: "Somente dias úteis" });
+  if (linhaMapa !== "todas") resumoFiltrosAtivos.push({ label: "Linha do mapa", value: displayLinhaName(linhaMapa) });
+  if (operadorMapa !== "todos") resumoFiltrosAtivos.push({ label: "Operador do mapa", value: displayOperadorName(operadorMapa) });
+  if (estadoMapa !== "todos") resumoFiltrosAtivos.push({ label: "Evento do mapa", value: estadoMapa });
+  if (origemMapa !== "todas") resumoFiltrosAtivos.push({ label: "Origem do mapa", value: origemMapa === "cascata" ? "Somente efeito cascata" : "Somente originários" });
+  if (linhaHistograma !== "todas") resumoFiltrosAtivos.push({ label: "Linha do histograma", value: displayLinhaName(linhaHistograma) });
+
   const limparFiltros = () => {
+    setResumoFiltrosAberto(false);
     setLinha("todas");
     setOperador("todos");
     setStatus("todos");
@@ -3029,7 +3099,12 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
     setOperadorOcorrencia("todos");
     setEstadoOcorrencia("todos");
     setTipoOcorrencia("todos");
+    setOrigemOcorrencia("todas");
+    setRecorteDiasMapa("todos");
     setLinhaMapa("todas");
+    setOperadorMapa("todos");
+    setEstadoMapa("todos");
+    setOrigemMapa("todas");
     setLinhaHistograma("todas");
   };
 
@@ -3294,7 +3369,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
               <option value="todas">Todas as linhas</option>
               {LINHAS.map((item) => (
                 <option key={item} value={item}>
-                  {item}
+                  {displayLinhaName(item)}
                 </option>
               ))}
             </select>
@@ -3331,6 +3406,49 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
           </label>
         </div>
       </section>
+
+      {totalFiltrosAtivos ? (
+        <div className="floating-filter-actions">
+          {resumoFiltrosAberto ? (
+            <section className="floating-filter-summary" aria-label="Resumo dos filtros ativos">
+              <div>
+                <strong>Filtros ativos</strong>
+                <button type="button" onClick={() => setResumoFiltrosAberto(false)} aria-label="Fechar resumo">
+                  <X size={15} />
+                </button>
+              </div>
+              <ul>
+                {resumoFiltrosAtivos.map((filtro) => (
+                  <li key={`${filtro.label}-${filtro.value}`}>
+                    <span>{filtro.label}</span>
+                    <strong>{filtro.value}</strong>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          <div className="floating-filter-buttons">
+            <button
+              type="button"
+              className="floating-clear-filters"
+              onClick={limparFiltros}
+              aria-label="Limpar todos os filtros ativos"
+            >
+              <X size={17} />
+              Limpar filtros
+            </button>
+            <button
+              type="button"
+              className="floating-filter-count"
+              onClick={() => setResumoFiltrosAberto((aberto) => !aberto)}
+              aria-expanded={resumoFiltrosAberto}
+              aria-label={`Mostrar resumo de ${totalFiltrosAtivos} filtro(s) ativo(s)`}
+            >
+              {totalFiltrosAtivos}
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       <section className="grid-kpis">
         <KpiCard
@@ -3540,7 +3658,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
               />
               <XAxis type="number" stroke="#475569" />
               <YAxis
-                dataKey="nome"
+                dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
                 width={130}
@@ -3587,7 +3705,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
               />
               <XAxis type="number" stroke="#475569" />
               <YAxis
-                dataKey="nome"
+                dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
                 width={130}
@@ -3788,7 +3906,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
               <select value={linhaMapa} onChange={(event) => setLinhaMapa(event.target.value)}>
                 <option value="todas">Todas as linhas do recorte global</option>
                 {linhasTemporaisDisponiveis.map((item) => (
-                  <option key={`mapa-linha-${item}`} value={item}>{item}</option>
+                  <option key={`mapa-linha-${item}`} value={item}>{displayLinhaName(item)}</option>
                 ))}
               </select>
             </label>
@@ -3859,7 +3977,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
             <select value={linhaHistograma} onChange={(event) => setLinhaHistograma(event.target.value)}>
               <option value="todas">Todas as linhas do recorte global</option>
               {linhasTemporaisDisponiveis.map((item) => (
-                <option key={`histograma-linha-${item}`} value={item}>{item}</option>
+                <option key={`histograma-linha-${item}`} value={item}>{displayLinhaName(item)}</option>
               ))}
             </select>
           </label>
