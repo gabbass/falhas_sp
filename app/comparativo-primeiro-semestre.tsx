@@ -120,7 +120,7 @@ function displayLinhaName(nome: string) {
   );
 }
 
-export default function ComparativoPrimeiroSemestre() {
+export default function ComparativoPrimeiroSemestre({ embedded = false }: { embedded?: boolean }) {
   const router = useRouter();
   const [anoPrincipal, setAnoPrincipal] = useState<AnoComparavel>("2026");
   const [anosReferencia, setAnosReferencia] = useState<AnoComparavel[]>(["2025", "2024"]);
@@ -166,9 +166,14 @@ export default function ComparativoPrimeiroSemestre() {
     router.push(`/?ano=${ano}`, { scroll: false });
   };
 
+  const Root = embedded ? "div" : "main";
+
   return (
-    <main className="page dashboard-page comparison-only-page">
-      <section className="panel comparison-year-controls" aria-label="Base analisada">
+    <Root
+      id={embedded ? "comparativo" : undefined}
+      className={embedded ? "comparison-embedded" : "page dashboard-page comparison-only-page"}
+    >
+      {!embedded ? <section className="panel comparison-year-controls" aria-label="Base analisada">
         <div className="hero-actions">
           <div className="hero-control-stack">
             <span className="hero-control-label">Base analisada</span>
@@ -181,7 +186,7 @@ export default function ComparativoPrimeiroSemestre() {
             </div>
           </div>
         </div>
-      </section>
+      </section> : null}
 
       <section className="panel comparison-panel" aria-labelledby="comparativo-semestral-title">
         <div className="comparison-heading">
@@ -413,6 +418,6 @@ export default function ComparativoPrimeiroSemestre() {
           </div>
         </div>
       </section>
-    </main>
+    </Root>
   );
 }

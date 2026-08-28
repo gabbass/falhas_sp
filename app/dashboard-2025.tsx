@@ -19,15 +19,25 @@ import {
   YAxis,
 } from "recharts";
 import {
-  AlertTriangle,
-  Clock3,
+  Activity,
+  AlarmClock,
+  CalendarDays,
+  CircleCheckBig,
+  CircleStop,
   Filter,
   Gauge,
+  GitCompareArrows,
   Info,
-  ListChecks,
+  RefreshCw,
+  Repeat2,
   Search,
-  TrainFront,
-  Trophy,
+  Sparkles,
+  Timer,
+  TimerOff,
+  TrendingDown,
+  TrendingUp,
+  TriangleAlert,
+  Wrench,
   X,
 } from "lucide-react";
 import { type ReactNode, useEffect, useMemo, useState, useTransition } from "react";
@@ -36,6 +46,7 @@ import EventosRelevantesPopup from "./eventos-relevantes-popup";
 import DocumentacaoPopup from "./documentacao-popup";
 import AnaliseHumanaPopup from "./analise-humana-popup";
 import AnaliseIaPopup from "./analise-ia-popup";
+import ComparativoPrimeiroSemestre from "./comparativo-primeiro-semestre";
 
 const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -1291,12 +1302,13 @@ function createEmptyRow(
   nome: string,
   operador?: string,
   linhasOperadas = 1,
+  horasPeriodoPorLinha = HORAS_ANO_LINHA,
 ): LinhaRanking {
   return {
     nome,
     operador,
     linhasOperadas,
-    horasTotaisOperacao: linhasOperadas * HORAS_ANO_LINHA,
+    horasTotaisOperacao: linhasOperadas * horasPeriodoPorLinha,
     horasDisponivel: 0,
     horasEventoEspecial: 0,
     horasManutencaoProgramada: 0,
@@ -1578,7 +1590,7 @@ function calcMediaEntreManutencaoEFalha(eventos: Evento[]): number {
       const tipoAnterior = tipoIntervaloOperacional(anterior);
       const tipoAtual = tipoIntervaloOperacional(atual);
 
-      if (!tipoAnterior || !tipoAtual || tipoAnterior === tipoAtual) continue;
+      if (tipoAnterior !== "manutencao" || tipoAtual !== "falha") continue;
 
       const horaAnterior = normalizarDataHora(anterior.dataHora);
       const horaAtual = normalizarDataHora(atual.dataHora);
@@ -1598,7 +1610,13 @@ function aggregateData(filtros: {
   linha: string;
   operador: string;
   status: string;
+  dataInicio: string;
+  dataFim: string;
 }): Agregado {
+  const dataInicio = filtros.dataInicio || data.metadata.periodoInicio;
+  const dataFim = filtros.dataFim || data.metadata.periodoFim;
+  const diasSelecionados = calcularDiasPeriodo(dataInicio, dataFim);
+  const horasPeriodoPorLinha = round3(diasSelecionados * HORAS_DIA);
   const linhasPermitidas = LINHAS.filter((linha) => {
     const operadorLinha = lineToOperator.get(linha) ?? "Não informado";
     return (
@@ -1609,8 +1627,11 @@ function aggregateData(filtros: {
 
   const linhasSet = new Set(linhasPermitidas);
   const eventosFiltrados = EVENTOS.filter((evento) => {
+    const dataEvento = evento.dataHora.slice(0, 10);
     return (
       linhasSet.has(evento.linha) &&
+      dataEvento >= dataInicio &&
+      dataEvento <= dataFim &&
       (filtros.status === "todos" || filtros.status === evento.estado)
     );
   });
@@ -1619,7 +1640,7 @@ function aggregateData(filtros: {
   linhasPermitidas.forEach((linha) => {
     linhasMap.set(
       linha,
-      createEmptyRow(linha, lineToOperator.get(linha) ?? "Não informado"),
+      createEmptyRow(linha, lineToOperator.get(linha) ?? "Não informado", 1, horasPeriodoPorLinha),
     );
   });
 
@@ -1635,7 +1656,7 @@ function aggregateData(filtros: {
   linhasPorOperador.forEach((linhas, operador) => {
     operadoresMap.set(
       operador,
-      createEmptyRow(operador, undefined, linhas.length),
+      createEmptyRow(operador, undefined, linhas.length, horasPeriodoPorLinha),
     );
   });
 
@@ -1732,7 +1753,7 @@ function aggregateData(filtros: {
     finalizeRow(row, filtros.status),
   );
 
-  const horasTotaisOperacao = linhasPermitidas.length * HORAS_ANO_LINHA;
+  const horasTotaisOperacao = linhasPermitidas.length * horasPeriodoPorLinha;
   const horasEventoEspecial = round3(
     linhas.reduce((total, linha) => total + linha.horasEventoEspecial, 0),
   );
@@ -1795,11 +1816,18 @@ function aggregateData(filtros: {
   ).length;
   const horasFalha = round3(horasFalhaParcial + horasFalhaTotal);
 
-  const mensal = [...mensalMap.values()].map((row) => {
-    const mesInfo = MESES.find((mes) => mes.key === row.mes);
-    const esperadoMes =
-      (mesInfo?.horasEsperadasPorLinha ?? HORAS_ANO_LINHA) *
-      linhasPermitidas.length;
+  const mensal = [...mensalMap.values()].filter((row) => {
+    const mesInicio = `${row.mes}-01`;
+    const [ano, mes] = row.mes.split("-").map(Number);
+    const mesFim = new Date(Date.UTC(ano, mes, 0)).toISOString().slice(0, 10);
+    return mesFim >= dataInicio && mesInicio <= dataFim;
+  }).map((row) => {
+    const [ano, mes] = row.mes.split("-").map(Number);
+    const inicioMes = `${row.mes}-01`;
+    const fimMes = new Date(Date.UTC(ano, mes, 0)).toISOString().slice(0, 10);
+    const inicioRecorte = inicioMes > dataInicio ? inicioMes : dataInicio;
+    const fimRecorte = fimMes < dataFim ? fimMes : dataFim;
+    const esperadoMes = calcularDiasPeriodo(inicioRecorte, fimRecorte) * HORAS_DIA * linhasPermitidas.length;
 
     if (filtros.status === "todos") {
       row.horasDisponivel = Math.max(
@@ -2656,11 +2684,19 @@ function HeatmapDisponibilidade({
   );
 }
 
-export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "painel" | "comparativo" }) {
+export default function DashboardOcorrencias2025({
+  modo = "painel",
+  comparativoAberto = false,
+}: {
+  modo?: "painel" | "comparativo";
+  comparativoAberto?: boolean;
+}) {
   const [ordenacao, setOrdenacao] = useState<Ordenacao>("tempo");
   const [linha, setLinha] = useState("todas");
   const [operador, setOperador] = useState("todos");
   const [status, setStatus] = useState("todos");
+  const [dataInicio, setDataInicio] = useState(data.metadata.periodoInicio);
+  const [dataFim, setDataFim] = useState(data.metadata.periodoFim);
   const [buscaTabela, setBuscaTabela] = useState("");
   const [operadorTabela, setOperadorTabela] = useState("todos");
   const [statusTabela, setStatusTabela] = useState("todos");
@@ -2680,6 +2716,10 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
   const [anoSelecionado, setAnoSelecionado] = useState<AnoDados>(modo === "comparativo" ? "comparativo" : ANO_ATIVO);
   const [isAnoPendente, iniciarTransicaoAno] = useTransition();
   const router = useRouter();
+
+  useEffect(() => {
+    if (modo === "painel") setAnoSelecionado(comparativoAberto ? "comparativo" : ANO_ATIVO);
+  }, [comparativoAberto, modo]);
 
   const filtrarPorEstado = (novoEstado: string) => {
     setStatus(novoEstado);
@@ -2710,13 +2750,16 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
     if (novoAno === anoSelecionado) return;
     setAnoSelecionado(novoAno);
     iniciarTransicaoAno(() => {
-      router.push(`/?ano=${novoAno}`, { scroll: false });
+      router.push(
+        novoAno === "comparativo" ? `/?ano=${ANO_ATIVO}&comparativo=1` : `/?ano=${novoAno}`,
+        { scroll: false },
+      );
     });
   };
 
   const agregado = useMemo(
-    () => aggregateData({ linha, operador, status }),
-    [linha, operador, status],
+    () => aggregateData({ linha, operador, status, dataInicio, dataFim }),
+    [linha, operador, status, dataInicio, dataFim],
   );
 
   const operadoresTabelaDisponiveis = useMemo(() => {
@@ -3043,12 +3086,14 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
     linha !== "todas",
     operador !== "todos",
     status !== "todos",
+    dataInicio !== data.metadata.periodoInicio || dataFim !== data.metadata.periodoFim,
   ].filter(Boolean).length;
 
   const totalFiltrosAtivos = [
     linha !== "todas",
     operador !== "todos",
     status !== "todos",
+    dataInicio !== data.metadata.periodoInicio || dataFim !== data.metadata.periodoFim,
     buscaTabela !== "",
     operadorTabela !== "todos",
     statusTabela !== "todos",
@@ -3070,6 +3115,10 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
   if (linha !== "todas") resumoFiltrosAtivos.push({ label: "Linha global", value: displayLinhaName(linha) });
   if (operador !== "todos") resumoFiltrosAtivos.push({ label: "Operador global", value: displayOperadorName(operador) });
   if (status !== "todos") resumoFiltrosAtivos.push({ label: "Estado global", value: status });
+  if (dataInicio !== data.metadata.periodoInicio || dataFim !== data.metadata.periodoFim) resumoFiltrosAtivos.push({
+    label: "Período global",
+    value: `${parseDataKey(dataInicio).toLocaleDateString("pt-BR")} a ${parseDataKey(dataFim).toLocaleDateString("pt-BR")}`,
+  });
   if (buscaTabela) resumoFiltrosAtivos.push({ label: "Busca na tabela", value: buscaTabela });
   if (operadorTabela !== "todos") resumoFiltrosAtivos.push({ label: "Operador da tabela", value: displayOperadorName(operadorTabela) });
   if (statusTabela !== "todos") resumoFiltrosAtivos.push({ label: "Situação da tabela", value: statusTabela.replaceAll("_", " ") });
@@ -3091,6 +3140,8 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
     setLinha("todas");
     setOperador("todos");
     setStatus("todos");
+    setDataInicio(data.metadata.periodoInicio);
+    setDataFim(data.metadata.periodoFim);
     setBuscaTabela("");
     setOperadorTabela("todos");
     setStatusTabela("todos");
@@ -3115,7 +3166,7 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
           <div className="hero-actions">
             <div className="hero-control-stack">
               <span className="hero-control-label">Base analisada</span>
-              <div className="hero-tabbar" aria-label="Base analisada e atalhos do painel">
+              <div className="hero-tabbar" aria-label="Base analisada">
                 <button
                   type="button"
                   className={anoSelecionado === "2026" ? "is-active" : ""}
@@ -3148,11 +3199,13 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                 >
                   Comparativo
                 </button>
-                <DocumentacaoPopup />
-                <EventosRelevantesPopup anoInicial="todos" />
-                <AnaliseHumanaPopup />
-                <AnaliseIaPopup />
               </div>
+            </div>
+            <div className="hero-tabbar hero-tabbar-shortcuts" aria-label="Conteúdos de apoio à análise">
+              <DocumentacaoPopup />
+              <EventosRelevantesPopup anoInicial="todos" />
+              <AnaliseHumanaPopup />
+              <AnaliseIaPopup />
             </div>
           </div>
       </section>
@@ -3296,7 +3349,7 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
           <div className="hero-actions">
             <div className="hero-control-stack">
               <span className="hero-control-label">Base analisada</span>
-              <div className="hero-tabbar" aria-label="Base analisada e atalhos do painel">
+              <div className="hero-tabbar" aria-label="Base analisada">
                 <button
                   type="button"
                   className={anoSelecionado === "2026" ? "is-active" : ""}
@@ -3329,14 +3382,18 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
                 >
                   Comparativo
                 </button>
-                <DocumentacaoPopup />
-                <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
-                <AnaliseHumanaPopup />
-                <AnaliseIaPopup />
               </div>
+            </div>
+            <div className="hero-tabbar hero-tabbar-shortcuts" aria-label="Conteúdos de apoio à análise">
+              <DocumentacaoPopup />
+              <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
+              <AnaliseHumanaPopup />
+              <AnaliseIaPopup />
             </div>
           </div>
       </section>
+
+      {comparativoAberto ? <ComparativoPrimeiroSemestre embedded /> : null}
 
       <section className="filters-panel">
         <div className="filters-title">
@@ -3404,6 +3461,18 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
               ))}
             </select>
           </label>
+
+          <fieldset className="date-range-filter">
+            <legend>Intervalo de datas</legend>
+            <label>
+              Data inicial
+              <input type="date" min={data.metadata.periodoInicio} max={dataFim} value={dataInicio} onChange={(event) => setDataInicio(event.target.value)} />
+            </label>
+            <label>
+              Data final
+              <input type="date" min={dataInicio} max={data.metadata.periodoFim} value={dataFim} onChange={(event) => setDataFim(event.target.value)} />
+            </label>
+          </fieldset>
         </div>
       </section>
 
@@ -3450,115 +3519,114 @@ export default function DashboardOcorrencias2025({ modo = "painel" }: { modo?: "
         </div>
       ) : null}
 
-      <section className="grid-kpis">
+      <section className="kpi-story" aria-label="História dos indicadores operacionais">
+        <div className="grid-kpis kpi-story-row kpi-story-row-6">
         <KpiCard
           label="Tempo total esperado"
           value={`${fmtHoras(agregado.kpis.horasTotaisOperacao)} h`}
           detail={`Base de comparação: ${agregado.linhasSelecionadas.length} linha(s) × ${fmtHoras(HORAS_DIA)} h/dia`}
-          icon={<Clock3 size={22} />}
+          icon={<Timer size={22} />}
         />
         <KpiCard
           label="Tempo disponível"
           value={`${fmtHoras(agregado.kpis.horasDisponivel)} h`}
           detail={`${fmtPct(agregado.kpis.disponibilidadePct)} do tempo esperado permaneceu disponível pela regra reconciliada`}
-          icon={<TrainFront size={22} />}
-        />
-        <KpiCard
-          label="Eventos especiais"
-          value={`${fmtHoras(agregado.kpis.horasEventoEspecial)} h`}
-          detail={`${fmtInt(agregado.kpis.qtdEventoEspecial)} registro(s); horas = operação/serviço adicional`}
-          icon={<Trophy size={22} />}
+          icon={<CircleCheckBig size={22} />}
         />
         <KpiCard
           label="Manutenção programada"
           value={`${fmtHoras(agregado.kpis.horasManutencaoProgramada)} h`}
           detail={`${fmtInt(agregado.kpis.qtdManutencaoProgramada)} intervenção(ões) planejada(s)`}
-          icon={<Clock3 size={22} />}
+          icon={<Wrench size={22} />}
         />
         <KpiCard
           label="Ocorrências operacionais"
           value={`${fmtHoras(agregado.kpis.horasFalhaParcial)} h`}
           detail={`${fmtInt(agregado.kpis.qtdFalhaParcial)} registro(s) de operação degradada`}
-          icon={<AlertTriangle size={22} />}
+          icon={<TriangleAlert size={22} />}
         />
         <KpiCard
           label="Indisponível/paralisado"
           value={`${fmtHoras(agregado.kpis.horasFalhaTotal)} h`}
           detail={`${fmtInt(agregado.kpis.qtdFalhaTotal)} registro(s) em que a operação parou`}
-          icon={<Gauge size={22} />}
+          icon={<CircleStop size={22} />}
         />
         <KpiCard
-          label="Dados indisponíveis"
-          value={fmtInt(agregado.kpis.qtdIndefinidos)}
-          detail="registro(s) com lacuna de coleta; este indicador é apresentado apenas como quantidade"
-          icon={<Gauge size={22} />}
+          label="Eventos especiais"
+          value={`${fmtHoras(agregado.kpis.horasEventoEspecial)} h`}
+          detail={`${fmtInt(agregado.kpis.qtdEventoEspecial)} registro(s); horas = operação/serviço adicional`}
+          icon={<Sparkles size={22} />}
         />
+        </div>
+
+        <div className="grid-kpis kpi-story-row kpi-story-row-3">
         <KpiCard
-          label="Registros classificados"
-          value={fmtInt(agregado.kpis.qtdFalhas)}
-          detail="manutenções programadas, ocorrências operacionais e paralisações"
-          icon={<ListChecks size={22} />}
-        />
-        <KpiCard
-          label="Dia mais comum para falha"
-          value={recorrenciaFalhas.diaLabel}
-          detail={`${fmtInt(recorrenciaFalhas.diaQtd)} ocorrência(s) de falha no recorte atual`}
-          icon={<AlertTriangle size={22} />}
-        />
-        <KpiCard
-          label="Horário mais comum para falha"
-          value={recorrenciaFalhas.horaLabel}
-          detail={`${fmtInt(recorrenciaFalhas.horaQtd)} ocorrência(s) de falha no recorte atual`}
-          icon={<Clock3 size={22} />}
-        />
-        <KpiCard
-          label="Média disponível"
-          value={`${fmtHoras(agregado.kpis.mediaHorasDisponivel)} h`}
-          detail="média das janelas classificadas como operação normal"
-          icon={<Clock3 size={22} />}
+          label="Média de paralisação total"
+          value={`${fmtHoras(agregado.kpis.mediaHorasIndisponibilidade)} h`}
+          detail="duração média dos registros em que a operação parou"
+          icon={<TimerOff size={22} />}
         />
         <KpiCard
           label="Média de operação degradada"
           value={`${fmtHoras(agregado.kpis.mediaHorasFalhaParcial)} h`}
           detail="duração média dos registros de operação degradada"
-          icon={<AlertTriangle size={22} />}
+          icon={<Activity size={22} />}
         />
         <KpiCard
-          label="Média de paralisação total"
-          value={`${fmtHoras(agregado.kpis.mediaHorasIndisponibilidade)} h`}
-          detail="duração média dos registros em que a operação parou"
+          label="Média de disponibilidade"
+          value={`${fmtHoras(agregado.kpis.mediaHorasDisponivel)} h`}
+          detail="média das janelas classificadas como operação normal"
           icon={<Gauge size={22} />}
         />
+        </div>
+
+        <div className="grid-kpis kpi-story-row kpi-story-row-3">
         <KpiCard
           label="Falha → falha"
           value={`${fmtHoras(agregado.kpis.mediaHorasAteNovaFalha)} h`}
           detail="tempo operacional médio entre uma ocorrência/falha e a próxima, na mesma linha"
-          icon={<Clock3 size={22} />}
+          icon={<Repeat2 size={22} />}
         />
         <KpiCard
-          label="Manutenção ↔ falha"
+          label="Manutenção → falha"
           value={`${fmtHoras(agregado.kpis.mediaHorasEntreManutencaoFalha)} h`}
-          detail="tempo operacional médio entre manutenção e ocorrência/falha, em qualquer sentido, na mesma linha"
-          icon={<Clock3 size={22} />}
+          detail="tempo operacional médio entre uma manutenção programada e a ocorrência/falha seguinte, na mesma linha"
+          icon={<GitCompareArrows size={22} />}
         />
         <KpiCard
           label="Manutenção → manutenção"
           value={`${fmtHoras(agregado.kpis.mediaHorasEntreManutencoes)} h`}
           detail="tempo operacional médio entre uma manutenção programada e a próxima, na mesma linha"
-          icon={<Clock3 size={22} />}
+          icon={<RefreshCw size={22} />}
+        />
+        </div>
+
+        <div className="grid-kpis kpi-story-row kpi-story-row-4">
+        <KpiCard
+          label="Dia mais comum para falha"
+          value={recorrenciaFalhas.diaLabel}
+          detail={`${fmtInt(recorrenciaFalhas.diaQtd)} ocorrência(s) de falha no recorte atual`}
+          icon={<CalendarDays size={22} />}
+        />
+        <KpiCard
+          label="Horário mais comum para falha"
+          value={recorrenciaFalhas.horaLabel}
+          detail={`${fmtInt(recorrenciaFalhas.horaQtd)} ocorrência(s) de falha no recorte atual`}
+          icon={<AlarmClock size={22} />}
         />
         <KpiCard
           label="Tipo mais comum"
           value={agregado.kpis.falhaMaisComum}
           detail={`${fmtInt(agregado.kpis.falhaMaisComumQtd)} ocorrência(s)`}
-          icon={<ListChecks size={22} />}
+          icon={<TrendingUp size={22} />}
         />
         <KpiCard
           label="Tipo menos comum"
           value={agregado.kpis.falhaMenosComum}
           detail={agregado.kpis.falhaMenosComumQtd ? `${fmtInt(agregado.kpis.falhaMenosComumQtd)} ocorrência(s)` : "não há outro tipo no recorte"}
-          icon={<ListChecks size={22} />}
+          icon={<TrendingDown size={22} />}
         />
+        </div>
       </section>
       <section className="hero-card operational-legend-line" aria-label="Legenda operacional">
         <div className="operational-legend-head">

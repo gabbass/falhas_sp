@@ -248,7 +248,7 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
                             <strong>Resumo da base</strong>
                             <div className="doc-facts">
                               {basesDisponiveis.map((base) => (
-                                <span key={base.fonte}>
+                                <span key={`${base.periodoLabel}-${base.fonte}`}>
                                   <b>{base.periodoLabel}</b>: {fmtInt(base.registrosNormalizados)} registros normalizados · {fmtInt(base.linhas)} linhas · fonte {base.fonte}
                                 </span>
                               ))}
