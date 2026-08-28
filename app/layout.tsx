@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "@fontsource-variable/inter";
 import "./globals.css";
 
 const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";

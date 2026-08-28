@@ -3146,7 +3146,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
                   onClick={() => trocarAno("comparativo")}
                   aria-pressed={anoSelecionado === "comparativo"}
                 >
-                  Comparativo 1º semestre · 2026 × 2025 × 2024
+                  Comparativo
                 </button>
                 <DocumentacaoPopup />
                 <EventosRelevantesPopup anoInicial="todos" />
@@ -3327,7 +3327,7 @@ export default function DashboardOcorrencias2026({ modo = "painel" }: { modo?: "
                   onClick={() => trocarAno("comparativo")}
                   aria-pressed={anoSelecionado === "comparativo"}
                 >
-                  Comparativo 1º semestre · 2026 × 2025 × 2024
+                  Comparativo
                 </button>
                 <DocumentacaoPopup />
                 <EventosRelevantesPopup anoInicial="todos" />
