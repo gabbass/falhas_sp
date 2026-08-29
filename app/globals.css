@@ -116,6 +116,8 @@ a { color: inherit; }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+.chart-overview-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
+.chart-overview-row > .panel { min-width: 0; height: 100%; }
 .panel { padding: 20px; min-height: 360px; overflow: hidden; }
 .panel-focus { min-height: 380px; }
 .panel h2 { margin: 0 0 5px; font-size: 20px; letter-spacing: -0.025em; color: #0f172a; font-weight: 700; }
@@ -185,6 +187,7 @@ td.muted { color: var(--muted); }
   .kpi-story-row-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filters-grid { grid-template-columns: repeat(2, 1fr); }
   .grid-2, .grid-3, .hero { grid-template-columns: 1fr; }
+  .chart-overview-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
   .page { width: min(100% - 20px, 1480px); padding-top: 18px; }
@@ -940,6 +943,37 @@ td {
   background: #1C2C8C;
   color: #ffffff;
   box-shadow: 0 6px 16px rgba(28, 44, 140, .18);
+}
+
+.chart-tab-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+.chart-tab-panel-heading h2 {
+  margin: 0;
+}
+
+.chart-mode-tabs {
+  flex: 0 0 auto;
+}
+
+.chart-tab-content {
+  display: none;
+}
+
+.chart-tab-content.is-active {
+  display: block;
+}
+
+@media (max-width: 720px) {
+  .chart-tab-panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .peak-band-strong {
@@ -1923,6 +1957,9 @@ td {
   overflow-y: hidden;
   padding-bottom: 4px;
   border-radius: 18px;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 .availability-heatmap-svg {
@@ -1962,6 +1999,24 @@ td {
   color: #334155;
   font-size: 12px;
   font-weight: 650;
+}
+
+@media (max-width: 720px) {
+  .availability-heatmap-card {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .availability-heatmap-scroll {
+    width: calc(100% + 20px);
+    margin-inline: -10px;
+    padding-inline: 10px;
+  }
+
+  .availability-heatmap-meta,
+  .availability-heatmap-footnote {
+    gap: 8px 12px;
+  }
 }
 
 /* Popup de eventos relevantes */
@@ -2872,6 +2927,76 @@ td {
   display: flex;
   flex-direction: column;
 }
+
+/* Aproxima as barras de tipos do padrão cartesiano usado nos rankings. */
+.problem-types-panel .problem-ranking {
+  gap: 0;
+  margin-top: 8px;
+}
+
+.problem-types-panel .problem-row {
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) 132px;
+  gap: 10px;
+  min-height: 46px;
+  padding: 5px 0;
+  border-bottom: 1px dashed rgba(148, 163, 184, .28);
+}
+
+.problem-types-panel .problem-row:last-child {
+  border-bottom: 0;
+}
+
+.problem-types-panel .problem-label {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.problem-types-panel .problem-bar-wrap {
+  height: 32px;
+  overflow: visible;
+  border: 0;
+  border-left: 1px solid #94a3b8;
+  border-radius: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(25% - 1px),
+    rgba(148, 163, 184, .24) calc(25% - 1px),
+    rgba(148, 163, 184, .24) 25%
+  );
+}
+
+.problem-types-panel .problem-bar {
+  top: 5px;
+  bottom: 5px;
+  height: auto;
+  border-radius: 0 3px 3px 0;
+  box-shadow: none;
+}
+
+.problem-types-panel .problem-bar-wrap strong {
+  right: 6px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .88);
+  text-shadow: none;
+}
+
+@media (max-width: 720px) {
+  .problem-types-panel .problem-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 10px 0;
+  }
+
+  .problem-types-panel .problem-label,
+  .problem-types-panel .problem-hours {
+    text-align: left;
+  }
+}
+
 .problem-types-thumb {
   /* Faz a imagem ocupar a largura real do cartão, sem “moldura” interna. */
   margin: auto -20px -20px;

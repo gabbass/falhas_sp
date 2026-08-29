@@ -67,6 +67,7 @@ type EstadoOperacional =
   | "Operação encerrada";
 type Ordenacao = "tempo" | "quantidade" | "disponibilidade" | "paralisacao";
 type RecorteDiasMapa = "todos" | "uteis";
+type ModoGrafico = "horas" | "quantidade";
 
 type Evento = {
   id: number;
@@ -2542,16 +2543,15 @@ function HeatmapDisponibilidade({
     };
   }, [eventos, linhaSelecionada]);
 
-  const larguraCelula = 5;
+  const larguraCelula = 6.2;
   const alturaCelula = 16;
-  // Reserva duas colunas legíveis antes da malha: linha à esquerda e faixas horárias à direita.
-  // Isso evita que nomes compridos encostem nos horários do eixo Y.
-  const margemEsquerda = 360;
-  const colunaRotuloLinhaX = 24;
-  const colunaFaixaHorariaX = margemEsquerda - 24;
+  // Mantém os rótulos legíveis em duas colunas compactas e libera mais largura para a malha temporal.
+  const margemEsquerda = 260;
+  const colunaRotuloLinhaX = 16;
+  const colunaFaixaHorariaX = margemEsquerda - 16;
   const margemTopo = 52;
   const alturaBlocoLinha = HEATMAP_SLOTS.length * alturaCelula + 10;
-  const larguraGrafico = margemEsquerda + resultado.dias.length * larguraCelula + 34;
+  const larguraGrafico = margemEsquerda + resultado.dias.length * larguraCelula + 16;
   const alturaGrafico = margemTopo + resultado.linhas.length * alturaBlocoLinha + 42;
 
   if (resultado.linhas.length === 0) {
@@ -2684,6 +2684,39 @@ function HeatmapDisponibilidade({
   );
 }
 
+function AbasModoGrafico({
+  valor,
+  aoAlterar,
+  rotulo,
+}: {
+  valor: ModoGrafico;
+  aoAlterar: (modo: ModoGrafico) => void;
+  rotulo: string;
+}) {
+  return (
+    <div className="segmented-control chart-mode-tabs" role="tablist" aria-label={rotulo}>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={valor === "horas"}
+        className={valor === "horas" ? "is-active" : ""}
+        onClick={() => aoAlterar("horas")}
+      >
+        Horas
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={valor === "quantidade"}
+        className={valor === "quantidade" ? "is-active" : ""}
+        onClick={() => aoAlterar("quantidade")}
+      >
+        Quantidade
+      </button>
+    </div>
+  );
+}
+
 export default function DashboardOcorrencias2025({
   modo = "painel",
   comparativoAberto = false,
@@ -2706,13 +2739,10 @@ export default function DashboardOcorrencias2025({
   const [estadoOcorrencia, setEstadoOcorrencia] = useState("todos");
   const [tipoOcorrencia, setTipoOcorrencia] = useState("todos");
   const [origemOcorrencia, setOrigemOcorrencia] = useState("todas");
-  const [recorteDiasMapa, setRecorteDiasMapa] = useState<RecorteDiasMapa>("todos");
-  const [linhaMapa, setLinhaMapa] = useState("todas");
-  const [linhaHistograma, setLinhaHistograma] = useState("todas");
-  const [operadorMapa, setOperadorMapa] = useState("todos");
-  const [estadoMapa, setEstadoMapa] = useState("todos");
-  const [origemMapa, setOrigemMapa] = useState("todas");
   const [resumoFiltrosAberto, setResumoFiltrosAberto] = useState(false);
+  const [modoDistribuicao, setModoDistribuicao] = useState<ModoGrafico>("horas");
+  const [modoRankingLinha, setModoRankingLinha] = useState<ModoGrafico>("horas");
+  const [modoRankingOperador, setModoRankingOperador] = useState<ModoGrafico>("horas");
   const [anoSelecionado, setAnoSelecionado] = useState<AnoDados>(modo === "comparativo" ? "comparativo" : ANO_ATIVO);
   const [isAnoPendente, iniciarTransicaoAno] = useTransition();
   const router = useRouter();
@@ -2805,65 +2835,13 @@ export default function DashboardOcorrencias2025({
     return agregado.eventosFiltrados.filter((evento) => entraEmRankingDeTipo(evento));
   }, [agregado.eventosFiltrados]);
 
-  const linhasTemporaisDisponiveis = useMemo(() => {
-    return Array.from(
-      new Set(agregado.eventosFiltrados.map((evento) => evento.linha)),
-    ).sort(compararLinhas);
-  }, [agregado.eventosFiltrados]);
-
-  useEffect(() => {
-    if (
-      linhaMapa !== "todas" &&
-      !linhasTemporaisDisponiveis.includes(linhaMapa)
-    ) {
-      setLinhaMapa("todas");
-    }
-
-    if (
-      linhaHistograma !== "todas" &&
-      !linhasTemporaisDisponiveis.includes(linhaHistograma)
-    ) {
-      setLinhaHistograma("todas");
-    }
-  }, [linhaMapa, linhaHistograma, linhasTemporaisDisponiveis]);
-
-  const operadoresMapaDisponiveis = useMemo(() => {
-    return Array.from(new Set(eventosBaseMapa.map((evento) => evento.operador))).sort(
-      (a, b) => displayOperadorName(a).localeCompare(displayOperadorName(b), "pt-BR"),
-    );
-  }, [eventosBaseMapa]);
-
-  const estadosMapaDisponiveis = useMemo(() => {
-    return ESTADOS_CLASSIFICADOS.filter((estadoItem) =>
-      eventosBaseMapa.some((evento) => evento.estado === estadoItem),
-    );
-  }, [eventosBaseMapa]);
-
   const eventosMapaHorario = useMemo(() => {
-    return eventosBaseMapa.filter((evento) => {
-      const bateLinha = linhaMapa === "todas" || evento.linha === linhaMapa;
-      const bateOperador = operadorMapa === "todos" || evento.operador === operadorMapa;
-      const bateEstado = estadoMapa === "todos" || evento.estado === estadoMapa;
-      const bateDia = filtraEventoPorRecorteDias(evento, recorteDiasMapa);
-      const bateOrigem =
-        origemMapa === "todas" ||
-        (origemMapa === "cascata" && Boolean(evento.efeitoCascata)) ||
-        (origemMapa === "originario" && !evento.efeitoCascata);
-      const bateDados =
+    return eventosBaseMapa.filter(
+      (evento) =>
         incluirDadosIndisponiveisNosGraficos ||
-        evento.estado !== "Indefinido";
-
-      return bateLinha && bateOperador && bateEstado && bateDia && bateOrigem && bateDados;
-    });
-  }, [
-    eventosBaseMapa,
-    linhaMapa,
-    operadorMapa,
-    estadoMapa,
-    origemMapa,
-    recorteDiasMapa,
-    incluirDadosIndisponiveisNosGraficos,
-  ]);
+        evento.estado !== "Indefinido",
+    );
+  }, [eventosBaseMapa, incluirDadosIndisponiveisNosGraficos]);
 
   const recorrenciaFalhas = useMemo(() => {
     const falhas = agregado.eventosFiltrados.filter(
@@ -2972,6 +2950,7 @@ export default function DashboardOcorrencias2025({
     }));
   const operadorTempoChartHeight = Math.max(330, chartOperadoresTempo.length * 46 + 96);
   const operadorQtdChartHeight = Math.max(330, chartOperadoresQtd.length * 46 + 96);
+  const overviewChartHeight = Math.max(460, operadorTempoChartHeight, operadorQtdChartHeight);
   const chartProblemas = agregado.problemas.slice(0, 10);
 
   const eventosProblemaBase = useMemo<EventoComTipo[]>(() => {
@@ -3103,12 +3082,6 @@ export default function DashboardOcorrencias2025({
     estadoOcorrencia !== "todos",
     tipoOcorrencia !== "todos",
     origemOcorrencia !== "todas",
-    recorteDiasMapa !== "todos",
-    linhaMapa !== "todas",
-    operadorMapa !== "todos",
-    estadoMapa !== "todos",
-    origemMapa !== "todas",
-    linhaHistograma !== "todas",
   ].filter(Boolean).length;
 
   const resumoFiltrosAtivos: Array<{ label: string; value: string }> = [];
@@ -3128,12 +3101,6 @@ export default function DashboardOcorrencias2025({
   if (estadoOcorrencia !== "todos") resumoFiltrosAtivos.push({ label: "Estado das ocorrências", value: estadoOcorrencia });
   if (tipoOcorrencia !== "todos") resumoFiltrosAtivos.push({ label: "Tipo de ocorrência", value: tipoOcorrencia });
   if (origemOcorrencia !== "todas") resumoFiltrosAtivos.push({ label: "Origem das ocorrências", value: origemOcorrencia === "cascata" ? "Somente efeito cascata" : "Somente originárias" });
-  if (recorteDiasMapa !== "todos") resumoFiltrosAtivos.push({ label: "Dias do mapa", value: "Somente dias úteis" });
-  if (linhaMapa !== "todas") resumoFiltrosAtivos.push({ label: "Linha do mapa", value: displayLinhaName(linhaMapa) });
-  if (operadorMapa !== "todos") resumoFiltrosAtivos.push({ label: "Operador do mapa", value: displayOperadorName(operadorMapa) });
-  if (estadoMapa !== "todos") resumoFiltrosAtivos.push({ label: "Evento do mapa", value: estadoMapa });
-  if (origemMapa !== "todas") resumoFiltrosAtivos.push({ label: "Origem do mapa", value: origemMapa === "cascata" ? "Somente efeito cascata" : "Somente originários" });
-  if (linhaHistograma !== "todas") resumoFiltrosAtivos.push({ label: "Linha do histograma", value: displayLinhaName(linhaHistograma) });
 
   const limparFiltros = () => {
     setResumoFiltrosAberto(false);
@@ -3151,12 +3118,6 @@ export default function DashboardOcorrencias2025({
     setEstadoOcorrencia("todos");
     setTipoOcorrencia("todos");
     setOrigemOcorrencia("todas");
-    setRecorteDiasMapa("todos");
-    setLinhaMapa("todas");
-    setOperadorMapa("todos");
-    setEstadoMapa("todos");
-    setOrigemMapa("todas");
-    setLinhaHistograma("todas");
   };
 
   if (modo === "comparativo") {
@@ -3658,20 +3619,28 @@ export default function DashboardOcorrencias2025({
       </p>
 
 
-      <section className="grid-2">
-        <div className="panel panel-focus">
-          <h2>Distribuição do tempo operacional</h2>
+      <div className="chart-overview-row">
+      <section className="panel panel-focus chart-tab-panel">
+        <div className="chart-tab-panel-heading">
+          <h2>Distribuição operacional</h2>
+          <AbasModoGrafico
+            valor={modoDistribuicao}
+            aoAlterar={setModoDistribuicao}
+            rotulo="Métrica da distribuição operacional"
+          />
+        </div>
+        <div className={`chart-tab-content ${modoDistribuicao === "horas" ? "is-active" : ""}`}>
           <p>
             Mostra a divisão das horas esperadas de operação. É a melhor leitura para entender a gravidade temporal: um evento longo pesa mais que um evento curto.
           </p>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={overviewChartHeight}>
             <PieChart className="interactive-chart">
               <Pie
                 data={dadosGraficoDisponibilidade}
                 dataKey="horas"
                 nameKey="categoria"
-                innerRadius={72}
-                outerRadius={112}
+                innerRadius={96}
+                outerRadius={150}
                 paddingAngle={2}
                 onClick={(entrada) => filtrarPorEstado(String(payloadGrafico(entrada).categoria ?? "todos"))}
               >
@@ -3683,19 +3652,18 @@ export default function DashboardOcorrencias2025({
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="panel panel-focus">
-          <h2>Distribuição por quantidade</h2>
+        <div className={`chart-tab-content ${modoDistribuicao === "quantidade" ? "is-active" : ""}`}>
           <p>
             Mostra quantos registros ocorreram em cada categoria operacional. É útil para frequência, mas não mede gravidade: muitos eventos curtos podem somar menos horas que poucos eventos longos. Dados indisponíveis ficam separados para não distorcer a comparação entre operadores.
           </p>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={overviewChartHeight}>
             <PieChart className="interactive-chart">
               <Pie
                 data={dadosGraficoDisponibilidade}
                 dataKey="quantidade"
                 nameKey="categoria"
-                innerRadius={72}
-                outerRadius={112}
+                innerRadius={96}
+                outerRadius={150}
                 paddingAngle={2}
                 onClick={(entrada) => filtrarPorEstado(String(payloadGrafico(entrada).categoria ?? "todos"))}
               >
@@ -3709,16 +3677,23 @@ export default function DashboardOcorrencias2025({
         </div>
       </section>
 
-      <section className="grid-2" style={{ marginTop: 18 }}>
-        <div className="panel">
-          <h2>Ranking por linha · tempo</h2>
+      <section className="panel chart-tab-panel">
+        <div className="chart-tab-panel-heading">
+          <h2>Ranking por linha</h2>
+          <AbasModoGrafico
+            valor={modoRankingLinha}
+            aoAlterar={setModoRankingLinha}
+            rotulo="Métrica do ranking por linha"
+          />
+        </div>
+        <div className={`chart-tab-content ${modoRankingLinha === "horas" ? "is-active" : ""}`}>
           <p>Ordena as linhas pelo maior tempo acumulado de manutenção programada, ocorrências operacionais e paralisações. Disponível e eventos especiais ficam fora desta leitura.</p>
-          <ResponsiveContainer width="100%" height={330}>
+          <ResponsiveContainer width="100%" height={overviewChartHeight}>
             <BarChart
               className="interactive-chart"
               data={chartLinhasTempo}
               layout="vertical"
-              margin={{ left: 95, right: 20, top: 10, bottom: 10 }}
+              margin={{ left: 0, right: 8, top: 10, bottom: 10 }}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -3729,7 +3704,7 @@ export default function DashboardOcorrencias2025({
                 dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
-                width={130}
+                width={110}
               />
               <Tooltip formatter={(value: number) => `${fmtHoras(value)} h`} />
               <Bar
@@ -3757,15 +3732,14 @@ export default function DashboardOcorrencias2025({
           </ResponsiveContainer>
         </div>
 
-        <div className="panel">
-          <h2>Ranking por linha · quantidade</h2>
+        <div className={`chart-tab-content ${modoRankingLinha === "quantidade" ? "is-active" : ""}`}>
           <p>Ordena as linhas pelo número de registros operacionais. Use junto com o ranking por tempo para separar frequência de gravidade.</p>
-          <ResponsiveContainer width="100%" height={330}>
+          <ResponsiveContainer width="100%" height={overviewChartHeight}>
             <BarChart
               className="interactive-chart"
               data={chartLinhasQtd}
               layout="vertical"
-              margin={{ left: 95, right: 20, top: 10, bottom: 10 }}
+              margin={{ left: 0, right: 8, top: 10, bottom: 10 }}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -3776,7 +3750,7 @@ export default function DashboardOcorrencias2025({
                 dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
-                width={130}
+                width={110}
               />
               <Tooltip />
               <Bar
@@ -3814,16 +3788,23 @@ export default function DashboardOcorrencias2025({
         </div>
       </section>
 
-      <section className="grid-2" style={{ marginTop: 18 }}>
-        <div className="panel">
-          <h2>Ranking por operador · tempo</h2>
+      <section className="panel chart-tab-panel">
+        <div className="chart-tab-panel-heading">
+          <h2>Ranking por operador</h2>
+          <AbasModoGrafico
+            valor={modoRankingOperador}
+            aoAlterar={setModoRankingOperador}
+            rotulo="Métrica do ranking por operador"
+          />
+        </div>
+        <div className={`chart-tab-content ${modoRankingOperador === "horas" ? "is-active" : ""}`}>
           <p>Compara operadores pelo tempo acumulado de manutenção programada, ocorrências operacionais e paralisações. Dados indisponíveis ficam fora desta comparação principal; o nome completo aparece ao passar o mouse.</p>
-          <ResponsiveContainer width="100%" height={operadorTempoChartHeight}>
+          <ResponsiveContainer width="100%" height={overviewChartHeight}>
             <BarChart
               className="interactive-chart"
               data={chartOperadoresTempo}
               layout="vertical"
-              margin={{ left: 24, right: 28, top: 10, bottom: 10 }}
+              margin={{ left: 0, right: 8, top: 10, bottom: 10 }}
               barCategoryGap={12}
             >
               <CartesianGrid
@@ -3835,7 +3816,7 @@ export default function DashboardOcorrencias2025({
                 dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
-                width={150}
+                width={120}
                 interval={0}
                 tick={{ fontSize: 13, fontWeight: 650 }}
               />
@@ -3870,15 +3851,14 @@ export default function DashboardOcorrencias2025({
           </ResponsiveContainer>
         </div>
 
-        <div className="panel">
-          <h2>Ranking por operador · quantidade</h2>
+        <div className={`chart-tab-content ${modoRankingOperador === "quantidade" ? "is-active" : ""}`}>
           <p>Compara operadores pela quantidade de registros operacionais. Essa visão mede frequência, não necessariamente duração.</p>
-          <ResponsiveContainer width="100%" height={operadorQtdChartHeight}>
+          <ResponsiveContainer width="100%" height={overviewChartHeight}>
             <BarChart
               className="interactive-chart"
               data={chartOperadoresQtd}
               layout="vertical"
-              margin={{ left: 24, right: 28, top: 10, bottom: 10 }}
+              margin={{ left: 0, right: 8, top: 10, bottom: 10 }}
               barCategoryGap={12}
             >
               <CartesianGrid
@@ -3890,7 +3870,7 @@ export default function DashboardOcorrencias2025({
                 dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
-                width={150}
+                width={120}
                 interval={0}
                 tick={{ fontSize: 13, fontWeight: 650 }}
               />
@@ -3933,6 +3913,7 @@ export default function DashboardOcorrencias2025({
           </ResponsiveContainer>
         </div>
       </section>
+      </div>
 
       <section className="panel time-scatter-panel" style={{ marginTop: 18 }}>
         <div className="panel-heading-row">
@@ -3947,86 +3928,17 @@ export default function DashboardOcorrencias2025({
           </div>
         </div>
 
-        <div className="map-controls" aria-label="Filtros próprios do mapa horário">
-          <div className="map-recorte-control">
-            <span>Recorte de dias</span>
-            <div className="segmented-control">
-              <button
-                type="button"
-                className={recorteDiasMapa === "todos" ? "is-active" : ""}
-                onClick={() => setRecorteDiasMapa("todos")}
-              >
-                Todos os dias
-              </button>
-              <button
-                type="button"
-                className={recorteDiasMapa === "uteis" ? "is-active" : ""}
-                onClick={() => setRecorteDiasMapa("uteis")}
-              >
-                Somente dias úteis
-              </button>
-            </div>
-          </div>
-
-          <div className="local-filters-grid map-local-filters">
-            <label>
-              Linha
-              <select value={linhaMapa} onChange={(event) => setLinhaMapa(event.target.value)}>
-                <option value="todas">Todas as linhas do recorte global</option>
-                {linhasTemporaisDisponiveis.map((item) => (
-                  <option key={`mapa-linha-${item}`} value={item}>{displayLinhaName(item)}</option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Operador
-              <select value={operadorMapa} onChange={(e) => setOperadorMapa(e.target.value)}>
-                <option value="todos">Todos os operadores</option>
-                {operadoresMapaDisponiveis.map((item) => (
-                  <option key={`map-operador-${item}`} value={item}>
-                    {displayOperadorName(item)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Evento
-              <select value={estadoMapa} onChange={(e) => setEstadoMapa(e.target.value)}>
-                <option value="todos">Todos os eventos</option>
-                {estadosMapaDisponiveis.map((item) => (
-                  <option key={`map-estado-${item}`} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Origem
-              <select value={origemMapa} onChange={(e) => setOrigemMapa(e.target.value)}>
-                <option value="todas">Originários e cascatas</option>
-                <option value="originario">Somente originários</option>
-                <option value="cascata">Somente efeito cascata</option>
-              </select>
-            </label>
-          </div>
-
-          <small>Estes filtros refinam apenas o mapa horário. O histograma temporal abaixo tem seu próprio filtro de linha. Em toda a página, os Filtros globais são aplicados primeiro.</small>
-        </div>
-
         <TimeScatterChart
           eventos={eventosMapaHorario}
           incluirDadosIndisponiveis={incluirDadosIndisponiveisNosGraficos}
-          recorteDias={recorteDiasMapa}
+          recorteDias="todos"
           onSelectEvento={filtrarPorEvento}
         />
         <div className="chart-footnote scatter-footnote">
           Tamanho do ponto = duração aproximada. Clique em um ponto para ver a ocorrência, a duração calculada e, quando houver, o efeito cascata associado a outra linha.
         </div>
         <div className="chart-footnote scatter-footnote scatter-disclaimer">
-          As faixas de pico são referência de leitura: janeiro não considera pico estudantil e sábados/domingos não têm pico declarado. Em “Somente dias úteis”, as faixas ficam mais fortes para destacar os períodos críticos. O posicionamento do ponto usa sempre o horário de início do evento. Dados indisponíveis aparecem apenas quando esse status é selecionado no filtro global ou no filtro local de evento.
+          As faixas de pico são referência de leitura: janeiro não considera pico estudantil e sábados/domingos não têm pico declarado. O posicionamento do ponto usa sempre o horário de início do evento. Dados indisponíveis aparecem apenas quando esse status é selecionado nos Filtros globais.
         </div>
       </section>
 
@@ -4039,23 +3951,9 @@ export default function DashboardOcorrencias2025({
             </p>
           </div>
         </div>
-        <div className="local-filters-grid compact heatmap-local-filters">
-          <label>
-            Linha do histograma
-            <select value={linhaHistograma} onChange={(event) => setLinhaHistograma(event.target.value)}>
-              <option value="todas">Todas as linhas do recorte global</option>
-              {linhasTemporaisDisponiveis.map((item) => (
-                <option key={`histograma-linha-${item}`} value={item}>{displayLinhaName(item)}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <small>
-          Os Filtros globais também alteram este histograma. Este seletor apenas refina a linha exibida; o mapa horário possui controle próprio logo acima.
-        </small>
         <HeatmapDisponibilidade
           eventos={agregado.eventosFiltrados}
-          linhaSelecionada={linhaHistograma}
+          linhaSelecionada={linha}
           onSelectCell={filtrarPorLinhaEEstado}
         />
       </section>

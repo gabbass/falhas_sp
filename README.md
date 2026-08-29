@@ -979,7 +979,7 @@ Mostra ocorrências distribuídas no tempo, permitindo observar padrões por:
 - horário;
 - tipo de ocorrência.
 
-Possui filtros próprios que refinam apenas essa visualização.
+Usa diretamente os filtros globais de linha, operador, status e período.
 
 ---
 
@@ -996,6 +996,8 @@ Disponível
 Depois, eventos restritivos sobrepõem as células afetadas.
 
 Quando mais de um estado cruza a mesma célula, prevalece o estado mais crítico para leitura operacional.
+
+A visualização usa diretamente os filtros globais, sem um seletor local de linha.
 
 ---
 
