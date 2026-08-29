@@ -125,6 +125,7 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
   const [anoPrincipal, setAnoPrincipal] = useState<AnoComparavel>("2026");
   const [anosReferencia, setAnosReferencia] = useState<AnoComparavel[]>(["2025", "2024"]);
   const [usarMediaReferencias, setUsarMediaReferencias] = useState(false);
+  const [abaComparativo, setAbaComparativo] = useState<"sintese" | "linhas">("sintese");
 
   const basePrincipal = bases.find((base) => base.ano === anoPrincipal)!;
   const basesReferencia = bases.filter((base) => anosReferencia.includes(base.ano));
@@ -200,6 +201,13 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
           <span className="comparison-badge">1º semestre</span>
         </div>
 
+        <div className="dashboard-subtabs comparison-view-tabs" role="tablist" aria-label="Conteúdo do comparativo">
+          <button type="button" role="tab" aria-selected={abaComparativo === "sintese"} className={abaComparativo === "sintese" ? "is-active" : ""} onClick={() => setAbaComparativo("sintese")}>Síntese</button>
+          <button type="button" role="tab" aria-selected={abaComparativo === "linhas"} className={abaComparativo === "linhas" ? "is-active" : ""} onClick={() => setAbaComparativo("linhas")}>Comparação por linha</button>
+        </div>
+
+        {abaComparativo === "sintese" ? (
+        <div className="comparison-summary-view">
         <div className="comparison-period-controls">
         <fieldset className="comparison-year-selector">
           <legend>Período analisado</legend>
@@ -331,7 +339,10 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
             );
           })}
         </div>
+        </div>
+        ) : null}
 
+        {abaComparativo === "linhas" ? (
         <div className="comparison-lines-block">
           <div className="comparison-subheading">
             <h3>Disponibilidade e horas de ocorrência por linha</h3>
@@ -417,6 +428,7 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
             </table>
           </div>
         </div>
+        ) : null}
       </section>
     </Root>
   );

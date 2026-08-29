@@ -47,6 +47,11 @@ import DocumentacaoPopup from "./documentacao-popup";
 import AnaliseHumanaPopup from "./analise-humana-popup";
 import AnaliseIaPopup from "./analise-ia-popup";
 import ComparativoPrimeiroSemestre from "./comparativo-primeiro-semestre";
+import DashboardCarousel, {
+  DashboardChrome,
+  DashboardFilterPanel,
+  DashboardSlide,
+} from "./dashboard-carousel";
 
 const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -2743,6 +2748,8 @@ export default function DashboardOcorrencias2024({
   const [modoDistribuicao, setModoDistribuicao] = useState<ModoGrafico>("horas");
   const [modoRankingLinha, setModoRankingLinha] = useState<ModoGrafico>("horas");
   const [modoRankingOperador, setModoRankingOperador] = useState<ModoGrafico>("horas");
+  const [abaTempo, setAbaTempo] = useState<"mapa" | "histograma">("mapa");
+  const [abaRegistros, setAbaRegistros] = useState<"falhas" | "encerramentos" | "especiais">("falhas");
   const [anoSelecionado, setAnoSelecionado] = useState<AnoDados>(modo === "comparativo" ? "comparativo" : ANO_ATIVO);
   const [isAnoPendente, iniciarTransicaoAno] = useTransition();
   const router = useRouter();
@@ -2780,8 +2787,10 @@ export default function DashboardOcorrencias2024({
     if (novoAno === anoSelecionado) return;
     setAnoSelecionado(novoAno);
     iniciarTransicaoAno(() => {
+      const telaAtual = typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("tela");
+      const telaQuery = telaAtual ? `&tela=${encodeURIComponent(telaAtual)}` : "";
       router.push(
-        novoAno === "comparativo" ? `/?ano=${ANO_ATIVO}&comparativo=1` : `/?ano=${novoAno}`,
+        novoAno === "comparativo" ? "/?ano=comparativo" : `/?ano=${novoAno}${telaQuery}`,
         { scroll: false },
       );
     });
@@ -2950,7 +2959,7 @@ export default function DashboardOcorrencias2024({
     }));
   const operadorTempoChartHeight = Math.max(330, chartOperadoresTempo.length * 46 + 96);
   const operadorQtdChartHeight = Math.max(330, chartOperadoresQtd.length * 46 + 96);
-  const overviewChartHeight = Math.max(460, operadorTempoChartHeight, operadorQtdChartHeight);
+  const overviewChartHeight = Math.max(340, Math.min(380, operadorTempoChartHeight), Math.min(380, operadorQtdChartHeight));
   const chartProblemas = agregado.problemas.slice(0, 10);
 
   const eventosProblemaBase = useMemo<EventoComTipo[]>(() => {
@@ -3272,6 +3281,8 @@ export default function DashboardOcorrencias2024({
           </div>
         </div>
       ) : null}
+      <DashboardCarousel activeFilterCount={totalFiltrosAtivos}>
+      <DashboardSlide id="abertura">
       <section className="hero dashboard-hero">
         <div className="hero-card hero-thumb-card">
           <div className="hero-thumb-media">
@@ -3304,8 +3315,9 @@ export default function DashboardOcorrencias2024({
           </div>
         </div>
       </section>
+      </DashboardSlide>
 
-
+      <DashboardChrome>
       <section className="panel comparison-year-controls" aria-label="Base analisada">
           <div className="hero-actions">
             <div className="hero-control-stack">
@@ -3353,9 +3365,9 @@ export default function DashboardOcorrencias2024({
             </div>
           </div>
       </section>
+      </DashboardChrome>
 
-      {comparativoAberto ? <ComparativoPrimeiroSemestre embedded /> : null}
-
+      <DashboardFilterPanel>
       <section className="filters-panel">
         <div className="filters-title">
           <div>
@@ -3436,6 +3448,7 @@ export default function DashboardOcorrencias2024({
           </fieldset>
         </div>
       </section>
+      </DashboardFilterPanel>
 
       {totalFiltrosAtivos ? (
         <div className="floating-filter-actions">
@@ -3480,6 +3493,7 @@ export default function DashboardOcorrencias2024({
         </div>
       ) : null}
 
+      <DashboardSlide id="resumo">
       <section className="kpi-story" aria-label="História dos indicadores operacionais">
         <div className="grid-kpis kpi-story-row kpi-story-row-6">
         <KpiCard
@@ -3612,7 +3626,9 @@ export default function DashboardOcorrencias2024({
           </div>
         </div>
       </section>
+      </DashboardSlide>
 
+      <DashboardSlide id="rankings">
       <p className="chart-interaction-hint">
         Clique em setores, barras, linhas, pontos, células ou palavras para aplicar o recorte
         correspondente aos Filtros globais. Use “Limpar filtros” para voltar à visão completa.
@@ -3914,7 +3930,14 @@ export default function DashboardOcorrencias2024({
         </div>
       </section>
       </div>
+      </DashboardSlide>
 
+      <DashboardSlide id="tempo">
+      <div className="dashboard-subtabs" role="tablist" aria-label="Visualização temporal">
+        <button type="button" role="tab" aria-selected={abaTempo === "mapa"} className={abaTempo === "mapa" ? "is-active" : ""} onClick={() => setAbaTempo("mapa")}>Mapa horário</button>
+        <button type="button" role="tab" aria-selected={abaTempo === "histograma"} className={abaTempo === "histograma" ? "is-active" : ""} onClick={() => setAbaTempo("histograma")}>Histograma</button>
+      </div>
+      {abaTempo === "mapa" ? (
       <section className="panel time-scatter-panel" style={{ marginTop: 18 }}>
         <div className="panel-heading-row">
           <div>
@@ -3941,6 +3964,7 @@ export default function DashboardOcorrencias2024({
           As faixas de pico são referência de leitura: janeiro não considera pico estudantil e sábados/domingos não têm pico declarado. O posicionamento do ponto usa sempre o horário de início do evento. Dados indisponíveis aparecem apenas quando esse status é selecionado nos Filtros globais.
         </div>
       </section>
+      ) : (
 
       <section className="panel availability-heatmap-panel" style={{ marginTop: 18 }}>
         <div className="panel-heading-row">
@@ -3957,7 +3981,10 @@ export default function DashboardOcorrencias2024({
           onSelectCell={filtrarPorLinhaEEstado}
         />
       </section>
+      )}
+      </DashboardSlide>
 
+      <DashboardSlide id="diagnosticos">
       <section className="grid-2 monthly-wordcloud-layout" style={{ marginTop: 18 }}>
         <div className="stacked-panel-column">
         <div className="panel">
@@ -4117,7 +4144,9 @@ export default function DashboardOcorrencias2024({
           </div>
         </div>
       </section>
+      </DashboardSlide>
 
+      <DashboardSlide id="linhas">
       <section
         className="panel analytics-table-panel"
         style={{ marginTop: 18 }}
@@ -4193,8 +4222,16 @@ export default function DashboardOcorrencias2024({
 
         <RankingTable rows={linhasFiltradas} />
       </section>
+      </DashboardSlide>
 
 
+      <DashboardSlide id="registros">
+      <div className="dashboard-subtabs" role="tablist" aria-label="Tipo de registro">
+        <button type="button" role="tab" aria-selected={abaRegistros === "falhas"} className={abaRegistros === "falhas" ? "is-active" : ""} onClick={() => setAbaRegistros("falhas")}>Falhas e paralisações</button>
+        <button type="button" role="tab" aria-selected={abaRegistros === "encerramentos"} className={abaRegistros === "encerramentos" ? "is-active" : ""} onClick={() => setAbaRegistros("encerramentos")}>Operações encerradas</button>
+        <button type="button" role="tab" aria-selected={abaRegistros === "especiais"} className={abaRegistros === "especiais" ? "is-active" : ""} onClick={() => setAbaRegistros("especiais")}>Eventos especiais</button>
+      </div>
+      {abaRegistros === "falhas" ? (
       <section className="panel occurrence-panel" style={{ marginTop: 18 }}>
         <div className="panel-heading-row occurrence-heading-row">
           <div>
@@ -4340,7 +4377,9 @@ export default function DashboardOcorrencias2024({
           )}
         />
       </section>
-      <details className="panel occurrence-panel collapsed-panel" style={{ marginTop: 18 }}>
+      ) : null}
+      {abaRegistros === "encerramentos" ? (
+      <details className="panel occurrence-panel collapsed-panel" open style={{ marginTop: 18 }}>
         <summary className="collapsed-summary">
           <div>
             <h2>Operações encerradas</h2>
@@ -4400,8 +4439,10 @@ export default function DashboardOcorrencias2024({
           />
         </div>
       </details>
+      ) : null}
 
-      <details className="panel occurrence-panel collapsed-panel" style={{ marginTop: 18 }}>
+      {abaRegistros === "especiais" ? (
+      <details className="panel occurrence-panel collapsed-panel" open style={{ marginTop: 18 }}>
         <summary className="collapsed-summary">
           <div>
             <h2>Eventos especiais</h2>
@@ -4457,8 +4498,10 @@ export default function DashboardOcorrencias2024({
           />
         </div>
       </details>
+      ) : null}
+      </DashboardSlide>
 
-
+      </DashboardCarousel>
     </main>
   );
 }
