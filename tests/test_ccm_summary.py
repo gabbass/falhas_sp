@@ -75,6 +75,17 @@ class SummaryIntegrationTests(unittest.TestCase):
         self.assertEqual(summary["metadata"]["mensagemParcial"], "Recorte comparável do primeiro semestre de 2025.")
         self.assertNotIn("2025-07", {event["mes"] for event in summary["events"]})
 
+    def test_second_semester_uses_full_year_source_and_excludes_first_semester(self) -> None:
+        rows = [
+            source_row(1, "2024-06-30T05:00:00", "Operação Normal", period="2024"),
+            source_row(2, "2024-07-01T05:00:00", "Operação Parcial", "Falha em trem", period="2024"),
+        ]
+        summary = build_summary(rows, "2024_2sem", "fixture.json")
+        self.assertEqual(summary["metadata"]["periodoInicio"], "2024-07-01")
+        self.assertEqual(summary["metadata"]["registrosOriginais"], 1)
+        self.assertEqual(summary["metadata"]["mensagemParcial"], "Recorte comparável do segundo semestre de 2024.")
+        self.assertNotIn("2024-06", {event["mes"] for event in summary["events"]})
+
     def test_closure_only_record_closes_previous_event_and_is_omitted(self) -> None:
         rows = [
             source_row(1, "2026-01-01T04:30:00", "Operação Normal"),

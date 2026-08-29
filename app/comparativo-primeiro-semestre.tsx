@@ -1,23 +1,26 @@
 "use client";
 
 import data2024 from "../data/ocorrencias-summary-2024-1sem.json";
+import data2024SegundoSemestre from "../data/ocorrencias-summary-2024-2sem.json";
 import data2025 from "../data/ocorrencias-summary-2025-1sem.json";
+import data2025SegundoSemestre from "../data/ocorrencias-summary-2025-2sem.json";
 import data2026 from "../data/ocorrencias-summary-2026.json";
 import { Info } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import DocumentacaoPopup from "./documentacao-popup";
+import LineBadge from "./line-badge";
 
 type Summary = typeof data2026;
 type KpiKey = keyof Summary["kpis"];
 
 const bases = [
-  { ano: "2026", data: data2026 },
-  { ano: "2025", data: data2025 },
-  { ano: "2024", data: data2024 },
+  { id: "2026-1", ano: "2026", semestre: 1, rotulo: "1º sem. 2026", data: data2026 },
+  { id: "2025-1", ano: "2025", semestre: 1, rotulo: "1º sem. 2025", data: data2025 },
+  { id: "2024-1", ano: "2024", semestre: 1, rotulo: "1º sem. 2024", data: data2024 },
+  { id: "2025-2", ano: "2025", semestre: 2, rotulo: "2º sem. 2025", data: data2025SegundoSemestre },
+  { id: "2024-2", ano: "2024", semestre: 2, rotulo: "2º sem. 2024", data: data2024SegundoSemestre },
 ] as const;
 
-type AnoComparavel = (typeof bases)[number]["ano"];
+type BaseId = (typeof bases)[number]["id"];
 type BaseComparavel = (typeof bases)[number];
 type FormatoMetrica = "percentual" | "horas" | "inteiro";
 type SentidoMetrica = "maior-melhor" | "menor-melhor" | "contextual";
@@ -43,11 +46,21 @@ function numero(valor: number, formato: FormatoMetrica) {
   return Math.round(valor).toLocaleString("pt-BR");
 }
 
-function rotuloDelta(atual: number, referencia: number) {
+function rotuloPercentualDelta(atual: number, referencia: number) {
   if (referencia === 0) return atual === 0 ? "0,00%" : "sem base %";
   const variacao = ((atual - referencia) / Math.abs(referencia)) * 100;
   const sinal = variacao > 0 ? "+" : variacao < 0 ? "−" : "";
   return `${sinal}${Math.abs(variacao).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+}
+
+function rotuloDelta(atual: number, referencia: number, formato: FormatoMetrica) {
+  const delta = atual - referencia;
+  const sinal = delta > 0 ? "+" : delta < 0 ? "−" : "";
+  const absoluto = Math.abs(delta);
+  const valor = formato === "percentual"
+    ? `${absoluto.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} p.p.`
+    : numero(absoluto, formato);
+  return `${sinal}${valor} (${rotuloPercentualDelta(atual, referencia)})`;
 }
 
 function classeTendencia(atual: number, referencia: number, sentido: SentidoMetrica) {
@@ -62,11 +75,13 @@ function Tendencia({
   referencia,
   rotuloReferencia,
   sentido,
+  formato,
 }: {
   atual: number;
   referencia: number;
   rotuloReferencia: string;
   sentido: SentidoMetrica;
+  formato: FormatoMetrica;
 }) {
   const delta = atual - referencia;
   const simbolo = delta > 0 ? "▲" : delta < 0 ? "▼" : "—";
@@ -76,7 +91,7 @@ function Tendencia({
       title={`Variação percentual em relação a ${rotuloReferencia}`}
     >
       <span className="comparison-trend-icon" aria-hidden="true">{simbolo}</span>
-      <span>{rotuloDelta(atual, referencia)}</span>
+      <span>{rotuloDelta(atual, referencia, formato)}</span>
       <small>vs. {rotuloReferencia}</small>
     </span>
   );
@@ -121,50 +136,46 @@ function displayLinhaName(nome: string) {
 }
 
 export default function ComparativoPrimeiroSemestre({ embedded = false }: { embedded?: boolean }) {
-  const router = useRouter();
-  const [anoPrincipal, setAnoPrincipal] = useState<AnoComparavel>("2026");
-  const [anosReferencia, setAnosReferencia] = useState<AnoComparavel[]>(["2025", "2024"]);
+  const [basePrincipalId, setBasePrincipalId] = useState<BaseId>("2026-1");
+  const [basesReferenciaIds, setBasesReferenciaIds] = useState<BaseId[]>(["2025-1", "2024-1"]);
   const [usarMediaReferencias, setUsarMediaReferencias] = useState(false);
-  const [abaComparativo, setAbaComparativo] = useState<"sintese" | "linhas">("sintese");
 
-  const basePrincipal = bases.find((base) => base.ano === anoPrincipal)!;
-  const basesReferencia = bases.filter((base) => anosReferencia.includes(base.ano));
-  const rotuloReferencias = anosReferencia.join(" + ");
+  const basePrincipal = bases.find((base) => base.id === basePrincipalId)!;
+  const basesCompativeis = bases.filter((base) => base.semestre === basePrincipal.semestre && base.id !== basePrincipalId);
+  const basesReferencia = bases.filter((base) => basesReferenciaIds.includes(base.id));
+  const rotuloReferencias = basesReferencia.map((base) => base.rotulo).join(" + ");
   const baseMediaAtiva = usarMediaReferencias && basesReferencia.length === 2;
   const basesEmUso = [basePrincipal, ...basesReferencia];
-  const basesVisiveis = bases.filter((base) => base.ano === anoPrincipal || anosReferencia.includes(base.ano));
-  const mapasPorAno = new Map(basesEmUso.map((base) => [base.ano, linhasPorNome(base.data as Summary)]));
+  const basesVisiveis = [basePrincipal, ...basesReferencia];
+  const mapasPorBase = new Map(basesEmUso.map((base) => [base.id, linhasPorNome(base.data as Summary)]));
   const nomesLinhas = Array.from(
     new Set(basesEmUso.flatMap((base) => base.data.rankings.linhas.map((linha) => linha.nome))),
   ).sort((a, b) => numeroLinha(a) - numeroLinha(b) || a.localeCompare(b, "pt-BR"));
 
-  const escolherPrincipal = (ano: AnoComparavel) => {
-    if (ano === anoPrincipal) return;
-    setAnoPrincipal(ano);
-    setAnosReferencia(bases.filter((base) => base.ano !== ano).map((base) => base.ano));
+  const escolherPrincipal = (id: BaseId) => {
+    if (id === basePrincipalId) return;
+    const proximaBase = bases.find((base) => base.id === id)!;
+    setBasePrincipalId(id);
+    setBasesReferenciaIds(
+      bases.filter((base) => base.semestre === proximaBase.semestre && base.id !== id).map((base) => base.id),
+    );
     setUsarMediaReferencias(false);
   };
 
-  const alternarReferencia = (ano: AnoComparavel) => {
-    if (ano === anoPrincipal) return;
-    if (anosReferencia.includes(ano)) {
-      if (anosReferencia.length === 1) return;
-      const proximos = anosReferencia.filter((item) => item !== ano);
-      setAnosReferencia(proximos);
+  const alternarReferencia = (id: BaseId) => {
+    if (id === basePrincipalId) return;
+    if (basesReferenciaIds.includes(id)) {
+      if (basesReferenciaIds.length === 1) return;
+      const proximos = basesReferenciaIds.filter((item) => item !== id);
+      setBasesReferenciaIds(proximos);
       if (proximos.length !== 2) setUsarMediaReferencias(false);
       return;
     }
-    setAnosReferencia(
-      bases.map((base) => base.ano).filter((item) => item !== anoPrincipal && (item === ano || anosReferencia.includes(item))),
-    );
+    setBasesReferenciaIds(basesCompativeis.map((base) => base.id).filter((item) => item === id || basesReferenciaIds.includes(item)));
   };
 
   const selecionarTodasReferencias = () => {
-    setAnosReferencia(bases.filter((base) => base.ano !== anoPrincipal).map((base) => base.ano));
-  };
-
-  const navegar = (ano: "2024" | "2025" | "2026" | "comparativo") => {
-    router.push(`/?ano=${ano}`, { scroll: false });
+    setBasesReferenciaIds(basesCompativeis.map((base) => base.id));
   };
 
   const Root = embedded ? "div" : "main";
@@ -174,53 +185,31 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
       id={embedded ? "comparativo" : undefined}
       className={embedded ? "comparison-embedded" : "page dashboard-page comparison-only-page"}
     >
-      {!embedded ? <section className="panel comparison-year-controls" aria-label="Base analisada">
-        <div className="hero-actions">
-          <div className="hero-control-stack">
-            <span className="hero-control-label">Base analisada</span>
-            <div className="hero-tabbar">
-              <button type="button" onClick={() => navegar("2026")}>2026 · 1º semestre</button>
-              <button type="button" onClick={() => navegar("2025")}>2025</button>
-              <button type="button" onClick={() => navegar("2024")}>2024</button>
-              <button type="button" className="is-active" aria-pressed="true">Comparativo</button>
-              <DocumentacaoPopup />
-            </div>
-          </div>
-        </div>
-      </section> : null}
-
       <section className="panel comparison-panel" aria-labelledby="comparativo-semestral-title">
         <div className="comparison-heading">
           <div>
             <h2 id="comparativo-semestral-title">Comparativo</h2>
             <p>
-              Compare o período analisado com um ou dois períodos de referência.
-              A variação mostra quanto o valor aumentou ou diminuiu em porcentagem.
+              Compare o período analisado com períodos de referência do mesmo semestre.
+              A diferença é sempre calculada como analisado menos comparado, em valor absoluto e percentual.
             </p>
           </div>
-          <span className="comparison-badge">1º semestre</span>
+          <span className="comparison-badge">{basePrincipal.semestre}º semestre</span>
         </div>
-
-        <div className="dashboard-subtabs comparison-view-tabs" role="tablist" aria-label="Conteúdo do comparativo">
-          <button type="button" role="tab" aria-selected={abaComparativo === "sintese"} className={abaComparativo === "sintese" ? "is-active" : ""} onClick={() => setAbaComparativo("sintese")}>Síntese</button>
-          <button type="button" role="tab" aria-selected={abaComparativo === "linhas"} className={abaComparativo === "linhas" ? "is-active" : ""} onClick={() => setAbaComparativo("linhas")}>Comparação por linha</button>
-        </div>
-
-        {abaComparativo === "sintese" ? (
-        <div className="comparison-summary-view">
+        <div className="comparison-scroll-content">
         <div className="comparison-period-controls">
         <fieldset className="comparison-year-selector">
           <legend>Período analisado</legend>
           <div>
             {bases.map((base) => (
-              <label key={`principal-${base.ano}`} className={anoPrincipal === base.ano ? "is-selected" : ""}>
+              <label key={`principal-${base.id}`} className={basePrincipalId === base.id ? "is-selected" : ""}>
                 <input
                   type="radio"
-                  name="ano-principal"
-                  checked={anoPrincipal === base.ano}
-                  onChange={() => escolherPrincipal(base.ano)}
+                  name="periodo-principal"
+                  checked={basePrincipalId === base.id}
+                  onChange={() => escolherPrincipal(base.id)}
                 />
-                <span>1º sem. {base.ano}</span>
+                <span>{base.rotulo}</span>
               </label>
             ))}
           </div>
@@ -231,22 +220,24 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
           <legend>Comparar com</legend>
           <div>
             {bases.map((base) => {
-              const ehPrincipal = base.ano === anoPrincipal;
-              const marcado = anosReferencia.includes(base.ano);
-              const ultimaReferencia = marcado && anosReferencia.length === 1;
+              const ehPrincipal = base.id === basePrincipalId;
+              const semestreIncompativel = base.semestre !== basePrincipal.semestre;
+              const marcado = basesReferenciaIds.includes(base.id);
+              const ultimaReferencia = marcado && basesReferenciaIds.length === 1;
+              const desabilitado = ehPrincipal || semestreIncompativel || ultimaReferencia;
               return (
                 <label
-                  key={`referencia-${base.ano}`}
-                  className={`${marcado ? "is-selected" : ""} ${ehPrincipal ? "is-disabled" : ""}`.trim()}
-                  title={ehPrincipal ? "O período analisado não pode ser referência para si próprio." : undefined}
+                  key={`referencia-${base.id}`}
+                  className={`${marcado ? "is-selected" : ""} ${ehPrincipal || semestreIncompativel ? "is-disabled" : ""}`.trim()}
+                  title={semestreIncompativel ? "Primeiro e segundo semestre não podem ser comparados entre si." : ehPrincipal ? "O período analisado não pode ser referência para si próprio." : undefined}
                 >
                   <input
                     type="checkbox"
                     checked={marcado}
-                    disabled={ehPrincipal || ultimaReferencia}
-                    onChange={() => alternarReferencia(base.ano)}
+                    disabled={desabilitado}
+                    onChange={() => alternarReferencia(base.id)}
                   />
-                  <span>1º sem. {base.ano}{ehPrincipal ? " · analisado" : ""}</span>
+                  <span>{base.rotulo}{ehPrincipal ? " · analisado" : ""}</span>
                 </label>
               );
             })}
@@ -254,7 +245,7 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
               Todos os outros períodos
             </button>
           </div>
-          <small>Pelo menos uma referência deve permanecer marcada; o período analisado fica sempre indisponível aqui.</small>
+          <small>Pelo menos uma referência do mesmo semestre deve permanecer marcada. Semestres diferentes ficam bloqueados.</small>
         </fieldset>
 
         <div className="comparison-sum-option">
@@ -279,7 +270,7 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
         <div className="comparison-grid">
           {metricas.map((metrica) => {
             const valorPrincipal = Number(basePrincipal.data.kpis[metrica.chave]);
-            const explicacao = `${metrica.detalhe} O selo identifica o período analisado, que funciona como base do cálculo. Em cada outra coluna, a seta e o percentual indicam quanto aquele período aumentou ou diminuiu em relação ao analisado: (período da coluna − período analisado) ÷ período analisado × 100.`;
+            const explicacao = `${metrica.detalhe} A diferença sempre parte do período comparado para o analisado: período analisado − período comparado. Por exemplo, comparado 5 e analisado 1 resulta em queda de 4.`;
             return (
               <article className="comparison-card" key={metrica.chave}>
                 <header className="comparison-card-header">
@@ -295,7 +286,7 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
                   {baseMediaAtiva ? (
                     <>
                       <span className="comparison-card-column comparison-primary-value">
-                        <small>1º sem. {anoPrincipal}</small>
+                        <small>{basePrincipal.rotulo}</small>
                         <strong>{numero(valorPrincipal, metrica.formato)}</strong>
                         <em>Analisado</em>
                       </span>
@@ -303,32 +294,34 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
                         <small>Média {rotuloReferencias}</small>
                         <b>{numero(valorBaseMedia(basesReferencia, metrica.chave), metrica.formato)}</b>
                         <Tendencia
-                          atual={valorBaseMedia(basesReferencia, metrica.chave)}
-                          referencia={valorPrincipal}
-                          rotuloReferencia={anoPrincipal}
+                          atual={valorPrincipal}
+                          referencia={valorBaseMedia(basesReferencia, metrica.chave)}
+                          rotuloReferencia={`média ${rotuloReferencias}`}
                           sentido={metrica.sentido}
+                          formato={metrica.formato}
                         />
                       </span>
                     </>
                   ) : basesVisiveis.map((base) => {
-                    const ehPrincipal = base.ano === anoPrincipal;
+                    const ehPrincipal = base.id === basePrincipalId;
                     const valor = Number(base.data.kpis[metrica.chave]);
                     return (
                       <span
                         className={`comparison-card-column ${ehPrincipal ? "comparison-primary-value" : "comparison-secondary-value"}`}
-                        key={`${metrica.chave}-${base.ano}`}
+                        key={`${metrica.chave}-${base.id}`}
                       >
-                        <small>1º sem. {base.ano}</small>
+                        <small>{base.rotulo}</small>
                         {ehPrincipal
                           ? <strong>{numero(valor, metrica.formato)}</strong>
                           : <b>{numero(valor, metrica.formato)}</b>}
                         {ehPrincipal ? <em>Analisado</em> : null}
                         {!ehPrincipal ? (
                           <Tendencia
-                            atual={valor}
-                            referencia={valorPrincipal}
-                            rotuloReferencia={anoPrincipal}
+                            atual={valorPrincipal}
+                            referencia={valor}
+                            rotuloReferencia={base.rotulo}
                             sentido={metrica.sentido}
+                            formato={metrica.formato}
                           />
                         ) : null}
                       </span>
@@ -339,14 +332,10 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
             );
           })}
         </div>
-        </div>
-        ) : null}
-
-        {abaComparativo === "linhas" ? (
         <div className="comparison-lines-block">
           <div className="comparison-subheading">
             <h3>Disponibilidade e horas de ocorrência por linha</h3>
-            <p>O período analisado mostra a variação percentual em relação a cada referência escolhida.</p>
+            <p>A diferença de disponibilidade é calculada do período comparado para o analisado.</p>
           </div>
           <div className="table-wrap comparison-lines-table-wrap">
             <table className="comparison-lines-table">
@@ -355,20 +344,20 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
                   <th>Linha</th>
                   {baseMediaAtiva ? (
                     <>
-                      <th>{anoPrincipal} · analisado</th>
+                      <th>{basePrincipal.rotulo} · analisado</th>
                       <th className="is-summed">Média {rotuloReferencias}</th>
                     </>
                   ) : basesVisiveis.map((base) => (
-                    <th key={base.ano}>{base.ano} · {base.ano === anoPrincipal ? "analisado" : "referência"}</th>
+                    <th key={base.id}>{base.rotulo} · {base.id === basePrincipalId ? "analisado" : "referência"}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {nomesLinhas.map((nome) => (
                   <tr key={nome}>
-                    <td><strong>{displayLinhaName(nome)}</strong></td>
+                    <td><LineBadge nome={nome} /></td>
                     {baseMediaAtiva ? (() => {
-                      const linhaPrincipal = mapasPorAno.get(anoPrincipal)?.get(nome);
+                      const linhaPrincipal = mapasPorBase.get(basePrincipalId)?.get(nome);
                       const linhaMedia = linhaBaseMedia(basesReferencia, nome);
                       return (
                         <>
@@ -386,10 +375,11 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
                               <>
                                 <strong className="comparison-line-main-value">{numero(linhaMedia.disponibilidadePct, "percentual")}</strong>
                                 <Tendencia
-                                  atual={linhaMedia.disponibilidadePct}
-                                  referencia={linhaPrincipal.disponibilidadePct}
-                                  rotuloReferencia={anoPrincipal}
+                                  atual={linhaPrincipal.disponibilidadePct}
+                                  referencia={linhaMedia.disponibilidadePct}
+                                  rotuloReferencia={`média ${rotuloReferencias}`}
                                   sentido="maior-melhor"
+                                  formato="percentual"
                                 />
                                 <span className="comparison-line-reference">Ocorrências: {numero(linhaMedia.horasFalhaParcial, "horas")}</span>
                                 <span className="comparison-line-reference">Manutenção: {numero(linhaMedia.horasManutencaoProgramada, "horas")}</span>
@@ -399,20 +389,21 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
                         </>
                       );
                     })() : basesVisiveis.map((base) => {
-                      const linha = mapasPorAno.get(base.ano)?.get(nome);
-                      const linhaPrincipal = mapasPorAno.get(anoPrincipal)?.get(nome);
-                      const ehPrincipal = base.ano === anoPrincipal;
+                      const linha = mapasPorBase.get(base.id)?.get(nome);
+                      const linhaPrincipal = mapasPorBase.get(basePrincipalId)?.get(nome);
+                      const ehPrincipal = base.id === basePrincipalId;
                       return (
-                        <td key={`${nome}-${base.ano}`}>
+                        <td key={`${nome}-${base.id}`}>
                           {linha ? (
                             <>
                               <strong className="comparison-line-main-value">{numero(linha.disponibilidadePct, "percentual")}</strong>
                               {!ehPrincipal && linhaPrincipal ? (
                                 <Tendencia
-                                  atual={linha.disponibilidadePct}
-                                  referencia={linhaPrincipal.disponibilidadePct}
-                                  rotuloReferencia={anoPrincipal}
+                                  atual={linhaPrincipal.disponibilidadePct}
+                                  referencia={linha.disponibilidadePct}
+                                  rotuloReferencia={base.rotulo}
                                   sentido="maior-melhor"
+                                  formato="percentual"
                                 />
                               ) : null}
                               <span className="comparison-line-reference">Ocorrências: {numero(linha.horasFalhaParcial, "horas")}</span>
@@ -428,7 +419,7 @@ export default function ComparativoPrimeiroSemestre({ embedded = false }: { embe
             </table>
           </div>
         </div>
-        ) : null}
+        </div>
       </section>
     </Root>
   );

@@ -592,6 +592,8 @@ def build_summary(
         "2025": ("2025", date(2025, 1, 1), date(2025, 12, 31), "2025", False),
         "2024_1sem": ("2024", date(2024, 1, 1), date(2024, 6, 30), "2024", True),
         "2025_1sem": ("2025", date(2025, 1, 1), date(2025, 6, 30), "2025", True),
+        "2024_2sem": ("2024", date(2024, 7, 1), date(2024, 12, 31), "2024", True),
+        "2025_2sem": ("2025", date(2025, 7, 1), date(2025, 12, 31), "2025", True),
         "2026_1sem": ("2026_1sem", date(2026, 1, 1), date(2026, 6, 30), "2026", True),
     }
     source_period, period_start, period_end, display_year, is_semester = period_specs[period_label]
@@ -619,7 +621,11 @@ def build_summary(
         "periodoFimDataHora": iso_seconds(last_dt),
         "periodoLabel": f"{period_start.strftime('%d/%m/%Y')} a {period_end.strftime('%d/%m/%Y')}",
         "periodoParcial": is_semester,
-        "mensagemParcial": f"Recorte comparável do primeiro semestre de {display_year}." if is_semester else f"Base CCM reprocessada para o ano completo de {display_year}.",
+        "mensagemParcial": (
+            f"Recorte comparável do {'segundo' if period_label.endswith('_2sem') else 'primeiro'} semestre de {display_year}."
+            if is_semester
+            else f"Base CCM reprocessada para o ano completo de {display_year}."
+        ),
         "registrosOriginais": len(selected),
         "registrosNormalizados": len(events),
         "duplicidadesRemovidasLinhaHorario": 0,
@@ -671,6 +677,8 @@ def output_filename(period_label: str) -> str:
         "2025": "ocorrencias-summary.json",
         "2024_1sem": "ocorrencias-summary-2024-1sem.json",
         "2025_1sem": "ocorrencias-summary-2025-1sem.json",
+        "2024_2sem": "ocorrencias-summary-2024-2sem.json",
+        "2025_2sem": "ocorrencias-summary-2025-2sem.json",
         "2026_1sem": "ocorrencias-summary-2026.json",
     }[period_label]
 
@@ -697,8 +705,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--periods",
         nargs="+",
-        choices=("2024", "2025", "2024_1sem", "2025_1sem", "2026_1sem"),
-        default=("2024", "2025", "2024_1sem", "2025_1sem", "2026_1sem"),
+        choices=("2024", "2025", "2024_1sem", "2025_1sem", "2024_2sem", "2025_2sem", "2026_1sem"),
+        default=("2024", "2025", "2024_1sem", "2025_1sem", "2024_2sem", "2025_2sem", "2026_1sem"),
     )
     args = parser.parse_args(argv)
 

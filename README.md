@@ -5,7 +5,7 @@
 
 Dashboard público em **Next.js** para visualização, análise e documentação das ocorrências metroferroviárias da Região Metropolitana de São Paulo.
 
-O painel apresenta indicadores de disponibilidade operacional, manutenção programada, ocorrências operacionais, falhas/paralisações, eventos especiais, registros indefinidos e o comparativo do primeiro semestre de 2024, 2025 e 2026.
+O painel apresenta indicadores de disponibilidade operacional, manutenção programada, ocorrências operacionais, falhas/paralisações, eventos especiais, registros indefinidos e comparativos semestrais de 2024, 2025 e 2026.
 
 O objetivo do projeto é tornar os dados mais compreensíveis ao público, preservando rastreabilidade metodológica e separando claramente:
 
@@ -188,13 +188,14 @@ para abrir a visão de 2024.
 
 Use `/?ano=2025` para abrir a visão anual de 2025.
 
-E:
+O comparativo faz parte do carrossel e pode ser aberto diretamente por:
 
 ```text
-/?ano=comparativo
+/?tela=comparativo
 ```
 
-para abrir a comparação entre os **primeiros semestres de 2026, 2025 e 2024**.
+Nessa tela, primeiros semestres só podem ser comparados com primeiros semestres;
+segundos semestres de 2024 e 2025 só podem ser comparados entre si.
 
 O roteamento é feito em:
 
@@ -1465,8 +1466,8 @@ npm run data:generate
 ```
 
 Os arquivos são escritos em `data/generated/`, que não é versionado. O comando
-gera as bases anuais de 2024 e 2025 e os recortes de primeiro semestre de 2024,
-2025 e 2026, mas não substitui
+gera as bases anuais de 2024 e 2025, os recortes dos dois semestres de 2024 e
+2025 e o primeiro semestre de 2026, mas não substitui
 automaticamente os dados publicados.
 
 O gerador:

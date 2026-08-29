@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" width="200px" height="100px" viewBox="0 0 200 100" xml:space="preserve">
+<g id="fim">
+</g>
+<g id="fim_off">
+</g>
+<g id="meio_on">
+	<rect id="meio-on-antes" x="-0.25" y="25" fill="#005EB8" width="100" height="50"/>
+	<rect id="meio-on-depois" x="99.75" y="25" fill="#005EB8" width="100" height="50"/>
+	<circle id="meio-on" fill="#FFFFFF" stroke="#005EB8" stroke-width="2.8347" stroke-miterlimit="10" cx="100" cy="50" r="30"/>
+</g>
+<g id="meio_off">
+</g>
+<g id="inicio_1_">
+</g>
+<g id="inicio_off">
+</g>
+</svg>

@@ -4,6 +4,7 @@ import eventosData from "../data/eventos-relevantes.json";
 import { ExternalLink, Newspaper, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import { LineBadgesInText } from "./line-badge";
 
 type AnoEvento = "2024" | "2025";
 type AnoFiltro = AnoEvento | "todos";
@@ -158,7 +159,7 @@ export default function EventosRelevantesPopup({ anoInicial = "todos" }: Eventos
                       <div className="evento-relevante-conteudo">
                         <h3>{evento.eventoEstrutural}</h3>
                         <p>
-                          <strong>{evento.operador}</strong> · {evento.linhas}
+                          <strong>{evento.operador}</strong> · <LineBadgesInText texto={evento.linhas} />
                         </p>
                         <p>Fonte: {evento.tituloFonte}</p>
                         <a href={evento.link} target="_blank" rel="noreferrer">

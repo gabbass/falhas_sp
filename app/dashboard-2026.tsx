@@ -27,7 +27,6 @@ import {
   Filter,
   Gauge,
   GitCompareArrows,
-  Info,
   RefreshCw,
   Repeat2,
   Search,
@@ -50,8 +49,11 @@ import ComparativoPrimeiroSemestre from "./comparativo-primeiro-semestre";
 import DashboardCarousel, {
   DashboardChrome,
   DashboardFilterPanel,
+  DashboardLegend,
   DashboardSlide,
 } from "./dashboard-carousel";
+import LineBadge, { LineBadgeTick } from "./line-badge";
+import KpiCard from "./kpi-card";
 
 const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -1268,7 +1270,7 @@ function TimeScatterChart({
               >
                 <span className="legend-dot" style={{ background: evento.cor }} />
                 <div className="scatter-selection-main">
-                  <strong>{evento.linha}</strong>
+                  <LineBadge nome={evento.linha} />
                   <span>{displayOperadorName(evento.operador)} · {evento.estado}</span>
                   {evento.efeitoCascata ? (
                     <em className="cascade-badge">{labelOrigemEvento(evento)}</em>
@@ -2021,37 +2023,6 @@ function aggregateData(filtros: {
   };
 }
 
-function KpiCard({
-  label,
-  value,
-  detail,
-  icon,
-}: {
-  label: string;
-  value: string;
-  detail: string;
-  icon: ReactNode;
-}) {
-  return (
-    <div className="kpi">
-      <div className="kpi-icon">{icon}</div>
-      <div className="kpi-label-row">
-        <small>{label}</small>
-        <span className="kpi-info">
-          <button
-            type="button"
-            aria-label={`Informações sobre ${label}: ${detail}`}
-          >
-            <Info size={15} aria-hidden="true" />
-          </button>
-          <span className="kpi-tooltip" role="tooltip">{detail}</span>
-        </span>
-      </div>
-      <strong>{value}</strong>
-    </div>
-  );
-}
-
 function AvailabilityBar({ row }: { row: LinhaRanking }) {
   const total = Math.max(row.horasTotaisOperacao, 1);
   const disp = Math.max((row.horasDisponivel / total) * 100, 0);
@@ -2141,7 +2112,7 @@ function RankingTable({ rows }: { rows: LinhaRanking[] }) {
                 <td>
                   <span className="rank">{inicio + index + 1}</span>
                 </td>
-                <td>{item.nome}</td>
+                <td><LineBadge nome={item.nome} /></td>
                 <td className="muted">{displayOperadorName(item.operador ?? "—")}</td>
                 <td>
                   <strong>{fmtPct(item.disponibilidadePct)}</strong>
@@ -2548,11 +2519,11 @@ function HeatmapDisponibilidade({
     };
   }, [eventos, linhaSelecionada]);
 
-  const larguraCelula = 6.2;
+  const larguraCelula = 7.2;
   const alturaCelula = 16;
   // Mantém os rótulos legíveis em duas colunas compactas e libera mais largura para a malha temporal.
-  const margemEsquerda = 260;
-  const colunaRotuloLinhaX = 16;
+  const margemEsquerda = 124;
+  const colunaRotuloLinhaX = 0;
   const colunaFaixaHorariaX = margemEsquerda - 16;
   const margemTopo = 52;
   const alturaBlocoLinha = HEATMAP_SLOTS.length * alturaCelula + 10;
@@ -2624,14 +2595,15 @@ function HeatmapDisponibilidade({
                   y2={yBase - 4}
                   className="availability-heatmap-hour-line"
                 />
-                <text
+                <foreignObject
                   x={colunaRotuloLinhaX}
-                  y={yBase + Math.max(14, HEATMAP_SLOTS.length * alturaCelula / 2)}
-                  textAnchor="start"
-                  className="availability-heatmap-line-label"
+                  y={yBase + Math.max(4, HEATMAP_SLOTS.length * alturaCelula / 2 - 10)}
+                  width="36"
+                  height="28"
+                  overflow="visible"
                 >
-                  {linha}
-                </text>
+                  <div className="line-badge-svg-host line-badge-svg-host--heatmap"><LineBadge nome={linha} className="line-number-badge--heatmap" /></div>
+                </foreignObject>
                 {HEATMAP_SLOTS.map((slot, slotIndex) => (
                   <text
                     key={`heatmap-slot-label-${linha}-${slot.id}`}
@@ -2913,13 +2885,13 @@ export default function DashboardOcorrencias2026({
         b.horasFalhaParcial - a.horasFalhaParcial ||
         b.horasFalhaTotal - a.horasFalhaTotal,
     )
-    .slice(0, 10)
+    .slice(0, 16)
     .map((item) => ({
       ...limparDadosIndisponiveisParaGrafico(
         item,
         incluirDadosIndisponiveisNosGraficos,
       ),
-      nomeLabel: displayLinhaName(item.nome),
+      nomeLabel: item.nome,
     }));
   const chartLinhasQtd = [...agregado.linhas]
     .sort(
@@ -2929,17 +2901,17 @@ export default function DashboardOcorrencias2026({
         b.qtdFalhaParcial - a.qtdFalhaParcial ||
         b.qtdFalhaTotal - a.qtdFalhaTotal,
     )
-    .slice(0, 10)
+    .slice(0, 16)
     .map((item) => ({
       ...limparDadosIndisponiveisParaGrafico(
         item,
         incluirDadosIndisponiveisNosGraficos,
       ),
-      nomeLabel: displayLinhaName(item.nome),
+      nomeLabel: item.nome,
     }));
   const chartOperadoresTempo = [...agregado.operadores]
     .sort((a, b) => horasRegistrosClassificados(b) - horasRegistrosClassificados(a))
-    .slice(0, 8)
+    .slice(0, 12)
     .map((item) => ({
       ...limparDadosIndisponiveisParaGrafico(
         item,
@@ -2949,7 +2921,7 @@ export default function DashboardOcorrencias2026({
     }));
   const chartOperadoresQtd = [...agregado.operadores]
     .sort((a, b) => qtdRegistrosClassificadosOperacionais(b) - qtdRegistrosClassificadosOperacionais(a))
-    .slice(0, 8)
+    .slice(0, 12)
     .map((item) => ({
       ...limparDadosIndisponiveisParaGrafico(
         item,
@@ -2957,9 +2929,6 @@ export default function DashboardOcorrencias2026({
       ),
       nomeLabel: displayOperadorName(item.nome),
     }));
-  const operadorTempoChartHeight = Math.max(330, chartOperadoresTempo.length * 46 + 96);
-  const operadorQtdChartHeight = Math.max(330, chartOperadoresQtd.length * 46 + 96);
-  const overviewChartHeight = Math.max(340, Math.min(380, operadorTempoChartHeight), Math.min(380, operadorQtdChartHeight));
   const chartProblemas = agregado.problemas.slice(0, 10);
 
   const eventosProblemaBase = useMemo<EventoComTipo[]>(() => {
@@ -3161,14 +3130,6 @@ export default function DashboardOcorrencias2026({
                 >
                   2024
                 </button>
-                <button
-                  type="button"
-                  className={anoSelecionado === "comparativo" ? "is-active" : ""}
-                  onClick={() => trocarAno("comparativo")}
-                  aria-pressed={anoSelecionado === "comparativo"}
-                >
-                  Comparativo
-                </button>
               </div>
             </div>
             <div className="hero-tabbar hero-tabbar-shortcuts" aria-label="Conteúdos de apoio à análise">
@@ -3233,7 +3194,7 @@ export default function DashboardOcorrencias2026({
               <tbody>
                 {COMPARATIVO_POR_LINHA.map((item) => (
                   <tr key={`comparativo-linha-${item.nome}`}>
-                    <td><strong>{item.nome}</strong></td>
+                    <td><LineBadge nome={item.nome} /></td>
                     <td className="muted">{item.operador}</td>
                     {METRICAS_COMPARATIVO_LINHA.map((metrica) => {
                       const valor2025 = getValorComparativoLinha(item.linha2025, metrica.chave);
@@ -3346,14 +3307,6 @@ export default function DashboardOcorrencias2026({
                   aria-pressed={anoSelecionado === "2024"}
                 >
                   2024
-                </button>
-                <button
-                  type="button"
-                  className={anoSelecionado === "comparativo" ? "is-active" : ""}
-                  onClick={() => trocarAno("comparativo")}
-                  aria-pressed={anoSelecionado === "comparativo"}
-                >
-                  Comparativo
                 </button>
               </div>
             </div>
@@ -3511,37 +3464,37 @@ export default function DashboardOcorrencias2026({
         <KpiCard
           label="Tempo total esperado"
           value={`${fmtHoras(agregado.kpis.horasTotaisOperacao)} h`}
-          detail={`Base de comparação: ${agregado.linhasSelecionadas.length} linha(s) × ${fmtHoras(HORAS_DIA)} h/dia`}
+          detail={`(em horas) – Soma do tempo que as linhas deveriam permanecer em operação no período selecionado. É a base para comparar disponibilidade e interrupções: ${agregado.linhasSelecionadas.length} linha(s) × ${fmtHoras(HORAS_DIA)} h/dia.`}
           icon={<Timer size={22} />}
         />
         <KpiCard
           label="Tempo disponível"
           value={`${fmtHoras(agregado.kpis.horasDisponivel)} h`}
-          detail={`${fmtPct(agregado.kpis.disponibilidadePct)} do tempo esperado permaneceu disponível pela regra reconciliada`}
+          detail={`(em horas) – Soma do tempo em que as linhas operaram normalmente. Quanto mais próximo do tempo total esperado, maior a disponibilidade geral; equivale a ${fmtPct(agregado.kpis.disponibilidadePct)}.`}
           icon={<CircleCheckBig size={22} />}
         />
         <KpiCard
           label="Manutenção programada"
           value={`${fmtHoras(agregado.kpis.horasManutencaoProgramada)} h`}
-          detail={`${fmtInt(agregado.kpis.qtdManutencaoProgramada)} intervenção(ões) planejada(s)`}
+          detail={`(em horas) – Soma da duração das intervenções planejadas. Indica quanto da operação foi reservado para manutenção e reúne ${fmtInt(agregado.kpis.qtdManutencaoProgramada)} registro(s).`}
           icon={<Wrench size={22} />}
         />
         <KpiCard
           label="Ocorrências operacionais"
           value={`${fmtHoras(agregado.kpis.horasFalhaParcial)} h`}
-          detail={`${fmtInt(agregado.kpis.qtdFalhaParcial)} registro(s) de operação degradada`}
+          detail={`(em horas) – Soma do tempo de operação degradada. Indica períodos em que o serviço continuou com restrições e reúne ${fmtInt(agregado.kpis.qtdFalhaParcial)} registro(s).`}
           icon={<TriangleAlert size={22} />}
         />
         <KpiCard
-          label="Indisponível/paralisado"
+          label="Indisponível / paralisado"
           value={`${fmtHoras(agregado.kpis.horasFalhaTotal)} h`}
-          detail={`${fmtInt(agregado.kpis.qtdFalhaTotal)} registro(s) em que a operação parou`}
+          detail={`(em horas) – Soma da duração das paralisações totais. Indica o tempo em que o serviço ficou completamente interrompido e reúne ${fmtInt(agregado.kpis.qtdFalhaTotal)} registro(s).`}
           icon={<CircleStop size={22} />}
         />
         <KpiCard
           label="Eventos especiais"
           value={`${fmtHoras(agregado.kpis.horasEventoEspecial)} h`}
-          detail={`${fmtInt(agregado.kpis.qtdEventoEspecial)} registro(s); horas = operação/serviço adicional`}
+          detail={`(em horas) – Soma do tempo de operações ou serviços adicionais. Indica ampliações temporárias da oferta e reúne ${fmtInt(agregado.kpis.qtdEventoEspecial)} registro(s).`}
           icon={<Sparkles size={22} />}
         />
         </div>
@@ -3550,19 +3503,19 @@ export default function DashboardOcorrencias2026({
         <KpiCard
           label="Média de paralisação total"
           value={`${fmtHoras(agregado.kpis.mediaHorasIndisponibilidade)} h`}
-          detail="duração média dos registros em que a operação parou"
+          detail="(em horas) – Duração média de cada registro com paralisação total."
           icon={<TimerOff size={22} />}
         />
         <KpiCard
           label="Média de operação degradada"
           value={`${fmtHoras(agregado.kpis.mediaHorasFalhaParcial)} h`}
-          detail="duração média dos registros de operação degradada"
+          detail="(em horas) – Duração média de cada registro de operação degradada."
           icon={<Activity size={22} />}
         />
         <KpiCard
           label="Média de disponibilidade"
           value={`${fmtHoras(agregado.kpis.mediaHorasDisponivel)} h`}
-          detail="média das janelas classificadas como operação normal"
+          detail="(em horas) – Duração média das janelas classificadas como operação normal."
           icon={<Gauge size={22} />}
         />
         </div>
@@ -3571,19 +3524,19 @@ export default function DashboardOcorrencias2026({
         <KpiCard
           label="Falha → falha"
           value={`${fmtHoras(agregado.kpis.mediaHorasAteNovaFalha)} h`}
-          detail="tempo operacional médio entre uma ocorrência/falha e a próxima, na mesma linha"
+          detail="(em horas) – Intervalo operacional médio entre uma falha e a seguinte, na mesma linha."
           icon={<Repeat2 size={22} />}
         />
         <KpiCard
           label="Manutenção → falha"
           value={`${fmtHoras(agregado.kpis.mediaHorasEntreManutencaoFalha)} h`}
-          detail="tempo operacional médio entre uma manutenção programada e a ocorrência/falha seguinte, na mesma linha"
+          detail="(em horas) – Intervalo operacional médio entre uma manutenção e a falha seguinte, na mesma linha."
           icon={<GitCompareArrows size={22} />}
         />
         <KpiCard
           label="Manutenção → manutenção"
           value={`${fmtHoras(agregado.kpis.mediaHorasEntreManutencoes)} h`}
-          detail="tempo operacional médio entre uma manutenção programada e a próxima, na mesma linha"
+          detail="(em horas) – Intervalo operacional médio entre duas manutenções, na mesma linha."
           icon={<RefreshCw size={22} />}
         />
         </div>
@@ -3592,35 +3545,34 @@ export default function DashboardOcorrencias2026({
         <KpiCard
           label="Dia mais comum para falha"
           value={recorrenciaFalhas.diaLabel}
-          detail={`${fmtInt(recorrenciaFalhas.diaQtd)} ocorrência(s) de falha no recorte atual`}
+          detail=""
           icon={<CalendarDays size={22} />}
         />
         <KpiCard
           label="Horário mais comum para falha"
           value={recorrenciaFalhas.horaLabel}
-          detail={`${fmtInt(recorrenciaFalhas.horaQtd)} ocorrência(s) de falha no recorte atual`}
+          detail=""
           icon={<AlarmClock size={22} />}
         />
         <KpiCard
           label="Tipo mais comum"
           value={agregado.kpis.falhaMaisComum}
-          detail={`${fmtInt(agregado.kpis.falhaMaisComumQtd)} ocorrência(s)`}
+          detail=""
           icon={<TrendingUp size={22} />}
         />
         <KpiCard
           label="Tipo menos comum"
           value={agregado.kpis.falhaMenosComum}
-          detail={agregado.kpis.falhaMenosComumQtd ? `${fmtInt(agregado.kpis.falhaMenosComumQtd)} ocorrência(s)` : "não há outro tipo no recorte"}
+          detail=""
           icon={<TrendingDown size={22} />}
         />
         </div>
       </section>
+      </DashboardSlide>
+      <DashboardLegend>
       <section className="hero-card operational-legend-line" aria-label="Legenda operacional">
-        <div className="operational-legend-head">
-          <strong>Legenda operacional</strong>
-          <p className="legend-intro">Cada cor representa uma situação operacional monitorada. Disponível e eventos especiais ficam concentrados nos cartões, distribuições, evolução mensal e tabela analítica.</p>
-        </div>
         <div className="operational-legend-items">
+          <strong className="operational-legend-label">Legenda</strong>
           <div className="legend-block">
             <span style={{ background: CORES["Manutenção programada"] }} /> Manutenção programada
           </div>
@@ -3638,7 +3590,7 @@ export default function DashboardOcorrencias2026({
           </div>
         </div>
       </section>
-      </DashboardSlide>
+      </DashboardLegend>
 
       <DashboardSlide id="rankings">
       <p className="chart-interaction-hint">
@@ -3661,14 +3613,14 @@ export default function DashboardOcorrencias2026({
           <p>
             Mostra a divisão das horas esperadas de operação. É a melhor leitura para entender a gravidade temporal: um evento longo pesa mais que um evento curto.
           </p>
-          <ResponsiveContainer width="100%" height={overviewChartHeight}>
+          <ResponsiveContainer width="100%" height="100%" minHeight={0}>
             <PieChart className="interactive-chart">
               <Pie
                 data={dadosGraficoDisponibilidade}
                 dataKey="horas"
                 nameKey="categoria"
-                innerRadius={96}
-                outerRadius={150}
+                innerRadius="52%"
+                outerRadius="82%"
                 paddingAngle={2}
                 onClick={(entrada) => filtrarPorEstado(String(payloadGrafico(entrada).categoria ?? "todos"))}
               >
@@ -3684,14 +3636,14 @@ export default function DashboardOcorrencias2026({
           <p>
             Mostra quantos registros ocorreram em cada categoria operacional. É útil para frequência, mas não mede gravidade: muitos eventos curtos podem somar menos horas que poucos eventos longos. Dados indisponíveis ficam separados para não distorcer a comparação entre operadores.
           </p>
-          <ResponsiveContainer width="100%" height={overviewChartHeight}>
+          <ResponsiveContainer width="100%" height="100%" minHeight={0}>
             <PieChart className="interactive-chart">
               <Pie
                 data={dadosGraficoDisponibilidade}
                 dataKey="quantidade"
                 nameKey="categoria"
-                innerRadius={96}
-                outerRadius={150}
+                innerRadius="52%"
+                outerRadius="82%"
                 paddingAngle={2}
                 onClick={(entrada) => filtrarPorEstado(String(payloadGrafico(entrada).categoria ?? "todos"))}
               >
@@ -3716,7 +3668,7 @@ export default function DashboardOcorrencias2026({
         </div>
         <div className={`chart-tab-content ${modoRankingLinha === "horas" ? "is-active" : ""}`}>
           <p>Ordena as linhas pelo maior tempo acumulado de manutenção programada, ocorrências operacionais e paralisações. Disponível e eventos especiais ficam fora desta leitura.</p>
-          <ResponsiveContainer width="100%" height={overviewChartHeight}>
+          <ResponsiveContainer width="100%" height="100%" minHeight={0}>
             <BarChart
               className="interactive-chart"
               data={chartLinhasTempo}
@@ -3732,7 +3684,9 @@ export default function DashboardOcorrencias2026({
                 dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
-                width={110}
+                width={56}
+                interval={0}
+                tick={<LineBadgeTick />}
               />
               <Tooltip formatter={(value: number) => `${fmtHoras(value)} h`} />
               <Bar
@@ -3762,7 +3716,7 @@ export default function DashboardOcorrencias2026({
 
         <div className={`chart-tab-content ${modoRankingLinha === "quantidade" ? "is-active" : ""}`}>
           <p>Ordena as linhas pelo número de registros operacionais. Use junto com o ranking por tempo para separar frequência de gravidade.</p>
-          <ResponsiveContainer width="100%" height={overviewChartHeight}>
+          <ResponsiveContainer width="100%" height="100%" minHeight={0}>
             <BarChart
               className="interactive-chart"
               data={chartLinhasQtd}
@@ -3778,7 +3732,9 @@ export default function DashboardOcorrencias2026({
                 dataKey="nomeLabel"
                 type="category"
                 stroke="#475569"
-                width={110}
+                width={56}
+                interval={0}
+                tick={<LineBadgeTick />}
               />
               <Tooltip />
               <Bar
@@ -3827,7 +3783,7 @@ export default function DashboardOcorrencias2026({
         </div>
         <div className={`chart-tab-content ${modoRankingOperador === "horas" ? "is-active" : ""}`}>
           <p>Compara operadores pelo tempo acumulado de manutenção programada, ocorrências operacionais e paralisações. Dados indisponíveis ficam fora desta comparação principal; o nome completo aparece ao passar o mouse.</p>
-          <ResponsiveContainer width="100%" height={overviewChartHeight}>
+          <ResponsiveContainer width="100%" height="100%" minHeight={0}>
             <BarChart
               className="interactive-chart"
               data={chartOperadoresTempo}
@@ -3881,7 +3837,7 @@ export default function DashboardOcorrencias2026({
 
         <div className={`chart-tab-content ${modoRankingOperador === "quantidade" ? "is-active" : ""}`}>
           <p>Compara operadores pela quantidade de registros operacionais. Essa visão mede frequência, não necessariamente duração.</p>
-          <ResponsiveContainer width="100%" height={overviewChartHeight}>
+          <ResponsiveContainer width="100%" height="100%" minHeight={0}>
             <BarChart
               className="interactive-chart"
               data={chartOperadoresQtd}
@@ -4362,7 +4318,7 @@ export default function DashboardOcorrencias2026({
             <tr key={`${evento.id}-${evento.dataHora}-${evento.linha}`}>
               <td className="nowrap">{evento.dataLabel}</td>
               <td>
-                <strong>{evento.linha}</strong>
+                <LineBadge nome={evento.linha} />
               </td>
               <td className="muted">{displayOperadorName(evento.operador)}</td>
               <td>
@@ -4425,7 +4381,7 @@ export default function DashboardOcorrencias2026({
               <tr key={`enc-${evento.id}-${evento.dataHora}-${evento.linha}`}>
                 <td className="nowrap">{evento.dataLabel}</td>
                 <td>
-                  <strong>{evento.linha}</strong>
+                  <LineBadge nome={evento.linha} />
                 </td>
                 <td className="muted">{displayOperadorName(evento.operador)}</td>
                 <td>
@@ -4487,7 +4443,7 @@ export default function DashboardOcorrencias2026({
               <tr key={`esp-${evento.id}-${evento.dataHora}-${evento.linha}`}>
                 <td className="nowrap">{evento.dataLabel}</td>
                 <td>
-                  <strong>{evento.linha}</strong>
+                  <LineBadge nome={evento.linha} />
                 </td>
                 <td className="muted">{displayOperadorName(evento.operador)}</td>
                 <td>
@@ -4511,6 +4467,10 @@ export default function DashboardOcorrencias2026({
         </div>
       </details>
       ) : null}
+      </DashboardSlide>
+
+      <DashboardSlide id="comparativo" className="dashboard-slide-comparison">
+        <ComparativoPrimeiroSemestre embedded />
       </DashboardSlide>
 
       </DashboardCarousel>

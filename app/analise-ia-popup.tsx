@@ -5,6 +5,7 @@ import data2024Raw from "../data/ocorrencias-summary-2024.json";
 import { Bot, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import LineBadge, { LineBadgesInText } from "./line-badge";
 
 type LinhaRanking = {
   nome: string;
@@ -797,7 +798,7 @@ export default function AnaliseIaPopup() {
                         <tbody>
                           {linhasComMaiorPressao.map((linha) => (
                             <tr key={linha.nome}>
-                              <td>{linha.nome}</td>
+                              <td><LineBadge nome={linha.nome} /></td>
                               <td>{fmtPct(linha.disp2024)}%</td>
                               <td>{fmtPct(linha.disp2025)}%</td>
                               <td>{fmtPp(linha.deltaDisponibilidade)}</td>
@@ -809,8 +810,8 @@ export default function AnaliseIaPopup() {
                     </div>
 
                     <p className="analise-ia-observacao">
-                      As linhas com maior deterioração de disponibilidade em 2025 foram Linha 11-Coral, Linha 10-Turquesa,
-                      Linha 7-Rubi, Linha 13-Jade e Linha 4-Amarela. Essa hierarquia reforça que a piora anual não foi homogênea:
+                      As linhas com maior deterioração de disponibilidade em 2025 foram <LineBadge nome="Linha 11-Coral" />, <LineBadge nome="Linha 10-Turquesa" />,
+                      <LineBadge nome="Linha 7-Rubi" />, <LineBadge nome="Linha 13-Jade" /> e <LineBadge nome="Linha 4-Amarela" />. Essa hierarquia reforça que a piora anual não foi homogênea:
                       ela se concentrou em corredores específicos.
                     </p>
                   </section>
@@ -888,37 +889,37 @@ export default function AnaliseIaPopup() {
                         <tbody>
                           <tr>
                             <td>Relevante / estrutural</td>
-                            <td>Normalização da Linha 11-Coral em 19/05/2025 após obra emergencial na região de Suzano</td>
+                            <td>Normalização da <LineBadge nome="Linha 11-Coral" /> em 19/05/2025 após obra emergencial na região de Suzano</td>
                             <td>É usada como marco de contexto para interpretar a pressão observada na linha antes da normalização.</td>
                           </tr>
                           <tr>
                             <td>Imprevisto / operacional</td>
-                            <td>Linha 11-Coral em {concentracaoLinha11Abril.mesLabel}</td>
+                            <td><LineBadge nome="Linha 11-Coral" /> em {concentracaoLinha11Abril.mesLabel}</td>
                             <td>{fmtHoras(concentracaoLinha11Abril.horas)} h de falha concentradas no mês, equivalentes a {fmtPct1(concentracaoLinha11Abril.participacaoLinhaPct)}% do total anual da própria linha.</td>
                           </tr>
                           <tr>
                             <td>Imprevisto / operacional</td>
-                            <td>Linha 4-Amarela em {concentracaoLinha4Setembro.mesLabel}</td>
+                            <td><LineBadge nome="Linha 4-Amarela" /> em {concentracaoLinha4Setembro.mesLabel}</td>
                             <td>{fmtHoras(concentracaoLinha4Setembro.horas)} h em {fmtInt(concentracaoLinha4Setembro.qtd)} registros, distribuídos em {fmtInt(concentracaoLinha4Setembro.dias)} dias.</td>
                           </tr>
                           <tr>
                             <td>Imprevisto / efeito de rede</td>
                             <td>Ocorrências multilinha em {eventoMultilinha20Abril.dataLabel}</td>
-                            <td>{fmtInt(eventoMultilinha20Abril.qtd)} ocorrências somando {fmtHoras(eventoMultilinha20Abril.horas)} h, alcançando {eventoMultilinha20Abril.linhas.join(", ")}.</td>
+                            <td>{fmtInt(eventoMultilinha20Abril.qtd)} ocorrências somando {fmtHoras(eventoMultilinha20Abril.horas)} h, alcançando {eventoMultilinha20Abril.linhas.map((nome, index) => <span key={nome}>{index ? ", " : ""}<LineBadge nome={nome} /></span>)}.</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                     <p>
-                      A <strong>Linha 11-Coral</strong> reúne <strong>{fmtHoras(concentracaoLinha11Abril.horas)} h</strong> de falha em
+                      A <LineBadge nome="Linha 11-Coral" /> reúne <strong>{fmtHoras(concentracaoLinha11Abril.horas)} h</strong> de falha em
                       <strong> {concentracaoLinha11Abril.mesLabel}</strong>, equivalentes a
                       <strong> {fmtPct1(concentracaoLinha11Abril.participacaoLinhaPct)}%</strong> das horas de falha da própria linha no ano.
                       Esse pico coincide com a restrição iniciada em 04/04/2025 na região de Suzano, posteriormente normalizada em 19/05/2025
-                      com a construção de uma via emergencial. A correspondência temporal é forte e ajuda a explicar por que a Linha 11 aparece como
+                      com a construção de uma via emergencial. A correspondência temporal é forte e ajuda a explicar por que a <LineBadge nome="Linha 11-Coral" /> aparece como
                       um dos principais vetores de deterioração do ano.
                     </p>
                     <p>
-                      A <strong>Linha 4-Amarela</strong> apresenta outro caso de concentração: em
+                      A <LineBadge nome="Linha 4-Amarela" /> apresenta outro caso de concentração: em
                       <strong> {concentracaoLinha4Setembro.mesLabel}</strong>, acumulou
                       <strong> {fmtHoras(concentracaoLinha4Setembro.horas)} h</strong> em
                       <strong> {fmtInt(concentracaoLinha4Setembro.qtd)} registros</strong>, distribuídos em
@@ -929,9 +930,9 @@ export default function AnaliseIaPopup() {
                       Em <strong>{eventoMultilinha20Abril.dataLabel}</strong>, a rede registrou
                       <strong> {fmtInt(eventoMultilinha20Abril.qtd)} ocorrências</strong> que somaram
                       <strong> {fmtHoras(eventoMultilinha20Abril.horas)} h</strong>, alcançando
-                      <strong> {eventoMultilinha20Abril.linhas.join(", ")}</strong>.
-                      Além disso, a <strong>Linha 13-Jade</strong> acumula
-                      <strong> {fmtHoras(efeitoCascataLinha13PorLinha11.horas)} h</strong> em registros associados a Linha 11 e sistema de energia,
+                      <strong> {eventoMultilinha20Abril.linhas.map((nome, index) => <span key={nome}>{index ? ", " : ""}<LineBadge nome={nome} /></span>)}</strong>.
+                      Além disso, a <LineBadge nome="Linha 13-Jade" /> acumula
+                      <strong> {fmtHoras(efeitoCascataLinha13PorLinha11.horas)} h</strong> em registros associados à <LineBadge nome="Linha 11-Coral" /> e sistema de energia,
                       reforçando a necessidade de tratar efeitos em cascata separadamente da origem do evento.
                     </p>
                     <div className="analise-ia-callout">
@@ -957,7 +958,7 @@ export default function AnaliseIaPopup() {
                         <tbody>
                           {linhasComMaiorAumentoBrutoFalha.map((linha) => (
                             <tr key={linha.nome}>
-                              <td>{linha.nome}</td>
+                              <td><LineBadge nome={linha.nome} /></td>
                               <td>{fmtHoras(linha.falha24)} h</td>
                               <td>{fmtHoras(linha.falha25)} h</td>
                               <td>{fmtHoras(linha.deltaFalhaHoras)} h</td>
@@ -1007,7 +1008,7 @@ export default function AnaliseIaPopup() {
                           para as horas de falha em 2025.
                         </li>
                         <li>
-                          <strong>Investigar eventos concentrados como dossiês próprios:</strong> abril na Linha 11-Coral, setembro na Linha 4-Amarela e o
+                          <strong>Investigar eventos concentrados como dossiês próprios:</strong> abril na <LineBadge nome="Linha 11-Coral" />, setembro na <LineBadge nome="Linha 4-Amarela" /> e o
                           episódio multilinha de 20/04 merecem análise formal de causa, resposta, duração e medidas preventivas.
                         </li>
                         <li>
@@ -1019,8 +1020,8 @@ export default function AnaliseIaPopup() {
                           mais rápida e menos dependente de interpretação posterior.
                         </li>
                         <li>
-                          <strong>Acompanhar marcos estruturais com janela antes/depois:</strong> a transição da Linha 7-Rubi para a TIC Trens, a modernização
-                          de sinalização das Linhas 8 e 9 e a renovação de frota da Linha 15-Prata precisam ser monitoradas por efeito operacional observável,
+                          <strong>Acompanhar marcos estruturais com janela antes/depois:</strong> a transição da <LineBadge nome="Linha 7-Rubi" /> para a TIC Trens, a modernização
+                          de sinalização das <LineBadge nome="Linha 8-Diamante" /> e <LineBadge nome="Linha 9-Esmeralda" /> e a renovação de frota da <LineBadge nome="Linha 15-Prata" /> precisam ser monitoradas por efeito operacional observável,
                           e não apenas por anúncio institucional.
                         </li>
                       </ol>
@@ -1059,8 +1060,8 @@ export default function AnaliseIaPopup() {
                       <span className="analise-ia-section-tag">Leitura institucional</span>
                       <h3>Eventos relevantes ajudam a cobrar resultado, não a declarar causalidade automática</h3>
                       <p>
-                        A operação da Linha 7-Rubi sob novo arranjo institucional, o aditivo de modernização das Linhas 8 e 9 e a chegada de novos trens
-                        para a Linha 15-Prata são fatos relevantes para a avaliação do sistema. Eles não explicam sozinhos os resultados de 2025, mas criam
+                        A operação da <LineBadge nome="Linha 7-Rubi" /> sob novo arranjo institucional, o aditivo de modernização das <LineBadge nome="Linha 8-Diamante" /> e <LineBadge nome="Linha 9-Esmeralda" /> e a chegada de novos trens
+                        para a <LineBadge nome="Linha 15-Prata" /> são fatos relevantes para a avaliação do sistema. Eles não explicam sozinhos os resultados de 2025, mas criam
                         marcos objetivos para acompanhamento futuro.
                       </p>
                       <p className="analise-ia-observacao">
@@ -1080,7 +1081,7 @@ export default function AnaliseIaPopup() {
                     <div className="analise-ia-fonte-lista">
                       {fontesContexto.map((fonte) => (
                         <a key={fonte.href} href={fonte.href} target="_blank" rel="noreferrer">
-                          {fonte.rotulo}
+                          <LineBadgesInText texto={fonte.rotulo} />
                         </a>
                       ))}
                     </div>
@@ -1095,7 +1096,7 @@ export default function AnaliseIaPopup() {
                       um problema que merece atenção regulatória e resposta operacional dirigida.
                     </p>
                     <p>
-                      A Linha 11-Coral, a Linha 4-Amarela, a Linha 7-Rubi, a Linha 13-Jade e a Linha 10-Turquesa aparecem como eixos de maior pressão.
+                      A <LineBadge nome="Linha 11-Coral" />, a <LineBadge nome="Linha 4-Amarela" />, a <LineBadge nome="Linha 7-Rubi" />, a <LineBadge nome="Linha 13-Jade" /> e a <LineBadge nome="Linha 10-Turquesa" /> aparecem como eixos de maior pressão.
                       Entre as causas, sinalização e equipamentos de via, clima e alagamentos, além de energia e rede aérea, formam o núcleo mais pesado
                       das horas de falha em 2025. Os eventos relevantes e os eventos imprevistos ajudam a explicar o contexto e a orientar onde a apuração deve ser mais cuidadosa.
                     </p>

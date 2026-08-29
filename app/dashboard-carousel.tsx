@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Filter, X } from "lucide-react";
+import { Filter, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Children,
@@ -24,11 +24,13 @@ export const DASHBOARD_SCREENS = [
   { id: "diagnosticos", label: "Diagnósticos" },
   { id: "linhas", label: "Linhas" },
   { id: "registros", label: "Registros" },
+  { id: "comparativo", label: "Comparativo" },
 ] as const;
 
 export type DashboardScreenId = (typeof DASHBOARD_SCREENS)[number]["id"];
 
 const ScreenContext = createContext<DashboardScreenId>("abertura");
+const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 function isDashboardScreen(value: string | null): value is DashboardScreenId {
   return DASHBOARD_SCREENS.some((screen) => screen.id === value);
@@ -67,6 +69,10 @@ export function DashboardChrome({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+export function DashboardLegend({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}
+
 export default function DashboardCarousel({
   children,
   activeFilterCount,
@@ -78,14 +84,15 @@ export default function DashboardCarousel({
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedScreen = searchParams.get("tela");
-  const initialScreen = isDashboardScreen(requestedScreen) ? requestedScreen : "abertura";
+  const legacyComparison = searchParams.get("comparativo") === "1" || searchParams.get("ano") === "comparativo";
+  const initialScreen = isDashboardScreen(requestedScreen) ? requestedScreen : legacyComparison ? "comparativo" : "abertura";
   const [activeScreen, setActiveScreen] = useState<DashboardScreenId>(initialScreen);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const pointerStart = useRef<number | null>(null);
 
   useEffect(() => {
-    setActiveScreen(isDashboardScreen(requestedScreen) ? requestedScreen : "abertura");
-  }, [requestedScreen]);
+    setActiveScreen(isDashboardScreen(requestedScreen) ? requestedScreen : legacyComparison ? "comparativo" : "abertura");
+  }, [legacyComparison, requestedScreen]);
 
   const activeIndex = DASHBOARD_SCREENS.findIndex((screen) => screen.id === activeScreen);
   const activeLabel = DASHBOARD_SCREENS[activeIndex]?.label ?? "Abertura";
@@ -133,8 +140,12 @@ export default function DashboardCarousel({
   const childElements = useMemo(() => Children.toArray(children).filter(isValidElement), [children]);
   const filterElement = childElements.find((child) => child.type === DashboardFilterPanel);
   const chromeElement = childElements.find((child) => child.type === DashboardChrome);
+  const legendElement = childElements.find((child) => child.type === DashboardLegend);
   const slides = childElements.filter(
-    (child) => child.type !== DashboardFilterPanel && child.type !== DashboardChrome,
+    (child) =>
+      child.type !== DashboardFilterPanel &&
+      child.type !== DashboardChrome &&
+      child.type !== DashboardLegend,
   );
 
   useEffect(() => {
@@ -157,43 +168,67 @@ export default function DashboardCarousel({
         aria-roledescription="carrossel"
         aria-label="Telas do painel"
       >
-        <div className="dashboard-carousel-chrome">{chromeElement}</div>
+        {activeIndex >= 1 && activeScreen !== "comparativo" ? (
+          <div className="dashboard-carousel-toolbar">
+            <div className="dashboard-carousel-chrome">{chromeElement}</div>
+            <div className="dashboard-carousel-toolbar-row">
+              <button
+                type="button"
+                className="dashboard-filter-trigger dashboard-toolbar-filter-trigger"
+                onClick={() => setFiltersOpen(true)}
+                aria-expanded={filtersOpen}
+              >
+                <Filter size={16} />
+                Filtros
+                {activeFilterCount ? <em>{activeFilterCount}</em> : null}
+              </button>
+              <div className="dashboard-carousel-legend">{legendElement}</div>
+            </div>
+          </div>
+        ) : null}
         <div className="dashboard-screen-status" aria-live="polite">
           <span>{activeIndex + 1} de {DASHBOARD_SCREENS.length}</span>
           <strong>{activeLabel}</strong>
-          <button
-            type="button"
-            className="dashboard-filter-trigger"
-            onClick={() => setFiltersOpen(true)}
-            aria-expanded={filtersOpen}
-          >
-            <Filter size={16} />
-            Filtros
-            {activeFilterCount ? <em>{activeFilterCount}</em> : null}
-          </button>
         </div>
 
         <div className="dashboard-slide-viewport">{slides}</div>
 
         <nav className="dashboard-carousel-nav" aria-label="Navegação entre telas">
           <button type="button" onClick={() => move(-1)} disabled={activeIndex === 0} aria-label="Tela anterior">
-            <ChevronLeft size={19} />
+            <img src={`${assetBase}/images/seta_esquerda.svg`} alt="" aria-hidden="true" />
           </button>
           <div className="dashboard-carousel-dots">
-            {DASHBOARD_SCREENS.map((screen, index) => (
-              <button
-                key={screen.id}
-                type="button"
-                className={screen.id === activeScreen ? "is-active" : ""}
-                onClick={() => navigate(screen.id)}
-                aria-label={`Abrir tela ${index + 1}: ${screen.label}`}
-                aria-current={screen.id === activeScreen ? "step" : undefined}
-                title={screen.label}
-              />
-            ))}
+            {DASHBOARD_SCREENS.map((screen, index) => {
+              const isActive = screen.id === activeScreen;
+              const indicatorImage = index === 0
+                ? isActive
+                  ? "arte-linhas_Inicio.svg"
+                  : "arte-linhas_Inicio_off.svg"
+                : index === DASHBOARD_SCREENS.length - 1
+                  ? isActive
+                    ? "arte-linhas_Fim.svg"
+                    : "arte-linhas_Fim_off.svg"
+                  : isActive
+                    ? "arte-linhas_Meio%20On.svg"
+                    : "arte-linhas_Meio%20off.svg";
+
+              return (
+                <button
+                  key={screen.id}
+                  type="button"
+                  className={isActive ? "is-active" : ""}
+                  onClick={() => navigate(screen.id)}
+                  aria-label={`Abrir tela ${index + 1}: ${screen.label}`}
+                  aria-current={isActive ? "step" : undefined}
+                  title={screen.label}
+                >
+                  <img src={`${assetBase}/images/${indicatorImage}`} alt="" aria-hidden="true" />
+                </button>
+              );
+            })}
           </div>
           <button type="button" onClick={() => move(1)} disabled={activeIndex === DASHBOARD_SCREENS.length - 1} aria-label="Próxima tela">
-            <ChevronRight size={19} />
+            <img src={`${assetBase}/images/seta_direita.svg`} alt="" aria-hidden="true" />
           </button>
         </nav>
       </div>
