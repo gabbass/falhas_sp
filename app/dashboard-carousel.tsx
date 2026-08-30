@@ -22,9 +22,9 @@ export const DASHBOARD_SCREENS = [
   { id: "rankings", label: "Rankings" },
   { id: "tempo", label: "Tempo" },
   { id: "diagnosticos", label: "Diagnósticos" },
+  { id: "comparativo", label: "Comparativo" },
   { id: "linhas", label: "Linhas" },
   { id: "registros", label: "Registros" },
-  { id: "comparativo", label: "Comparativo" },
 ] as const;
 
 export type DashboardScreenId = (typeof DASHBOARD_SCREENS)[number]["id"];
@@ -168,7 +168,7 @@ export default function DashboardCarousel({
         aria-roledescription="carrossel"
         aria-label="Telas do painel"
       >
-        {activeIndex >= 1 && activeScreen !== "comparativo" ? (
+        {activeIndex >= 1 ? (
           <div className="dashboard-carousel-toolbar">
             <div className="dashboard-carousel-chrome">{chromeElement}</div>
             <div className="dashboard-carousel-toolbar-row">

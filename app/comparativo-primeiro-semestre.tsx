@@ -22,8 +22,132 @@ const bases = [
 
 type BaseId = (typeof bases)[number]["id"];
 type BaseComparavel = (typeof bases)[number];
+type BaseDados = {
+  id: BaseId;
+  ano: string;
+  semestre: number;
+  rotulo: string;
+  data: Summary;
+};
 type FormatoMetrica = "percentual" | "horas" | "inteiro";
 type SentidoMetrica = "maior-melhor" | "menor-melhor" | "contextual";
+
+export type ComparisonFilters = {
+  linha: string;
+  operador: string;
+  status: string;
+  dataInicio: string;
+  dataFim: string;
+  periodoInicio: string;
+  periodoFim: string;
+};
+
+const HORAS_OPERACAO_DIA = 19.5;
+const DIA_MS = 86_400_000;
+
+function dataUtc(valor: string) {
+  return Date.parse(`${valor}T00:00:00Z`);
+}
+
+function dataIso(timestamp: number) {
+  return new Date(timestamp).toISOString().slice(0, 10);
+}
+
+function intervaloEquivalente(base: BaseComparavel, filtros?: ComparisonFilters) {
+  const alvoInicio = dataUtc(base.data.metadata.periodoInicio);
+  const alvoFim = dataUtc(base.data.metadata.periodoFim);
+  if (!filtros || (filtros.dataInicio === filtros.periodoInicio && filtros.dataFim === filtros.periodoFim)) {
+    return { inicio: base.data.metadata.periodoInicio, fim: base.data.metadata.periodoFim };
+  }
+
+  const origemInicio = dataUtc(filtros.periodoInicio);
+  const origemFim = dataUtc(filtros.periodoFim);
+  const origemDuracao = Math.max(origemFim - origemInicio, DIA_MS);
+  const alvoDuracao = Math.max(alvoFim - alvoInicio, 0);
+  const proporcaoInicio = Math.max(0, Math.min(1, (dataUtc(filtros.dataInicio) - origemInicio) / origemDuracao));
+  const proporcaoFim = Math.max(0, Math.min(1, (dataUtc(filtros.dataFim) - origemInicio) / origemDuracao));
+
+  return {
+    inicio: dataIso(alvoInicio + Math.round(proporcaoInicio * alvoDuracao / DIA_MS) * DIA_MS),
+    fim: dataIso(alvoInicio + Math.round(proporcaoFim * alvoDuracao / DIA_MS) * DIA_MS),
+  };
+}
+
+function aplicarFiltros(base: BaseComparavel, filtros?: ComparisonFilters): Summary {
+  if (!filtros) return base.data as Summary;
+
+  const intervalo = intervaloEquivalente(base, filtros);
+  const linhasPermitidas = base.data.rankings.linhas.filter((linha) =>
+    (filtros.linha === "todas" || linha.nome === filtros.linha) &&
+    (filtros.operador === "todos" || linha.operador === filtros.operador),
+  );
+  const nomesPermitidos = new Set(linhasPermitidas.map((linha) => linha.nome));
+  const eventos = base.data.events.filter((evento) => {
+    const dataEvento = evento.dataHora.slice(0, 10);
+    return nomesPermitidos.has(evento.linha) &&
+      dataEvento >= intervalo.inicio &&
+      dataEvento <= intervalo.fim &&
+      (filtros.status === "todos" || evento.estado === filtros.status);
+  });
+  const dias = Math.max(Math.round((dataUtc(intervalo.fim) - dataUtc(intervalo.inicio)) / DIA_MS) + 1, 0);
+  const horasEsperadasPorLinha = dias * HORAS_OPERACAO_DIA;
+
+  const somarHoras = (eventosBase: typeof eventos, estado: string) => eventosBase.reduce(
+    (total, evento) => total + (evento.estado === estado ? Number(evento.horas) : 0),
+    0,
+  );
+
+  const linhas = linhasPermitidas.map((linhaOriginal) => {
+    const eventosLinha = eventos.filter((evento) => evento.linha === linhaOriginal.nome);
+    const horasEventoEspecial = somarHoras(eventosLinha, "Evento especial");
+    const horasManutencaoProgramada = somarHoras(eventosLinha, "Manutenção programada");
+    const horasFalhaParcial = somarHoras(eventosLinha, "Ocorrência operacional") + somarHoras(eventosLinha, "Com falha ou parcial");
+    const horasFalhaTotal = somarHoras(eventosLinha, "Falha total / paralisação");
+    const horasIndefinidas = somarHoras(eventosLinha, "Indefinido");
+    const horasDisponivel = filtros.status === "Disponível"
+      ? horasEsperadasPorLinha
+      : filtros.status === "todos"
+        ? Math.max(horasEsperadasPorLinha - horasManutencaoProgramada - horasFalhaParcial - horasFalhaTotal - horasIndefinidas, 0)
+        : 0;
+    return {
+      ...linhaOriginal,
+      horasTotaisOperacao: horasEsperadasPorLinha,
+      horasDisponivel,
+      horasEventoEspecial,
+      horasManutencaoProgramada,
+      horasFalhaParcial,
+      horasFalhaTotal,
+      horasIndefinidas,
+      horasFalha: horasFalhaParcial + horasFalhaTotal,
+      qtdRegistros: eventosLinha.length,
+      disponibilidadePct: horasEsperadasPorLinha > 0 ? (horasDisponivel / horasEsperadasPorLinha) * 100 : 0,
+    };
+  });
+
+  const total = (chave: "horasTotaisOperacao" | "horasDisponivel" | "horasEventoEspecial" | "horasManutencaoProgramada" | "horasFalhaParcial" | "horasFalhaTotal" | "horasIndefinidas" | "horasFalha") =>
+    linhas.reduce((soma, linha) => soma + Number(linha[chave]), 0);
+  const horasTotaisOperacao = total("horasTotaisOperacao");
+  const horasDisponivel = total("horasDisponivel");
+
+  return {
+    ...(base.data as Summary),
+    kpis: {
+      ...(base.data.kpis as Summary["kpis"]),
+      horasTotaisOperacao,
+      horasDisponivel,
+      horasEventoEspecial: total("horasEventoEspecial"),
+      horasManutencaoProgramada: total("horasManutencaoProgramada"),
+      horasFalhaParcial: total("horasFalhaParcial"),
+      horasFalhaTotal: total("horasFalhaTotal"),
+      horasIndefinidas: total("horasIndefinidas"),
+      horasFalha: total("horasFalha"),
+      qtdRegistros: eventos.length,
+      disponibilidadePct: horasTotaisOperacao > 0 ? (horasDisponivel / horasTotaisOperacao) * 100 : 0,
+    },
+    rankings: { ...(base.data.rankings as Summary["rankings"]), linhas },
+    events: eventos as Summary["events"],
+  };
+}
 
 const metricas: Array<{
   label: string;
@@ -101,7 +225,7 @@ function linhasPorNome(data: Summary) {
   return new Map(data.rankings.linhas.map((linha) => [linha.nome, linha]));
 }
 
-function valorBaseMedia(basesReferencia: BaseComparavel[], chave: KpiKey) {
+function valorBaseMedia(basesReferencia: BaseDados[], chave: KpiKey) {
   if (chave === "disponibilidadePct") {
     const disponivel = basesReferencia.reduce((total, base) => total + Number(base.data.kpis.horasDisponivel), 0);
     const esperado = basesReferencia.reduce((total, base) => total + Number(base.data.kpis.horasTotaisOperacao), 0);
@@ -111,7 +235,7 @@ function valorBaseMedia(basesReferencia: BaseComparavel[], chave: KpiKey) {
   return basesReferencia.reduce((total, base) => total + Number(base.data.kpis[chave]), 0) / basesReferencia.length;
 }
 
-function linhaBaseMedia(basesReferencia: BaseComparavel[], nome: string) {
+function linhaBaseMedia(basesReferencia: BaseDados[], nome: string) {
   const linhas = basesReferencia
     .map((base) => base.data.rankings.linhas.find((linha) => linha.nome === nome))
     .filter((linha): linha is NonNullable<typeof linha> => Boolean(linha));
@@ -135,14 +259,21 @@ function displayLinhaName(nome: string) {
   );
 }
 
-export default function ComparativoPrimeiroSemestre({ embedded = false }: { embedded?: boolean }) {
+export default function ComparativoPrimeiroSemestre({
+  embedded = false,
+  filtros,
+}: {
+  embedded?: boolean;
+  filtros?: ComparisonFilters;
+}) {
   const [basePrincipalId, setBasePrincipalId] = useState<BaseId>("2026-1");
   const [basesReferenciaIds, setBasesReferenciaIds] = useState<BaseId[]>(["2025-1", "2024-1"]);
   const [usarMediaReferencias, setUsarMediaReferencias] = useState(false);
 
-  const basePrincipal = bases.find((base) => base.id === basePrincipalId)!;
-  const basesCompativeis = bases.filter((base) => base.semestre === basePrincipal.semestre && base.id !== basePrincipalId);
-  const basesReferencia = bases.filter((base) => basesReferenciaIds.includes(base.id));
+  const basesFiltradas = bases.map((base) => ({ ...base, data: aplicarFiltros(base, filtros) }));
+  const basePrincipal = basesFiltradas.find((base) => base.id === basePrincipalId)!;
+  const basesCompativeis = basesFiltradas.filter((base) => base.semestre === basePrincipal.semestre && base.id !== basePrincipalId);
+  const basesReferencia = basesFiltradas.filter((base) => basesReferenciaIds.includes(base.id));
   const rotuloReferencias = basesReferencia.map((base) => base.rotulo).join(" + ");
   const baseMediaAtiva = usarMediaReferencias && basesReferencia.length === 2;
   const basesEmUso = [basePrincipal, ...basesReferencia];

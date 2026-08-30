@@ -3614,7 +3614,7 @@ td {
   .dashboard-carousel-dots button { animation: none !important; transition: none !important; }
 }
 
-/* Cabeçalho único das telas 2 a 7: navegação, filtros e legenda. */
+/* Cabeçalho único das telas 2 a 8: navegação, filtros e legenda. */
 .dashboard-carousel-toolbar {
   overflow: hidden;
   border: 1px solid var(--line);
@@ -3707,7 +3707,7 @@ td {
   .dashboard-carousel-nav { grid-row: 4; }
 }
 
-/* Tipografia editorial comum das telas 2 a 7. */
+/* Tipografia editorial comum das telas 2 a 8. */
 .dashboard-slide:not(.dashboard-slide-abertura) {
   --dashboard-title-size: 16px;
   --dashboard-description-size: 12px;

@@ -4114,6 +4114,13 @@ export default function DashboardOcorrencias2026({
       </section>
       </DashboardSlide>
 
+      <DashboardSlide id="comparativo" className="dashboard-slide-comparison">
+        <ComparativoPrimeiroSemestre
+          embedded
+          filtros={{ linha, operador, status, dataInicio, dataFim, periodoInicio: data.metadata.periodoInicio, periodoFim: data.metadata.periodoFim }}
+        />
+      </DashboardSlide>
+
       <DashboardSlide id="linhas">
       <section
         className="panel analytics-table-panel"
@@ -4467,10 +4474,6 @@ export default function DashboardOcorrencias2026({
         </div>
       </details>
       ) : null}
-      </DashboardSlide>
-
-      <DashboardSlide id="comparativo" className="dashboard-slide-comparison">
-        <ComparativoPrimeiroSemestre embedded />
       </DashboardSlide>
 
       </DashboardCarousel>
