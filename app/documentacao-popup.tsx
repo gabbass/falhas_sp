@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import data2025 from "../data/ocorrencias-summary.json";
 import data2024 from "../data/ocorrencias-summary-2024.json";
+import data2026 from "../data/ocorrencias-summary-2026.json";
 
 const JANELA_INICIO_MINUTOS = 4 * 60 + 30;
 const JANELA_FIM_MINUTOS = 24 * 60;
@@ -16,8 +17,8 @@ const fmtInt = (n: number) =>
 const fmtHoras = (n: number) =>
   new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 3 }).format(n);
 
-const metadata = data2025.metadata;
-const basesDisponiveis = [data2025.metadata, data2024.metadata];
+const metadata = data2026.metadata;
+const basesDisponiveis = [data2026.metadata, data2025.metadata, data2024.metadata];
 
 const estados = [
   {
@@ -149,6 +150,11 @@ const formulas = [
     formula: "média_entre_falhas = média dos intervalos em horas operacionais, dentro da janela 04h30–00h00, entre falhas consecutivas da mesma linha",
     uso: "Ordena os eventos por data/hora dentro de cada linha e calcula somente o tempo operacional acumulado entre ocorrências de falha, excluindo a madrugada fora da janela.",
   },
+  {
+    titulo: "Média entre manutenção e falha",
+    formula: "média_manutenção_falha = média dos intervalos operacionais manutenção programada → falha subsequente na mesma linha",
+    uso: "Considera somente a direção manutenção → falha. A proximidade temporal é exploratória e não demonstra causalidade.",
+  },
 ];
 
 type DocumentacaoPopupProps = {
@@ -240,7 +246,7 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
                             <p>
                               Esta seção documenta como o painel calcula disponibilidade, ocorrências,
                               paralisações, eventos especiais, registros indefinidos por gap de coleta, efeitos cascata e agregações por linha,
-                              operador e mês. O objetivo é deixar o painel auditável: cada número precisa
+                              operador, período e mês, inclusive nos comparativos semestrais. O objetivo é deixar o painel auditável: cada número precisa
                               ter trilho, dormente e lastro.
                             </p>
                           </div>
@@ -402,9 +408,8 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
                             <div>
                               <h3>Filtros globais</h3>
                               <p>
-                                Filtros de linha, operador e status alteram cartões, gráficos, rankings,
-                                evolução mensal, mapa horário das ocorrências, histograma temporal de disponibilidade, nuvem de palavras e tabelas. Os filtros locais apenas refinam
-                                a visualização do componente em que aparecem.
+                                Filtros de linha, operador, status e intervalo de datas alteram cartões, gráficos, rankings,
+                                evolução mensal, mapa horário das ocorrências, histograma temporal de disponibilidade, nuvem de palavras, tabelas e o comparativo. O painel exibe a quantidade e o resumo dos filtros ativos e oferece limpeza conjunta.
                               </p>
                             </div>
                           </div>
@@ -419,8 +424,14 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
                             <li>Tabelas extensas usam paginação de <b>20 registros por página</b>, inclusive as seções minimizadas.</li>
                             <li>Rankings de tipos de falha excluem Disponível, Evento especial e Indefinido.</li>
                             <li>A lista pesquisável de falhas e paralisações considera apenas manutenção programada, ocorrência operacional, falha parcial e falha total/paralisação.</li>
-                            <li>O <b>Comparativo 2025 × 2024</b> é tratado como uma base analisada própria. Quando selecionado, a página exibe apenas os cartões e a tabela comparativa, sem misturar KPIs ou gráficos anuais.</li>
-                            <li>O <b>histograma temporal de disponibilidade</b> usa dias no eixo horizontal, faixas horárias no eixo vertical e cor por estado dominante. A malha completa nasce como <b>Disponível</b>; os eventos restritivos sobrepõem apenas as células atingidas. Quando dois estados se cruzam na mesma célula, prevalece o estado mais crítico para leitura operacional. Os <b>Filtros globais</b> são aplicados primeiro; depois, o seletor local refina apenas a linha exibida no histograma.</li>
+                            <li>O painel é organizado em um <b>carrossel de oito telas</b>: Abertura, Resumo, Rankings, Tempo, Diagnósticos, Comparativo, Linhas e Registros. A tela ativa é persistida em <code>tela</code> na URL e pode ser trocada pelos controles, teclado ou gesto horizontal.</li>
+                            <li>O <b>Comparativo</b> integra o carrossel. Primeiros semestres de 2024, 2025 e 2026 são comparados entre si; segundos semestres de 2024 e 2025, entre si. Semestres diferentes ficam bloqueados.</li>
+                            <li>No comparativo, o usuário escolhe o período analisado e uma ou duas referências. Com duas referências, pode usar a média aritmética para horas e quantidades; a disponibilidade de referência usa média ponderada pelo tempo operacional.</li>
+                            <li>O comparativo recalcula os indicadores com os filtros globais ativos. O recorte de datas é projetado proporcionalmente para o intervalo equivalente de cada base, preservando a comparabilidade entre períodos.</li>
+                            <li>As diferenças comparativas são exibidas como <b>analisado − referência</b>, em valor absoluto e percentual. Disponibilidade maior é favorável; manutenção, ocorrência e paralisação menores são favoráveis; eventos especiais e quantidade de registros são contextuais.</li>
+                            <li>O <b>histograma temporal de disponibilidade</b> usa dias no eixo horizontal, faixas horárias no eixo vertical e cor por estado dominante. A malha completa nasce como <b>Disponível</b>; os eventos restritivos sobrepõem apenas as células atingidas. Quando dois estados se cruzam na mesma célula, prevalece o estado mais crítico para leitura operacional. A visualização segue os filtros globais, sem manter um filtro local concorrente.</li>
+                            <li>Distribuições e rankings oferecem abas de <b>horas</b> e <b>quantidade</b>, preservando os mesmos filtros globais nas duas leituras.</li>
+                            <li>Linhas são ordenadas numericamente e identificadas por selos cromáticos consistentes em tabelas, gráficos e popups; nomes sem cor cadastrada continuam exibidos como texto.</li>
                             <li>A <b>nuvem de palavras</b> ignora palavras muito comuns, operação normal, operação encerrada e dados indisponíveis, para destacar termos com significado operacional. O tamanho representa frequência; a classificação operacional segue a legenda geral.</li>
                             <li>Quando o painel mencionar apenas <b>Disponibilidade</b>, o rótulo correto é <b>Disponibilidade total</b>. <b>Disponibilidade parcial</b> é um conceito distinto: disponibilidade total + ocorrência operacional + manutenção programada.</li>
                           </ul>
@@ -448,3 +459,4 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
 }
 
 // Regra documental: Obras de melhoria, obras de modernização, manutenção programada e atividade programada são tratadas como manutenção programada. Falha em veículo de manutenção permanece como ocorrência operacional, pois é evento não planejado.
+

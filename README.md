@@ -334,21 +334,22 @@ Arquivo consumido:
 data/eventos-relevantes.json
 ```
 
-Fonte original indicada:
+Fontes consolidadas:
 
 ```text
-ocorrencias_relevantes_metro_cptm_privadas_2024_2025_com_eventos.xlsx
+Base histórica 2024-2025 e fontes públicas vinculadas para o primeiro semestre de 2026
 ```
 
 Resumo:
 
 | Indicador | Valor |
 |---|---:|
-| Total de eventos relevantes | 9 |
+| Total de eventos relevantes | 12 |
 | Eventos de 2024 | 2 |
 | Eventos de 2025 | 7 |
+| Eventos do 1º semestre de 2026 | 3 |
 
-Esses eventos aparecem em popup próprio e servem para contextualizar mudanças institucionais, operacionais ou estruturais relevantes no período.
+Esses eventos aparecem em popup próprio e servem para contextualizar mudanças institucionais, operacionais ou estruturais relevantes no período. Para 2026, entram apenas fatos datados entre janeiro e junho; cada registro mantém o link da publicação pública usada como fonte.
 
 ---
 
@@ -775,12 +776,11 @@ média dos intervalos operacionais entre manutenções consecutivas da mesma lin
 
 ```text
 média_manutencao_falha =
-média dos intervalos operacionais entre eventos consecutivos de tipos diferentes:
+média dos intervalos operacionais entre uma manutenção programada e a falha subsequente da mesma linha:
 manutenção → falha
-falha → manutenção
 ```
 
-Essa métrica é exploratória. Ela ajuda a observar proximidade temporal entre manutenção e falha, mas não prova causalidade.
+O sentido inverso, falha → manutenção, não entra nessa métrica. O indicador é exploratório: ajuda a observar proximidade temporal, mas não prova causalidade.
 
 ---
 
@@ -834,12 +834,13 @@ O painel possui uma área inicial com:
 O usuário pode alternar entre:
 
 ```text
+1º semestre de 2026
 2025
 2024
-Comparativo 2025 × 2024
+Comparativo semestral
 ```
 
-A troca de ano atualiza a URL e evita divergência entre a renderização inicial e o estado do cliente.
+A troca de ano atualiza a URL e evita divergência entre a renderização inicial e o estado do cliente. Dentro de cada painel, o conteúdo é organizado em oito telas: Abertura, Resumo, Rankings, Tempo, Diagnósticos, Comparativo, Linhas e Registros. A tela ativa é persistida no parâmetro `tela` da URL e pode ser trocada pelos controles, setas do teclado ou gesto horizontal.
 
 ---
 
@@ -849,7 +850,8 @@ O painel possui filtros por:
 
 - linha;
 - operador;
-- status/categoria operacional.
+- status/categoria operacional;
+- data inicial e data final.
 
 Esses filtros afetam:
 
@@ -861,6 +863,8 @@ Esses filtros afetam:
 - histograma temporal;
 - nuvem de palavras;
 - tabelas.
+
+Os filtros são únicos para todo o dashboard: mapa horário, histograma, distribuições e rankings não mantêm seletores locais concorrentes. Um controle flutuante mostra quantidade e resumo dos filtros ativos e permite limpar todos de uma vez. Distribuições e rankings preservam o mesmo recorte ao alternar entre as abas de horas e quantidade.
 
 ---
 
@@ -889,7 +893,7 @@ O painel também mostra indicadores como:
 - média de operação degradada;
 - média de paralisação total;
 - intervalo falha → falha;
-- intervalo manutenção ↔ falha;
+- intervalo manutenção → falha;
 - intervalo manutenção → manutenção;
 - tipo mais comum;
 - tipo menos comum.
@@ -1097,17 +1101,17 @@ Eles são mantidos separados porque representam acréscimo ou diferenciação de
 
 ---
 
-### 13.20. Comparativo 2025 × 2024
+### 13.20. Comparativo semestral
 
 A visão comparativa mostra:
 
-- indicadores de 2025;
-- indicadores de 2024;
-- variação absoluta;
-- variação percentual;
+- primeiros semestres de 2024, 2025 e 2026, comparáveis entre si;
+- segundos semestres de 2024 e 2025, comparáveis entre si;
+- um período analisado e uma ou duas referências do mesmo semestre;
+- variação absoluta e percentual calculada como analisado menos referência;
 - comparação por linha.
 
-Essa visão é tratada como uma base própria, sem misturar gráficos anuais.
+O comparativo integra o carrossel e recebe os filtros globais de linha, operador, status e datas. Quando há recorte de datas, o sistema aplica a cada base o intervalo proporcional equivalente. Com duas referências selecionadas, é possível usar a média aritmética de horas e quantidades; a disponibilidade usa média ponderada pelo tempo operacional. Disponibilidade maior é favorável, enquanto manutenção, ocorrências e paralisações menores são favoráveis; eventos especiais e quantidade de registros são contextuais.
 
 ---
 
@@ -1142,9 +1146,9 @@ Arquivo:
 app/eventos-relevantes-popup.tsx
 ```
 
-Exibe eventos estruturais ou institucionais relevantes para interpretação do período.
+Exibe eventos estruturais ou institucionais relevantes para interpretação de 2024, 2025 e do primeiro semestre de 2026.
 
-Permite filtrar por ano e abrir links externos em nova aba.
+Permite filtrar por ano, informa a quantidade por recorte e abre a fonte pública de cada evento em nova aba.
 
 ---
 
@@ -1514,3 +1518,4 @@ usuais `python3`, `python` e `py -3`.
 Os summaries em `data/generated/` devem ser revisados antes da publicação. Após
 aprovação do relatório, copie explicitamente os arquivos anuais aprovados para
 `data/`, execute os testes, a checagem TypeScript e o build estático.
+

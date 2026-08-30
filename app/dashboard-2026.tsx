@@ -3312,7 +3312,7 @@ export default function DashboardOcorrencias2026({
             </div>
             <div className="hero-tabbar hero-tabbar-shortcuts" aria-label="Conteúdos de apoio à análise">
               <DocumentacaoPopup />
-              <EventosRelevantesPopup anoInicial="todos" />
+              <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
               <AnaliseHumanaPopup />
               <AnaliseIaPopup />
             </div>
@@ -4480,3 +4480,4 @@ export default function DashboardOcorrencias2026({
     </main>
   );
 }
+

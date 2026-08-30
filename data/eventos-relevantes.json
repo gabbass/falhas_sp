@@ -1,12 +1,43 @@
 {
   "metadata": {
-    "fonte": "ocorrencias_relevantes_metro_cptm_privadas_2024_2025_com_eventos.xlsx — aba Eventos 2024-2025",
-    "descricao": "Eventos estruturais e institucionais relevantes para a leitura do período 2024-2025.",
-    "totalEventos": 9,
+    "fonte": "Base histórica 2024-2025 e fontes públicas vinculadas para o primeiro semestre de 2026",
+    "descricao": "Eventos estruturais e institucionais relevantes para a leitura do período de 2024 ao primeiro semestre de 2026.",
+    "totalEventos": 12,
     "total2024": 2,
-    "total2025": 7
+    "total2025": 7,
+    "total2026": 3
   },
   "eventos": [
+    {
+      "ano": "2026",
+      "data": "2026-05-21",
+      "dataLabel": "21/05/2026",
+      "operador": "CPTM / Trívia Trens",
+      "linhas": "Linhas 11-Coral, 12-Safira e 13-Jade",
+      "eventoEstrutural": "Trívia Trens inicia a prática operacional supervisionada na transição das Linhas 11, 12 e 13, ainda sob responsabilidade da CPTM",
+      "tituloFonte": "Concessão das linhas 11, 12 e 13 entra em nova etapa com prática operacional supervisionada",
+      "link": "https://www.artesp.sp.gov.br/artesp/noticias/concessao%20das%20linhas%2011%2012%20e%2013/%21ut/p/z0/hYy9DoIwFEZfpQ6M5raUEB2JJiQmyESCdyFXrFAlLdDGn7e36q7Tl5Oc7wBCDWjopjvy2hoaAh8wbfgqTWKZc7kuyi1PZbWvZC5FmSewA_wthEI8F5uiAxzJ90ttzhbq1ppWOUeWncixQZs-jBBMxEwxId8vfZkmzACD6tXDQ02zV25sPmx8xL8ccWO9bjW5iP-rjlc8Pu_Z4gWG3Kpa/"
+    },
+    {
+      "ano": "2026",
+      "data": "2026-03-31",
+      "dataLabel": "31/03/2026",
+      "operador": "Metrô",
+      "linhas": "Linha 17-Ouro",
+      "eventoEstrutural": "Linha 17-Ouro é entregue em operação transitória, conectando o Aeroporto de Congonhas às Linhas 5-Lilás e 9-Esmeralda",
+      "tituloFonte": "Governo de SP entrega Linha 17-Ouro do Metrô e anuncia expansão que integra Paraisópolis à rede de transporte sobre trilhos",
+      "link": "https://www.agenciasp.sp.gov.br/governo-de-sp-entrega-linha-17-ouro-do-metro-e-anuncia-expansao-que-integra-paraisopolis-a-rede-de-transporte-sobre-trilhos/"
+    },
+    {
+      "ano": "2026",
+      "data": "2026-03-05",
+      "dataLabel": "05/03/2026",
+      "operador": "Metrô",
+      "linhas": "Linhas 1-Azul, 2-Verde, 3-Vermelha e 15-Prata",
+      "eventoEstrutural": "Metrô prorroga por seis meses a operação experimental ininterrupta entre sábados e domingos",
+      "tituloFonte": "Metrô prorroga operação 24 horas aos sábados",
+      "link": "https://www.agenciasp.sp.gov.br/metro-prorroga-operacao-24-horas-aos-sabados/"
+    },
     {
       "ano": "2025",
       "data": "2025-11-26",
@@ -99,3 +130,4 @@
     }
   ]
 }
+

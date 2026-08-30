@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { LineBadgesInText } from "./line-badge";
 
-type AnoEvento = "2024" | "2025";
+type AnoEvento = "2024" | "2025" | "2026";
 type AnoFiltro = AnoEvento | "todos";
 
 type EventoRelevante = {
@@ -27,6 +27,7 @@ type EventosRelevantesPayload = {
     totalEventos: number;
     total2024: number;
     total2025: number;
+    total2026: number;
   };
   eventos: EventoRelevante[];
 };
@@ -119,7 +120,7 @@ export default function EventosRelevantesPopup({ anoInicial = "todos" }: Eventos
                     <h2 id="eventos-relevantes-title">Eventos relevantes</h2>
                     <p id="eventos-relevantes-description">
                       Marcos estruturais, operacionais e contratuais relevantes para interpretar o período analisado,
-                      consolidados a partir da planilha anexada ao painel.
+                      de 2024 ao primeiro semestre de 2026, consolidados a partir de fontes públicas rastreáveis.
                     </p>
                   </div>
                   <button
@@ -133,7 +134,7 @@ export default function EventosRelevantesPopup({ anoInicial = "todos" }: Eventos
                 </header>
 
                 <div className="eventos-relevantes-toolbar" aria-label="Filtro de eventos relevantes por ano">
-                  {(["todos", "2025", "2024"] as AnoFiltro[]).map((item) => (
+                  {(["todos", "2026", "2025", "2024"] as AnoFiltro[]).map((item) => (
                     <button
                       key={item}
                       type="button"
@@ -173,9 +174,9 @@ export default function EventosRelevantesPopup({ anoInicial = "todos" }: Eventos
 
                 <footer className="eventos-relevantes-footer">
                   <span>
-                    {payload.metadata.total2025} eventos de 2025 · {payload.metadata.total2024} eventos de 2024
+                    {payload.metadata.total2026} eventos do 1º sem. de 2026 · {payload.metadata.total2025} eventos de 2025 · {payload.metadata.total2024} eventos de 2024
                   </span>
-                  <small>Fonte de consolidação: planilha de ocorrências e eventos relevantes anexada ao painel.</small>
+                  <small>Fontes de consolidação: base histórica anexada ao painel e publicações públicas vinculadas em cada evento.</small>
                 </footer>
               </section>
             </div>,
@@ -185,3 +186,4 @@ export default function EventosRelevantesPopup({ anoInicial = "todos" }: Eventos
     </>
   );
 }
+
