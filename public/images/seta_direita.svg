@@ -4,8 +4,8 @@
 	 y="0px" width="100px" height="100px" viewBox="0 0 100 100" xml:space="preserve">
 <g id="direita">
 	<circle id="arte-direita" fill="#005EB8" cx="50" cy="50" r="45"/>
-	<polyline id="seta-direita" fill="#FFFFFF" points="89.88,50.04 47.94,7.85 37.34,18.66 61.48,43 9.87,43 9.87,57 61.4,57 
-		37.11,81.31 48.02,92.23 89.88,50.04 	"/>
+	<polyline id="seta-direita" fill="#FFFFFF" points="78.32,50.04 48.5,20.04 40.96,27.71 58.13,45 21.87,45 21.87,55 58.07,55 
+		40.8,72.28 48.55,80.04 78.32,50.04 	"/>
 </g>
 <g id="esquerda">
 </g>

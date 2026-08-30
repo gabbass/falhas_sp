@@ -6,7 +6,7 @@
 </g>
 <g id="esquerda">
 	<circle id="arte-esquerda" fill="#005EB8" cx="50" cy="50" r="45"/>
-	<polyline id="seta-esquerda" fill="#FFFFFF" points="9.83,50.06 51.77,92.26 62.37,81.4 38.23,57 90,57 90,43 38.31,43 62.6,18.74 
-		51.69,7.85 9.83,50.06 	"/>
+	<polyline id="seta-esquerda" fill="#FFFFFF" points="21.42,50.06 51.23,80.05 58.77,72.34 41.61,55 78,55 78,45 41.66,45 
+		58.93,27.78 51.18,20.04 21.42,50.06 	"/>
 </g>
 </svg>

@@ -4,7 +4,8 @@
 	 y="0px" width="200px" height="100px" viewBox="0 0 200 100" xml:space="preserve">
 <g id="fim">
 	<rect id="linha-fim" x="-0.38" y="25" fill="#005EB8" width="100" height="50"/>
-	<circle id="Fim" fill="#FFFFFF" stroke="#005EB8" stroke-width="2.8347" stroke-miterlimit="10" cx="49.75" cy="50" r="30"/>
+	<rect id="linha-inicio_2_" x="98.62" y="25" fill="#005EB8" width="50" height="50"/>
+	<circle id="Fim" fill="#FFFFFF" stroke="#005EB8" stroke-width="11.3386" stroke-miterlimit="10" cx="99.75" cy="50" r="30"/>
 </g>
 <g id="fim_off">
 </g>

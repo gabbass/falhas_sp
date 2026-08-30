@@ -8,8 +8,8 @@
 </g>
 <g id="meio_on">
 	<rect id="meio-on-antes" x="-0.25" y="25" fill="#005EB8" width="100" height="50"/>
-	<rect id="meio-on-depois" x="99.75" y="25" fill="#005EB8" width="100" height="50"/>
-	<circle id="meio-on" fill="#FFFFFF" stroke="#005EB8" stroke-width="2.8347" stroke-miterlimit="10" cx="100" cy="50" r="30"/>
+	<rect id="meio-on-depois" x="100.75" y="25" fill="#005EB8" width="100" height="50"/>
+	<circle id="meio-on" fill="#FFFFFF" stroke="#005EB8" stroke-width="11.3386" stroke-miterlimit="10" cx="100" cy="50" r="30"/>
 </g>
 <g id="meio_off">
 </g>

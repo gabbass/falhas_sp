@@ -11,8 +11,9 @@
 <g id="meio_off">
 </g>
 <g id="inicio_1_">
+	<rect id="linha-inicio_1_" x="50" y="25" fill="#005EB8" width="50" height="50"/>
 	<rect id="linha-inicio" x="100" y="25" fill="#005EB8" width="100" height="50"/>
-	<circle id="inicio" fill="#FFFFFF" stroke="#005EB8" stroke-width="2.8347" stroke-miterlimit="10" cx="149.87" cy="50" r="30"/>
+	<circle id="inicio" fill="#FFFFFF" stroke="#005EB8" stroke-width="11.3386" stroke-miterlimit="10" cx="99.87" cy="50" r="30"/>
 </g>
 <g id="inicio_off">
 </g>
