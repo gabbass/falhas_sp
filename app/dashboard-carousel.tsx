@@ -1,13 +1,11 @@
 "use client";
 
-import { Filter, X } from "lucide-react";
+import { Filter, Info, List, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Children,
   createContext,
   isValidElement,
-  type KeyboardEvent,
-  type PointerEvent,
   type ReactNode,
   useContext,
   useEffect,
@@ -18,18 +16,38 @@ import {
 
 export const DASHBOARD_SCREENS = [
   { id: "abertura", label: "Abertura" },
+  { id: "introducao", label: "Introdução" },
   { id: "resumo", label: "Resumo" },
   { id: "rankings", label: "Rankings" },
   { id: "tempo", label: "Tempo" },
   { id: "diagnosticos", label: "Diagnósticos" },
-  { id: "comparativo", label: "Comparativo" },
   { id: "linhas", label: "Linhas" },
-  { id: "registros", label: "Registros" },
+  { id: "comparativo", label: "Comparativo" },
+  { id: "registros", label: "Análises" },
 ] as const;
+
+const SCREEN_DESCRIPTIONS: Record<DashboardScreenId, string> = {
+  abertura: "Apresenta o propósito do Falhas SP, o período analisado, a fonte dos dados e a janela operacional adotada.",
+  introducao: "Reúne as premissas centrais da metodologia e explica como cada categoria operacional é interpretada no painel.",
+  resumo: "Sintetiza os principais indicadores do período selecionado, como horas esperadas, disponibilidade, manutenção e falhas.",
+  rankings: "Compara a distribuição operacional e destaca linhas e operadores com maior concentração de horas ou registros.",
+  tempo: "Mostra quando as ocorrências aconteceram e como os estados operacionais se distribuíram ao longo do período.",
+  diagnosticos: "Explora padrões mensais, termos recorrentes e tipos de registro para apoiar a interpretação dos dados.",
+  comparativo: "Compara períodos equivalentes e mostra variações de disponibilidade, horas e registros entre as bases.",
+  linhas: "Detalha os indicadores de cada linha e permite comparar seu desempenho dentro do recorte aplicado.",
+  registros: "Reúne, em abas, a leitura humana e a análise produzida com apoio de inteligência artificial.",
+};
 
 export type DashboardScreenId = (typeof DASHBOARD_SCREENS)[number]["id"];
 
 const ScreenContext = createContext<DashboardScreenId>("abertura");
+const ToolbarActionsContext = createContext<{
+  activeFilterCount: number;
+  filtersOpen: boolean;
+  legendOpen: boolean;
+  openFilters: () => void;
+  openLegend: () => void;
+} | null>(null);
 const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 function isDashboardScreen(value: string | null): value is DashboardScreenId {
@@ -69,7 +87,42 @@ export function DashboardChrome({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+export function DashboardToolbarActions() {
+  const actions = useContext(ToolbarActionsContext);
+  if (!actions) return null;
+
+  return (
+    <div className="dashboard-toolbar-actions" aria-label="Ferramentas do painel">
+      <button
+        type="button"
+        className="dashboard-filter-trigger dashboard-toolbar-filter-trigger"
+        onClick={actions.openFilters}
+        aria-expanded={actions.filtersOpen}
+        aria-haspopup="dialog"
+      >
+        <Filter size={16} />
+        Filtros
+        {actions.activeFilterCount ? <em>{actions.activeFilterCount}</em> : null}
+      </button>
+      <button
+        type="button"
+        className="dashboard-filter-trigger dashboard-legend-trigger"
+        onClick={actions.openLegend}
+        aria-expanded={actions.legendOpen}
+        aria-haspopup="dialog"
+      >
+        <List size={16} />
+        Legenda
+      </button>
+    </div>
+  );
+}
+
 export function DashboardLegend({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}
+
+export function DashboardOverlay({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
@@ -88,10 +141,21 @@ export default function DashboardCarousel({
   const initialScreen = isDashboardScreen(requestedScreen) ? requestedScreen : legacyComparison ? "comparativo" : "abertura";
   const [activeScreen, setActiveScreen] = useState<DashboardScreenId>(initialScreen);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const pointerStart = useRef<number | null>(null);
+  const [legendOpen, setLegendOpen] = useState(false);
+  const [screenInfoOpen, setScreenInfoOpen] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<"forward" | "backward">("forward");
+  const activeScreenRef = useRef<DashboardScreenId>(initialScreen);
 
   useEffect(() => {
-    setActiveScreen(isDashboardScreen(requestedScreen) ? requestedScreen : legacyComparison ? "comparativo" : "abertura");
+    const nextScreen = isDashboardScreen(requestedScreen) ? requestedScreen : legacyComparison ? "comparativo" : "abertura";
+    const currentScreen = activeScreenRef.current;
+    if (nextScreen === currentScreen) return;
+
+    const currentIndex = DASHBOARD_SCREENS.findIndex((screen) => screen.id === currentScreen);
+    const nextIndex = DASHBOARD_SCREENS.findIndex((screen) => screen.id === nextScreen);
+    setSlideDirection(nextIndex > currentIndex ? "forward" : "backward");
+    activeScreenRef.current = nextScreen;
+    setActiveScreen(nextScreen);
   }, [legacyComparison, requestedScreen]);
 
   const activeIndex = DASHBOARD_SCREENS.findIndex((screen) => screen.id === activeScreen);
@@ -99,6 +163,9 @@ export default function DashboardCarousel({
 
   const navigate = (next: DashboardScreenId) => {
     if (next === activeScreen) return;
+    const nextIndex = DASHBOARD_SCREENS.findIndex((screen) => screen.id === next);
+    setSlideDirection(nextIndex > activeIndex ? "forward" : "backward");
+    activeScreenRef.current = next;
     setActiveScreen(next);
     const params = new URLSearchParams(searchParams.toString());
     if (next === "abertura") params.delete("tela");
@@ -112,86 +179,67 @@ export default function DashboardCarousel({
     if (next) navigate(next.id);
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement;
-    if (target.closest("input, select, textarea, button, a")) return;
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      move(-1);
-    }
-    if (event.key === "ArrowRight") {
-      event.preventDefault();
-      move(1);
-    }
-  };
-
-  const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
-    pointerStart.current = event.clientX;
-  };
-
-  const onPointerUp = (event: PointerEvent<HTMLDivElement>) => {
-    if (pointerStart.current === null) return;
-    const delta = event.clientX - pointerStart.current;
-    pointerStart.current = null;
-    if (Math.abs(delta) < 70) return;
-    move(delta > 0 ? -1 : 1);
-  };
-
   const childElements = useMemo(() => Children.toArray(children).filter(isValidElement), [children]);
   const filterElement = childElements.find((child) => child.type === DashboardFilterPanel);
   const chromeElement = childElements.find((child) => child.type === DashboardChrome);
   const legendElement = childElements.find((child) => child.type === DashboardLegend);
+  const overlayElement = childElements.find((child) => child.type === DashboardOverlay);
   const slides = childElements.filter(
     (child) =>
       child.type !== DashboardFilterPanel &&
       child.type !== DashboardChrome &&
-      child.type !== DashboardLegend,
+      child.type !== DashboardLegend &&
+      child.type !== DashboardOverlay,
   );
 
   useEffect(() => {
-    if (!filtersOpen) return;
+    if (!filtersOpen && !legendOpen) return;
     const close = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") setFiltersOpen(false);
+      if (event.key === "Escape") {
+        setFiltersOpen(false);
+        setLegendOpen(false);
+      }
     };
     window.addEventListener("keydown", close);
     return () => window.removeEventListener("keydown", close);
-  }, [filtersOpen]);
+  }, [filtersOpen, legendOpen]);
 
   return (
     <ScreenContext.Provider value={activeScreen}>
+      <ToolbarActionsContext.Provider value={{
+        activeFilterCount,
+        filtersOpen,
+        legendOpen,
+        openFilters: () => setFiltersOpen(true),
+        openLegend: () => setLegendOpen(true),
+      }}>
       <div
         className="dashboard-carousel"
-        tabIndex={0}
-        onKeyDown={onKeyDown}
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
         aria-roledescription="carrossel"
         aria-label="Telas do painel"
       >
-        {activeIndex >= 1 ? (
+        {activeIndex >= 2 ? (
           <div className="dashboard-carousel-toolbar">
             <div className="dashboard-carousel-chrome">{chromeElement}</div>
-            <div className="dashboard-carousel-toolbar-row">
-              <button
-                type="button"
-                className="dashboard-filter-trigger dashboard-toolbar-filter-trigger"
-                onClick={() => setFiltersOpen(true)}
-                aria-expanded={filtersOpen}
-              >
-                <Filter size={16} />
-                Filtros
-                {activeFilterCount ? <em>{activeFilterCount}</em> : null}
-              </button>
-              <div className="dashboard-carousel-legend">{legendElement}</div>
-            </div>
           </div>
         ) : null}
         <div className="dashboard-screen-status" aria-live="polite">
           <span>{activeIndex + 1} de {DASHBOARD_SCREENS.length}</span>
-          <strong>{activeLabel}</strong>
+          <div className="dashboard-screen-title">
+            <strong>{activeLabel}</strong>
+            <button
+              type="button"
+              className="dashboard-screen-info-trigger"
+              onClick={() => setScreenInfoOpen(true)}
+              aria-label={`Sobre a página ${activeLabel}`}
+              aria-haspopup="dialog"
+            >
+              <Info size={15} aria-hidden="true" />
+            </button>
+          </div>
         </div>
 
-        <div className="dashboard-slide-viewport">{slides}</div>
+        <div className="dashboard-slide-viewport" data-slide-direction={slideDirection}>{slides}</div>
 
         <nav className="dashboard-carousel-nav" aria-label="Navegação entre telas">
           <button type="button" onClick={() => move(-1)} disabled={activeIndex === 0} aria-label="Tela anterior">
@@ -243,6 +291,38 @@ export default function DashboardCarousel({
           </div>
         </div>
       ) : null}
+
+      {legendOpen ? (
+        <div className="dashboard-filter-backdrop dashboard-legend-backdrop" role="presentation" onMouseDown={() => setLegendOpen(false)}>
+          <div className="dashboard-filter-dialog dashboard-legend-dialog" role="dialog" aria-modal="true" aria-label="Legenda do painel" onMouseDown={(event) => event.stopPropagation()}>
+            <button type="button" className="dashboard-filter-close" onClick={() => setLegendOpen(false)} aria-label="Fechar legenda">
+              <X size={19} />
+            </button>
+            {legendElement}
+          </div>
+        </div>
+      ) : null}
+
+      {screenInfoOpen ? (
+        <div className="dashboard-info-backdrop" role="presentation" onMouseDown={() => setScreenInfoOpen(false)}>
+          <section
+            className="dashboard-info-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="dashboard-info-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <button type="button" className="dashboard-info-close" onClick={() => setScreenInfoOpen(false)} aria-label="Fechar explicação">
+              <X size={18} aria-hidden="true" />
+            </button>
+            <span>Sobre esta página</span>
+            <h2 id="dashboard-info-title">{activeLabel}</h2>
+            <p>{SCREEN_DESCRIPTIONS[activeScreen]}</p>
+          </section>
+        </div>
+      ) : null}
+      {overlayElement}
+      </ToolbarActionsContext.Provider>
     </ScreenContext.Provider>
   );
 }

@@ -39,21 +39,25 @@ import {
   Wrench,
   X,
 } from "lucide-react";
-import { type ReactNode, useEffect, useMemo, useState, useTransition } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import EventosRelevantesPopup from "./eventos-relevantes-popup";
 import DocumentacaoPopup from "./documentacao-popup";
 import AnaliseHumanaPopup from "./analise-humana-popup";
 import AnaliseIaPopup from "./analise-ia-popup";
 import ComparativoPrimeiroSemestre from "./comparativo-primeiro-semestre";
+import IntroducaoDashboard from "./introducao-dashboard";
 import DashboardCarousel, {
   DashboardChrome,
   DashboardFilterPanel,
   DashboardLegend,
+  DashboardOverlay,
   DashboardSlide,
+  DashboardToolbarActions,
 } from "./dashboard-carousel";
 import LineBadge, { LineBadgeTick } from "./line-badge";
 import KpiCard from "./kpi-card";
+import GlobalMultiSelect from "./global-multi-select";
 
 const assetBase = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -263,6 +267,23 @@ const LINHAS = [...(data.options.linhas as string[])].sort(compararLinhas);
 const OPERADORES = data.options.operadores as string[];
 const ESTADOS = data.options.estados as EstadoOperacional[];
 const ESTADOS_FILTRO_GLOBAL = ESTADOS;
+const MULTI_FILTER_SEPARATOR = "\u001f";
+
+function valoresDoFiltro(valor: string, todos: string): string[] {
+  return valor === todos ? [] : valor.split(MULTI_FILTER_SEPARATOR).filter(Boolean);
+}
+
+function filtroInclui(valor: string, todos: string, item: string): boolean {
+  return valor === todos || valoresDoFiltro(valor, todos).includes(item);
+}
+
+function valorDoFiltro(valores: string[], todos: string): string {
+  return valores.length ? valores.join(MULTI_FILTER_SEPARATOR) : todos;
+}
+
+function rotuloNomeLinha(nome: string): string {
+  return displayLinhaName(nome).replace(/^Linha\s*0*\d+\s*-\s*/i, "");
+}
 const ESTADOS_CLASSIFICADOS = ESTADOS.filter(
   (estado) => estado !== "Disponível" && estado !== "Evento especial",
 );
@@ -1306,6 +1327,23 @@ const lineToOperator = new Map<string, string>(
   ]),
 );
 
+function operadoresDaLinhaNoPeriodo(linha: string, inicio: string, fim: string): string[] {
+  return Array.from(new Set(
+    EVENTOS
+      .filter((evento) => evento.linha === linha && evento.dataHora.slice(0, 10) >= inicio && evento.dataHora.slice(0, 10) <= fim)
+      .map((evento) => evento.operador),
+  ));
+}
+
+function operadorDaLinhaNaData(linha: string, dataCivil: string): string {
+  const numero = numeroLinha(linha);
+  if (numero === 7) return dataCivil >= "2025-11-26" ? "TIC Trens" : "CPTM";
+  if ([11, 12, 13].includes(numero) && dataCivil <= "2026-06-30") return "CPTM";
+  return EVENTOS.find((evento) => evento.linha === linha)?.operador
+    ?? lineToOperator.get(linha)?.split(" / ")[0]
+    ?? "Não informado";
+}
+
 function createEmptyRow(
   nome: string,
   operador?: string,
@@ -1428,64 +1466,13 @@ function finalizeRow(
         row.horasIndefinidas,
       0,
     );
-  }
-
-  if (statusSelecionado === "Disponível") {
-    row.horasDisponivel = row.horasTotaisOperacao;
-    row.horasEventoEspecial = 0;
-    row.horasManutencaoProgramada = 0;
-    row.horasFalhaParcial = 0;
-    row.horasFalhaTotal = 0;
-    row.horasIndefinidas = 0;
-  }
-
-  if (statusSelecionado === "Evento especial") {
-    row.horasDisponivel = 0;
-    row.horasManutencaoProgramada = 0;
-    row.horasFalhaParcial = 0;
-    row.horasFalhaTotal = 0;
-    row.horasIndefinidas = 0;
-  }
-
-  if (statusSelecionado === "Manutenção programada") {
-    row.horasDisponivel = 0;
-    row.horasEventoEspecial = 0;
-    row.horasFalhaParcial = 0;
-    row.horasFalhaTotal = 0;
-    row.horasIndefinidas = 0;
-  }
-
-  if (statusSelecionado === "Ocorrência operacional" || statusSelecionado === "Com falha ou parcial") {
-    row.horasDisponivel = 0;
-    row.horasEventoEspecial = 0;
-    row.horasFalhaTotal = 0;
-    row.horasIndefinidas = 0;
-  }
-
-  if (statusSelecionado === "Falha total / paralisação") {
-    row.horasDisponivel = 0;
-    row.horasEventoEspecial = 0;
-    row.horasManutencaoProgramada = 0;
-    row.horasManutencaoProgramada = 0;
-    row.horasFalhaParcial = 0;
-    row.horasIndefinidas = 0;
-  }
-
-  if (statusSelecionado === "Indefinido") {
-    row.horasDisponivel = 0;
-    row.horasEventoEspecial = 0;
-    row.horasManutencaoProgramada = 0;
-    row.horasFalhaParcial = 0;
-    row.horasFalhaTotal = 0;
-  }
-
-  if (statusSelecionado === "Operação encerrada") {
-    row.horasDisponivel = 0;
-    row.horasEventoEspecial = 0;
-    row.horasManutencaoProgramada = 0;
-    row.horasFalhaParcial = 0;
-    row.horasFalhaTotal = 0;
-    row.horasIndefinidas = 0;
+  } else {
+    row.horasDisponivel = filtroInclui(statusSelecionado, "todos", "Disponível") ? row.horasTotaisOperacao : 0;
+    if (!filtroInclui(statusSelecionado, "todos", "Evento especial")) row.horasEventoEspecial = 0;
+    if (!filtroInclui(statusSelecionado, "todos", "Manutenção programada")) row.horasManutencaoProgramada = 0;
+    if (!filtroInclui(statusSelecionado, "todos", "Ocorrência operacional") && !filtroInclui(statusSelecionado, "todos", "Com falha ou parcial")) row.horasFalhaParcial = 0;
+    if (!filtroInclui(statusSelecionado, "todos", "Falha total / paralisação")) row.horasFalhaTotal = 0;
+    if (!filtroInclui(statusSelecionado, "todos", "Indefinido")) row.horasIndefinidas = 0;
   }
 
   row.horasDisponivel = round3(row.horasDisponivel);
@@ -1626,10 +1613,10 @@ function aggregateData(filtros: {
   const diasSelecionados = calcularDiasPeriodo(dataInicio, dataFim);
   const horasPeriodoPorLinha = round3(diasSelecionados * HORAS_DIA);
   const linhasPermitidas = LINHAS.filter((linha) => {
-    const operadorLinha = lineToOperator.get(linha) ?? "Não informado";
+    const operadoresLinha = operadoresDaLinhaNoPeriodo(linha, dataInicio, dataFim);
     return (
-      (filtros.linha === "todas" || filtros.linha === linha) &&
-      (filtros.operador === "todos" || filtros.operador === operadorLinha)
+      filtroInclui(filtros.linha, "todas", linha) &&
+      (filtros.operador === "todos" || operadoresLinha.some((item) => filtroInclui(filtros.operador, "todos", item)))
     );
   });
 
@@ -1640,32 +1627,46 @@ function aggregateData(filtros: {
       linhasSet.has(evento.linha) &&
       dataEvento >= dataInicio &&
       dataEvento <= dataFim &&
-      (filtros.status === "todos" || filtros.status === evento.estado)
+      filtroInclui(filtros.operador, "todos", evento.operador) &&
+      filtroInclui(filtros.status, "todos", evento.estado)
     );
   });
 
   const linhasMap = new Map<string, LinhaRanking>();
   linhasPermitidas.forEach((linha) => {
+    const operadoresLinha = operadoresDaLinhaNoPeriodo(linha, dataInicio, dataFim)
+      .filter((item) => filtroInclui(filtros.operador, "todos", item));
     linhasMap.set(
       linha,
-      createEmptyRow(linha, lineToOperator.get(linha) ?? "Não informado", 1, horasPeriodoPorLinha),
+      createEmptyRow(linha, operadoresLinha.join(" / ") || "Não informado", 1, horasPeriodoPorLinha),
     );
   });
 
   const operadoresMap = new Map<string, LinhaRanking>();
-  const linhasPorOperador = new Map<string, string[]>();
-  linhasPermitidas.forEach((linha) => {
-    const operadorLinha = lineToOperator.get(linha) ?? "Não informado";
-    linhasPorOperador.set(operadorLinha, [
-      ...(linhasPorOperador.get(operadorLinha) ?? []),
-      linha,
-    ]);
+  const coberturaOperador = new Map<string, { dias: number; linhas: Set<string> }>();
+  const diasCobertosPorLinha = new Map<string, number>();
+  const diasCobertosPorMes = new Map<string, number>();
+  for (let cursor = new Date(`${dataInicio}T12:00:00`); cursor <= new Date(`${dataFim}T12:00:00`); cursor.setDate(cursor.getDate() + 1)) {
+    const dataCivil = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")}`;
+    linhasPermitidas.forEach((linha) => {
+      const operador = operadorDaLinhaNaData(linha, dataCivil);
+      if (!filtroInclui(filtros.operador, "todos", operador)) return;
+      const cobertura = coberturaOperador.get(operador) ?? { dias: 0, linhas: new Set<string>() };
+      cobertura.dias += 1;
+      cobertura.linhas.add(linha);
+      coberturaOperador.set(operador, cobertura);
+      diasCobertosPorLinha.set(linha, (diasCobertosPorLinha.get(linha) ?? 0) + 1);
+      const mes = dataCivil.slice(0, 7);
+      diasCobertosPorMes.set(mes, (diasCobertosPorMes.get(mes) ?? 0) + 1);
+    });
+  }
+  coberturaOperador.forEach((cobertura, operador) => {
+    const row = createEmptyRow(operador, undefined, cobertura.linhas.size, 0);
+    row.horasTotaisOperacao = round3(cobertura.dias * HORAS_DIA);
+    operadoresMap.set(operador, row);
   });
-  linhasPorOperador.forEach((linhas, operador) => {
-    operadoresMap.set(
-      operador,
-      createEmptyRow(operador, undefined, linhas.length, horasPeriodoPorLinha),
-    );
+  linhasMap.forEach((row, linha) => {
+    row.horasTotaisOperacao = round3((diasCobertosPorLinha.get(linha) ?? 0) * HORAS_DIA);
   });
 
   const problemasMap = new Map<string, Problema>();
@@ -1696,9 +1697,7 @@ function aggregateData(filtros: {
     const linha = linhasMap.get(evento.linha);
     if (linha) applyEventToRow(linha, evento);
 
-    const operador = operadoresMap.get(
-      lineToOperator.get(evento.linha) ?? evento.operador,
-    );
+    const operador = operadoresMap.get(evento.operador);
     if (operador) applyEventToRow(operador, evento);
 
     if (entraEmRankingDeTipo(evento) && temDescricaoUtil(evento)) {
@@ -1761,7 +1760,9 @@ function aggregateData(filtros: {
     finalizeRow(row, filtros.status),
   );
 
-  const horasTotaisOperacao = linhasPermitidas.length * horasPeriodoPorLinha;
+  const horasTotaisOperacao = round3(
+    linhas.reduce((total, linha) => total + linha.horasTotaisOperacao, 0),
+  );
   const horasEventoEspecial = round3(
     linhas.reduce((total, linha) => total + linha.horasEventoEspecial, 0),
   );
@@ -1794,8 +1795,7 @@ function aggregateData(filtros: {
     );
   }
 
-  if (filtros.status === "Disponível") horasDisponivel = horasTotaisOperacao;
-  if (filtros.status !== "todos" && filtros.status !== "Disponível")
+  if (filtros.status !== "todos")
     horasDisponivel = linhas.reduce(
       (total, linha) => total + linha.horasDisponivel,
       0,
@@ -1835,7 +1835,7 @@ function aggregateData(filtros: {
     const fimMes = new Date(Date.UTC(ano, mes, 0)).toISOString().slice(0, 10);
     const inicioRecorte = inicioMes > dataInicio ? inicioMes : dataInicio;
     const fimRecorte = fimMes < dataFim ? fimMes : dataFim;
-    const esperadoMes = calcularDiasPeriodo(inicioRecorte, fimRecorte) * HORAS_DIA * linhasPermitidas.length;
+    const esperadoMes = (diasCobertosPorMes.get(row.mes) ?? 0) * HORAS_DIA;
 
     if (filtros.status === "todos") {
       row.horasDisponivel = Math.max(
@@ -1848,61 +1848,13 @@ function aggregateData(filtros: {
       );
     }
 
-    if (filtros.status === "Disponível") {
-      row.horasDisponivel = esperadoMes;
-      row.horasEventoEspecial = 0;
-      row.horasManutencaoProgramada = 0;
-      row.horasFalhaParcial = 0;
-      row.horasFalhaTotal = 0;
-      row.horasIndefinidas = 0;
-    }
-
-    if (filtros.status === "Evento especial") {
-      row.horasDisponivel = 0;
-      row.horasManutencaoProgramada = 0;
-      row.horasFalhaParcial = 0;
-      row.horasFalhaTotal = 0;
-      row.horasIndefinidas = 0;
-    }
-
-    if (filtros.status === "Manutenção programada") {
-      row.horasDisponivel = 0;
-      row.horasEventoEspecial = 0;
-      row.horasFalhaParcial = 0;
-      row.horasFalhaTotal = 0;
-      row.horasIndefinidas = 0;
-    }
-
-    if (filtros.status === "Ocorrência operacional" || filtros.status === "Com falha ou parcial") {
-      row.horasDisponivel = 0;
-      row.horasEventoEspecial = 0;
-      row.horasFalhaTotal = 0;
-      row.horasIndefinidas = 0;
-    }
-
-    if (filtros.status === "Falha total / paralisação") {
-      row.horasDisponivel = 0;
-      row.horasEventoEspecial = 0;
-      row.horasManutencaoProgramada = 0;
-      row.horasFalhaParcial = 0;
-      row.horasIndefinidas = 0;
-    }
-
-    if (filtros.status === "Indefinido") {
-      row.horasDisponivel = 0;
-      row.horasEventoEspecial = 0;
-      row.horasManutencaoProgramada = 0;
-      row.horasFalhaParcial = 0;
-      row.horasFalhaTotal = 0;
-    }
-
-    if (filtros.status === "Operação encerrada") {
-      row.horasDisponivel = 0;
-      row.horasEventoEspecial = 0;
-      row.horasManutencaoProgramada = 0;
-      row.horasFalhaParcial = 0;
-      row.horasFalhaTotal = 0;
-      row.horasIndefinidas = 0;
+    if (filtros.status !== "todos") {
+      row.horasDisponivel = filtroInclui(filtros.status, "todos", "Disponível") ? esperadoMes : 0;
+      if (!filtroInclui(filtros.status, "todos", "Evento especial")) row.horasEventoEspecial = 0;
+      if (!filtroInclui(filtros.status, "todos", "Manutenção programada")) row.horasManutencaoProgramada = 0;
+      if (!filtroInclui(filtros.status, "todos", "Ocorrência operacional") && !filtroInclui(filtros.status, "todos", "Com falha ou parcial")) row.horasFalhaParcial = 0;
+      if (!filtroInclui(filtros.status, "todos", "Falha total / paralisação")) row.horasFalhaTotal = 0;
+      if (!filtroInclui(filtros.status, "todos", "Indefinido")) row.horasIndefinidas = 0;
     }
 
     row.horasDisponivel = round3(row.horasDisponivel);
@@ -1954,7 +1906,7 @@ function aggregateData(filtros: {
   ];
 
   const disponibilidadeGeral = disponibilidadeBase.filter(
-    (item) => filtros.status === "todos" || item.categoria === filtros.status,
+    (item) => filtroInclui(filtros.status, "todos", item.categoria),
   );
   const problemas = [...problemasMap.values()]
     .map((item) => ({ ...item, horas: round3(item.horas) }))
@@ -2708,8 +2660,6 @@ export default function DashboardOcorrencias2026({
   const [dataInicio, setDataInicio] = useState(data.metadata.periodoInicio);
   const [dataFim, setDataFim] = useState(data.metadata.periodoFim);
   const [buscaTabela, setBuscaTabela] = useState("");
-  const [operadorTabela, setOperadorTabela] = useState("todos");
-  const [statusTabela, setStatusTabela] = useState("todos");
   const [buscaOcorrencia, setBuscaOcorrencia] = useState("");
   const [linhaOcorrencia, setLinhaOcorrencia] = useState("todas");
   const [operadorOcorrencia, setOperadorOcorrencia] = useState("todos");
@@ -2722,9 +2672,24 @@ export default function DashboardOcorrencias2026({
   const [modoRankingOperador, setModoRankingOperador] = useState<ModoGrafico>("horas");
   const [abaTempo, setAbaTempo] = useState<"mapa" | "histograma">("mapa");
   const [abaRegistros, setAbaRegistros] = useState<"falhas" | "encerramentos" | "especiais">("falhas");
+  const [abaAnalise, setAbaAnalise] = useState<"humana" | "ia">("humana");
+  const [registrosAberto, setRegistrosAberto] = useState(false);
   const [anoSelecionado, setAnoSelecionado] = useState<AnoDados>(modo === "comparativo" ? "comparativo" : ANO_ATIVO);
   const [isAnoPendente, iniciarTransicaoAno] = useTransition();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!registrosAberto) return;
+    const fecharComEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setRegistrosAberto(false);
+    };
+    document.addEventListener("keydown", fecharComEscape);
+    document.body.classList.add("modal-open");
+    return () => {
+      document.removeEventListener("keydown", fecharComEscape);
+      document.body.classList.remove("modal-open");
+    };
+  }, [registrosAberto]);
 
   useEffect(() => {
     if (modo === "painel") setAnoSelecionado(comparativoAberto ? "comparativo" : ANO_ATIVO);
@@ -2773,12 +2738,6 @@ export default function DashboardOcorrencias2026({
     [linha, operador, status, dataInicio, dataFim],
   );
 
-  const operadoresTabelaDisponiveis = useMemo(() => {
-    return Array.from(
-      new Set(agregado.linhas.map((item) => item.operador ?? "Não informado")),
-    ).sort();
-  }, [agregado.linhas]);
-
   const linhasFiltradas = useMemo(() => {
     const termo = normalizeText(buscaTabela);
 
@@ -2787,18 +2746,7 @@ export default function DashboardOcorrencias2026({
         const bateBusca =
           !termo ||
           normalizeText(`${item.nome} ${item.operador ?? ""}`).includes(termo);
-        const bateOperador =
-          operadorTabela === "todos" ||
-          (item.operador ?? "Não informado") === operadorTabela;
-        const bateStatus =
-          statusTabela === "todos" ||
-          (statusTabela === "com_falhas" && item.qtdFalhas > 0) ||
-          (statusTabela === "com_paralisacao" && item.qtdFalhaTotal > 0) ||
-          (statusTabela === "sem_falhas" && item.qtdFalhas === 0) ||
-          (statusTabela === "com_dados_indisponiveis" &&
-            item.qtdIndefinidos > 0);
-
-        return bateBusca && bateOperador && bateStatus;
+        return bateBusca;
       })
       .sort((a, b) => {
         if (ordenacao === "quantidade") return qtdRegistrosClassificadosTotal(b) - qtdRegistrosClassificadosTotal(a);
@@ -2808,9 +2756,9 @@ export default function DashboardOcorrencias2026({
           return b.horasFalhaTotal - a.horasFalhaTotal;
         return horasRegistrosClassificadosTotal(b) - horasRegistrosClassificadosTotal(a);
       });
-  }, [agregado.linhas, buscaTabela, operadorTabela, statusTabela, ordenacao]);
+  }, [agregado.linhas, buscaTabela, ordenacao]);
 
-  const incluirDadosIndisponiveisNosGraficos = status === "Indefinido";
+  const incluirDadosIndisponiveisNosGraficos = status !== "todos" && filtroInclui(status, "todos", "Indefinido");
 
   const eventosBaseMapa = useMemo(() => {
     return agregado.eventosFiltrados.filter((evento) => entraEmRankingDeTipo(evento));
@@ -3052,8 +3000,6 @@ export default function DashboardOcorrencias2026({
     status !== "todos",
     dataInicio !== data.metadata.periodoInicio || dataFim !== data.metadata.periodoFim,
     buscaTabela !== "",
-    operadorTabela !== "todos",
-    statusTabela !== "todos",
     buscaOcorrencia !== "",
     linhaOcorrencia !== "todas",
     operadorOcorrencia !== "todos",
@@ -3063,16 +3009,14 @@ export default function DashboardOcorrencias2026({
   ].filter(Boolean).length;
 
   const resumoFiltrosAtivos: Array<{ label: string; value: string }> = [];
-  if (linha !== "todas") resumoFiltrosAtivos.push({ label: "Linha global", value: displayLinhaName(linha) });
-  if (operador !== "todos") resumoFiltrosAtivos.push({ label: "Operador global", value: displayOperadorName(operador) });
-  if (status !== "todos") resumoFiltrosAtivos.push({ label: "Estado global", value: status });
+  if (linha !== "todas") resumoFiltrosAtivos.push({ label: "Linha global", value: valoresDoFiltro(linha, "todas").map(displayLinhaName).join(", ") });
+  if (operador !== "todos") resumoFiltrosAtivos.push({ label: "Operador global", value: valoresDoFiltro(operador, "todos").map(displayOperadorName).join(", ") });
+  if (status !== "todos") resumoFiltrosAtivos.push({ label: "Estado global", value: valoresDoFiltro(status, "todos").join(", ") });
   if (dataInicio !== data.metadata.periodoInicio || dataFim !== data.metadata.periodoFim) resumoFiltrosAtivos.push({
     label: "Período global",
     value: `${parseDataKey(dataInicio).toLocaleDateString("pt-BR")} a ${parseDataKey(dataFim).toLocaleDateString("pt-BR")}`,
   });
   if (buscaTabela) resumoFiltrosAtivos.push({ label: "Busca na tabela", value: buscaTabela });
-  if (operadorTabela !== "todos") resumoFiltrosAtivos.push({ label: "Operador da tabela", value: displayOperadorName(operadorTabela) });
-  if (statusTabela !== "todos") resumoFiltrosAtivos.push({ label: "Situação da tabela", value: statusTabela.replaceAll("_", " ") });
   if (buscaOcorrencia) resumoFiltrosAtivos.push({ label: "Busca em ocorrências", value: buscaOcorrencia });
   if (linhaOcorrencia !== "todas") resumoFiltrosAtivos.push({ label: "Linha das ocorrências", value: displayLinhaName(linhaOcorrencia) });
   if (operadorOcorrencia !== "todos") resumoFiltrosAtivos.push({ label: "Operador das ocorrências", value: displayOperadorName(operadorOcorrencia) });
@@ -3088,8 +3032,6 @@ export default function DashboardOcorrencias2026({
     setDataInicio(data.metadata.periodoInicio);
     setDataFim(data.metadata.periodoFim);
     setBuscaTabela("");
-    setOperadorTabela("todos");
-    setStatusTabela("todos");
     setBuscaOcorrencia("");
     setLinhaOcorrencia("todas");
     setOperadorOcorrencia("todos");
@@ -3278,6 +3220,10 @@ export default function DashboardOcorrencias2026({
       </section>
       </DashboardSlide>
 
+      <DashboardSlide id="introducao">
+        <IntroducaoDashboard />
+      </DashboardSlide>
+
       <DashboardChrome>
       <section className="panel comparison-year-controls" aria-label="Base analisada">
           <div className="hero-actions">
@@ -3310,11 +3256,13 @@ export default function DashboardOcorrencias2026({
                 </button>
               </div>
             </div>
+            <DashboardToolbarActions />
             <div className="hero-tabbar hero-tabbar-shortcuts" aria-label="Conteúdos de apoio à análise">
               <DocumentacaoPopup />
               <EventosRelevantesPopup anoInicial={ANO_ATIVO} />
-              <AnaliseHumanaPopup />
-              <AnaliseIaPopup />
+              <button type="button" className="hero-tab-action records-dialog-trigger" onClick={() => setRegistrosAberto(true)} aria-haspopup="dialog" aria-expanded={registrosAberto}>
+                Registro
+              </button>
             </div>
           </div>
       </section>
@@ -3343,50 +3291,9 @@ export default function DashboardOcorrencias2026({
         </div>
 
         <div className="filters-grid">
-          <label>
-            Linha
-            <select
-              value={linha}
-              onChange={(event) => setLinha(event.target.value)}
-            >
-              <option value="todas">Todas as linhas</option>
-              {LINHAS.map((item) => (
-                <option key={item} value={item}>
-                  {displayLinhaName(item)}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>
-            Operador
-            <select
-              value={operador}
-              onChange={(event) => setOperador(event.target.value)}
-            >
-              <option value="todos">Todos os operadores</option>
-              {OPERADORES.map((item) => (
-                <option key={item} value={item}>
-                  {displayOperadorName(item)}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>
-            Estado operacional
-            <select
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-            >
-              <option value="todos">Todos os status</option>
-              {ESTADOS_FILTRO_GLOBAL.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
+          <GlobalMultiSelect label="Linha" allLabel="Todas as linhas" selected={valoresDoFiltro(linha, "todas")} onChange={(valores) => setLinha(valorDoFiltro(valores, "todas"))} options={LINHAS.map((item) => ({ value: item, label: rotuloNomeLinha(item), visual: <LineBadge nome={item} className="global-multi-select-line-badge" /> }))} />
+          <GlobalMultiSelect label="Operador" allLabel="Todos os operadores" selected={valoresDoFiltro(operador, "todos")} onChange={(valores) => setOperador(valorDoFiltro(valores, "todos"))} options={OPERADORES.map((item) => ({ value: item, label: displayOperadorName(item) }))} />
+          <GlobalMultiSelect label="Estado operacional" allLabel="Todos os estados" selected={valoresDoFiltro(status, "todos")} onChange={(valores) => setStatus(valorDoFiltro(valores, "todos"))} options={ESTADOS_FILTRO_GLOBAL.map((item) => ({ value: item, label: item, visual: <span className="global-multi-select-status-dot" style={{ "--status-color": CORES[item] } as CSSProperties} aria-hidden="true" /> }))} />
 
           <fieldset className="date-range-filter">
             <legend>Intervalo de datas</legend>
@@ -3571,23 +3478,32 @@ export default function DashboardOcorrencias2026({
       </DashboardSlide>
       <DashboardLegend>
       <section className="hero-card operational-legend-line" aria-label="Legenda operacional">
-        <div className="operational-legend-items">
-          <strong className="operational-legend-label">Legenda</strong>
-          <div className="legend-block">
-            <span style={{ background: CORES["Manutenção programada"] }} /> Manutenção programada
-          </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Ocorrência operacional"] }} /> Ocorrência operacional
-          </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Falha total / paralisação"] }} /> Falha total / paralisação
-          </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Indefinido"] }} /> Indefinido
-          </div>
-          <div className="legend-block">
-            <span style={{ background: CORES["Evento especial"] }} /> Eventos especiais
-          </div>
+        <div className="operational-legend-head">
+          <strong>Legenda</strong>
+          <p className="legend-intro">Consulte as cores dos estados operacionais e os símbolos usados para identificar cada linha.</p>
+        </div>
+        <div className="dashboard-legend-sections">
+          <section className="dashboard-legend-section" aria-labelledby="operational-status-legend-title-2026">
+            <h3 id="operational-status-legend-title-2026">Estados operacionais</h3>
+            <div className="operational-legend-items">
+              <div className="legend-block"><span style={{ background: CORES["Manutenção programada"] }} /> Manutenção programada</div>
+              <div className="legend-block"><span style={{ background: CORES["Ocorrência operacional"] }} /> Ocorrência operacional</div>
+              <div className="legend-block"><span style={{ background: CORES["Falha total / paralisação"] }} /> Falha total / paralisação</div>
+              <div className="legend-block"><span style={{ background: CORES["Indefinido"] }} /> Indefinido</div>
+              <div className="legend-block"><span style={{ background: CORES["Evento especial"] }} /> Eventos especiais</div>
+            </div>
+          </section>
+          <section className="dashboard-legend-section" aria-labelledby="line-legend-title-2026">
+            <h3 id="line-legend-title-2026">Linhas</h3>
+            <div className="dashboard-line-legend">
+              {LINHAS.map((item) => (
+                <div className="dashboard-line-legend-item" key={item}>
+                  <LineBadge nome={item} className="dashboard-line-legend-badge" />
+                  <span>{rotuloNomeLinha(item)}</span>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </section>
       </DashboardLegend>
@@ -3901,12 +3817,13 @@ export default function DashboardOcorrencias2026({
       </DashboardSlide>
 
       <DashboardSlide id="tempo">
-      <div className="dashboard-subtabs" role="tablist" aria-label="Visualização temporal">
-        <button type="button" role="tab" aria-selected={abaTempo === "mapa"} className={abaTempo === "mapa" ? "is-active" : ""} onClick={() => setAbaTempo("mapa")}>Mapa horário</button>
-        <button type="button" role="tab" aria-selected={abaTempo === "histograma"} className={abaTempo === "histograma" ? "is-active" : ""} onClick={() => setAbaTempo("histograma")}>Histograma</button>
-      </div>
-      {abaTempo === "mapa" ? (
-      <section className="panel time-scatter-panel" style={{ marginTop: 18 }}>
+      <section className={`panel temporal-view-panel ${abaTempo === "mapa" ? "time-scatter-panel" : "availability-heatmap-panel"}`} style={{ marginTop: 18 }}>
+        <div className="dashboard-subtabs" role="tablist" aria-label="Visualização temporal">
+          <button type="button" role="tab" aria-selected={abaTempo === "mapa"} className={abaTempo === "mapa" ? "is-active" : ""} onClick={() => setAbaTempo("mapa")}>Mapa horário</button>
+          <button type="button" role="tab" aria-selected={abaTempo === "histograma"} className={abaTempo === "histograma" ? "is-active" : ""} onClick={() => setAbaTempo("histograma")}>Histograma</button>
+        </div>
+        {abaTempo === "mapa" ? (
+        <>
         <div className="panel-heading-row">
           <div>
             <h2>Mapa horário das ocorrências</h2>
@@ -3931,10 +3848,9 @@ export default function DashboardOcorrencias2026({
         <div className="chart-footnote scatter-footnote scatter-disclaimer">
           As faixas de pico são referência de leitura: janeiro não considera pico estudantil e sábados/domingos não têm pico declarado. O posicionamento do ponto usa sempre o horário de início do evento. Dados indisponíveis aparecem apenas quando esse status é selecionado nos Filtros globais.
         </div>
-      </section>
-      ) : (
-
-      <section className="panel availability-heatmap-panel" style={{ marginTop: 18 }}>
+        </>
+        ) : (
+        <>
         <div className="panel-heading-row">
           <div>
             <h2>Histograma temporal de disponibilidade por linha</h2>
@@ -3948,8 +3864,9 @@ export default function DashboardOcorrencias2026({
           linhaSelecionada={linha}
           onSelectCell={filtrarPorLinhaEEstado}
         />
+        </>
+        )}
       </section>
-      )}
       </DashboardSlide>
 
       <DashboardSlide id="diagnosticos">
@@ -4037,7 +3954,7 @@ export default function DashboardOcorrencias2026({
         <div className="word-cloud" aria-label="Nuvem de palavras das ocorrências">
           {agregado.palavras.map((item, index) => {
             const maiorQtd = Math.max(...agregado.palavras.map((palavra) => palavra.qtd), 1);
-            const size = 14 + Math.round((item.qtd / maiorQtd) * 24);
+            const size = 13 + Math.round((item.qtd / maiorQtd) * 17);
             return (
               <span
                 key={`${item.palavra}-${index}`}
@@ -4130,7 +4047,7 @@ export default function DashboardOcorrencias2026({
           <div>
             <h2>Tabela analítica por linha</h2>
             <p>
-              Resume cada linha em uma só tabela: tempo disponível, eventos especiais, manutenções, ocorrências, paralisações, dados indisponíveis, média até uma nova ocorrência e total de registros classificados. Primeiro entram os filtros globais; depois entram os filtros próprios desta tabela.
+              Resume cada linha em uma só tabela: tempo disponível, eventos especiais, manutenções, ocorrências, paralisações, dados indisponíveis, média até uma nova ocorrência e total de registros classificados. Os dados seguem os filtros globais; nesta tabela, somente a pesquisa e a ordenação são locais.
             </p>
           </div>
           <div className="occurrence-summary">
@@ -4147,37 +4064,6 @@ export default function DashboardOcorrencias2026({
               onChange={(event) => setBuscaTabela(event.target.value)}
               placeholder="Linha ou operador..."
             />
-          </label>
-          <label>
-            Operador da tabela
-            <select
-              value={operadorTabela}
-              onChange={(event) => setOperadorTabela(event.target.value)}
-            >
-              <option value="todos">Todos no recorte global</option>
-              {operadoresTabelaDisponiveis.map((item) => (
-                <option key={item} value={item}>
-                  {displayOperadorName(item)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Recorte da tabela
-            <select
-              value={statusTabela}
-              onChange={(event) => setStatusTabela(event.target.value)}
-            >
-              <option value="todos">Todas as linhas do recorte global</option>
-              <option value="com_falhas">Somente linhas com registros classificados</option>
-              <option value="com_paralisacao">
-                Somente linhas com paralisação
-              </option>
-              <option value="sem_falhas">Somente linhas sem falhas</option>
-              <option value="com_dados_indisponiveis">
-                Somente linhas com dados indisponíveis
-              </option>
-            </select>
           </label>
           <label>
             Ordenação da tabela
@@ -4201,13 +4087,38 @@ export default function DashboardOcorrencias2026({
 
 
       <DashboardSlide id="registros">
+        <article className="hero-card analyses-page-card">
+          <div className="analyses-page-media">
+            <img src={`${assetBase}/images/thumb-tipos-registro.jpg`} alt="Plataforma ferroviária movimentada em São Paulo" />
+          </div>
+          <div className="analyses-page-content">
+            <div className="dashboard-subtabs analyses-page-tabs" role="tablist" aria-label="Tipo de análise">
+              <button type="button" role="tab" aria-selected={abaAnalise === "humana"} className={abaAnalise === "humana" ? "is-active" : ""} onClick={() => setAbaAnalise("humana")}>Análise humana</button>
+              <button type="button" role="tab" aria-selected={abaAnalise === "ia"} className={abaAnalise === "ia" ? "is-active" : ""} onClick={() => setAbaAnalise("ia")}>Análise IA</button>
+            </div>
+            <div className="analyses-page-panel" role="tabpanel">
+              {abaAnalise === "humana" ? <AnaliseHumanaPopup embedded /> : <AnaliseIaPopup embedded />}
+            </div>
+          </div>
+        </article>
+      </DashboardSlide>
+
+      <DashboardOverlay>
+      {registrosAberto ? (
+      <div className="records-dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setRegistrosAberto(false); }}>
+      <section className="records-dialog" role="dialog" aria-modal="true" aria-labelledby="records-dialog-title">
+      <header className="records-dialog-header">
+        <div><span>Consulta detalhada</span><h2 id="records-dialog-title">Registro</h2></div>
+        <button type="button" onClick={() => setRegistrosAberto(false)} aria-label="Fechar registro"><X size={20} /></button>
+      </header>
+      <section className="panel records-page-card">
       <div className="dashboard-subtabs" role="tablist" aria-label="Tipo de registro">
         <button type="button" role="tab" aria-selected={abaRegistros === "falhas"} className={abaRegistros === "falhas" ? "is-active" : ""} onClick={() => setAbaRegistros("falhas")}>Falhas e paralisações</button>
         <button type="button" role="tab" aria-selected={abaRegistros === "encerramentos"} className={abaRegistros === "encerramentos" ? "is-active" : ""} onClick={() => setAbaRegistros("encerramentos")}>Operações encerradas</button>
         <button type="button" role="tab" aria-selected={abaRegistros === "especiais"} className={abaRegistros === "especiais" ? "is-active" : ""} onClick={() => setAbaRegistros("especiais")}>Eventos especiais</button>
       </div>
       {abaRegistros === "falhas" ? (
-      <section className="panel occurrence-panel" style={{ marginTop: 18 }}>
+      <section className="occurrence-panel records-tab-content">
         <div className="panel-heading-row occurrence-heading-row">
           <div>
             <h2>Lista pesquisável de falhas e paralisações</h2>
@@ -4354,7 +4265,7 @@ export default function DashboardOcorrencias2026({
       </section>
       ) : null}
       {abaRegistros === "encerramentos" ? (
-      <details className="panel occurrence-panel collapsed-panel" open style={{ marginTop: 18 }}>
+      <details className="occurrence-panel collapsed-panel records-tab-content" open>
         <summary className="collapsed-summary">
           <div>
             <h2>Operações encerradas</h2>
@@ -4417,7 +4328,7 @@ export default function DashboardOcorrencias2026({
       ) : null}
 
       {abaRegistros === "especiais" ? (
-      <details className="panel occurrence-panel collapsed-panel" open style={{ marginTop: 18 }}>
+      <details className="occurrence-panel collapsed-panel records-tab-content" open>
         <summary className="collapsed-summary">
           <div>
             <h2>Eventos especiais</h2>
@@ -4474,7 +4385,11 @@ export default function DashboardOcorrencias2026({
         </div>
       </details>
       ) : null}
-      </DashboardSlide>
+      </section>
+      </section>
+      </div>
+      ) : null}
+      </DashboardOverlay>
 
       </DashboardCarousel>
     </main>

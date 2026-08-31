@@ -183,6 +183,20 @@ def days_in_month_inside_period(month_key: str, start: date, end: date) -> int:
 
 
 def canonical_operator(row: dict[str, Any]) -> str:
+    """Resolve a operadora na data da ocorrência, sem retroagir concessões.
+
+    A API da CCM pode devolver a operadora atual da linha também em registros
+    históricos. Os marcos abaixo preservam a responsabilidade operacional que
+    valia no instante do evento dentro do recorte publicado pelo painel.
+    """
+    line_code = str(row.get("linha_codigo") or "").strip()
+    event_date = parse_datetime(row.get("data_hora")).date()
+
+    if line_code == "7":
+        return "TIC Trens" if event_date >= date(2025, 11, 26) else "CPTM"
+    if line_code in {"11", "12", "13"} and event_date <= date(2026, 6, 30):
+        return "CPTM"
+
     value = row.get("operadora_final") or row.get("operadora_api_normalizada") or row.get("operadora_api") or "Não informado"
     normalized = normalize_text(value)
     if "cptm" in normalized:
@@ -468,8 +482,8 @@ def aggregate_payload(
     line_operator: dict[str, str] = {}
     for line in sorted(line_names, key=line_sort_key):
         line_events = events_by_line.get(line, [])
-        operators = Counter(event["operador"] for event in line_events)
-        operator = operators.most_common(1)[0][0] if operators else "Não informado"
+        operators = list(dict.fromkeys(event["operador"] for event in line_events))
+        operator = " / ".join(operators) if operators else "Não informado"
         line_operator[line] = operator
         metrics = empty_metrics(line, operator, hours_per_line)
         for event in line_events:
@@ -477,14 +491,39 @@ def aggregate_payload(
         lines.append(finalize_metrics(metrics, intervals.get(line, [])))
     lines.sort(key=lambda row: (row["disponibilidadePct"], line_sort_key(row["nome"])))
 
-    operators_to_lines: defaultdict[str, list[str]] = defaultdict(list)
-    for line, operator in line_operator.items():
-        operators_to_lines[operator].append(line)
+    operators_to_lines: defaultdict[str, set[str]] = defaultdict(set)
+    for event in events:
+        operators_to_lines[event["operador"]].add(event["linha"])
     operator_rows: list[dict[str, Any]] = []
     for operator, operator_lines in operators_to_lines.items():
-        metrics = empty_metrics(operator, None, hours_per_line * len(operator_lines), len(operator_lines))
-        for line in operator_lines:
-            for event in events_by_line.get(line, []):
+        assigned_days = 0
+        cursor = period_start
+        while cursor <= period_end:
+            for line in operator_lines:
+                line_events = events_by_line.get(line, [])
+                operators_on_day = {
+                    event["operador"]
+                    for event in line_events
+                    if event["dataHora"][:10] == cursor.isoformat()
+                }
+                if operator in operators_on_day:
+                    assigned_days += 1
+                elif not operators_on_day:
+                    # Em dias sem registro, usa a responsabilidade temporal
+                    # conhecida para as linhas que trocaram de operadora.
+                    line_number = str(line_sort_key(line)[0])
+                    if line_number == "7":
+                        expected = "TIC Trens" if cursor >= date(2025, 11, 26) else "CPTM"
+                    elif line_number in {"11", "12", "13"} and cursor <= date(2026, 6, 30):
+                        expected = "CPTM"
+                    else:
+                        expected = Counter(event["operador"] for event in line_events).most_common(1)[0][0]
+                    if operator == expected:
+                        assigned_days += 1
+            cursor += timedelta(days=1)
+        metrics = empty_metrics(operator, None, assigned_days * HOURS_PER_OPERATION_DAY, len(operator_lines))
+        for event in events:
+            if event["operador"] == operator:
                 apply_event(metrics, event)
         operator_rows.append(finalize_metrics(metrics))
     operator_rows.sort(key=lambda row: (row["disponibilidadePct"], row["nome"]))
@@ -652,6 +691,7 @@ def build_summary(
         "regraCascata": "Menções explícitas a outra linha são marcadas como cascata; um retorno normal anterior pode encerrar a duração.",
         "regraManutencaoProgramadaResidual": "Circulação de Trens e Maiores Intervalos dependem da descrição; termos explicitamente programados prevalecem.",
         "regraIndefinidos": "Dados/Status Indisponíveis permanece auditável sem horas. Dados Indisponíveis, Status Desconhecido e Status não disponível somente fecham o ciclo anterior.",
+        "regraOperadoraHistorica": "A operadora é atribuída pela data da ocorrência: Linha 7-Rubi permanece CPTM até 25/11/2025 e passa à TIC Trens em 26/11/2025; Linhas 11-Coral, 12-Safira e 13-Jade permanecem CPTM em todo o recorte até 30/06/2026.",
         "auditoriaGeracao": audit,
     }
     options = {

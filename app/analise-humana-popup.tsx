@@ -1,19 +1,20 @@
 "use client";
 
 import { UserRound, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-export default function AnaliseHumanaPopup() {
-  const [aberto, setAberto] = useState(false);
+export default function AnaliseHumanaPopup({ embedded = false }: { embedded?: boolean }) {
+  const [aberto, setAberto] = useState(embedded);
   const [portalPronto, setPortalPronto] = useState(false);
+  const embedHost = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setPortalPronto(true);
   }, []);
 
   useEffect(() => {
-    if (!aberto) return;
+    if (!aberto || embedded) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -28,11 +29,11 @@ export default function AnaliseHumanaPopup() {
       document.removeEventListener("keydown", onKeyDown);
       document.body.classList.remove("modal-open");
     };
-  }, [aberto]);
+  }, [aberto, embedded]);
 
   return (
     <>
-      <button
+      {embedded ? <div className="analysis-embed-host" ref={embedHost} /> : <button
         type="button"
         className="hero-tab-action analise-humana-trigger"
         onClick={() => setAberto(true)}
@@ -40,12 +41,12 @@ export default function AnaliseHumanaPopup() {
         aria-expanded={aberto}
       >
         Análise humana
-      </button>
+      </button>}
 
       {aberto && portalPronto
         ? createPortal(
             <div
-              className="eventos-relevantes-backdrop analise-ia-backdrop"
+              className={`eventos-relevantes-backdrop analise-ia-backdrop ${embedded ? "analysis-embedded-backdrop" : ""}`}
               role="presentation"
               onMouseDown={(event) => {
                 if (event.target === event.currentTarget) {
@@ -54,9 +55,9 @@ export default function AnaliseHumanaPopup() {
               }}
             >
               <section
-                className="eventos-relevantes-modal analise-ia-modal analise-humana-modal"
-                role="dialog"
-                aria-modal="true"
+                className={`eventos-relevantes-modal analise-ia-modal analise-humana-modal ${embedded ? "analysis-embedded-modal" : ""}`}
+                role={embedded ? "region" : "dialog"}
+                aria-modal={embedded ? undefined : "true"}
                 aria-labelledby="analise-humana-title"
                 aria-describedby="analise-humana-description"
               >
@@ -71,14 +72,14 @@ export default function AnaliseHumanaPopup() {
                       Interpretação autoral sobre disponibilidade, manutenção, falhas, percepção do passageiro e lacunas de dados necessárias para aprofundar o diagnóstico técnico.
                     </p>
                   </div>
-                  <button
+                  {!embedded ? <button
                     type="button"
                     className="eventos-relevantes-close"
                     onClick={() => setAberto(false)}
                     aria-label="Fechar análise humana"
                   >
                     <X size={20} aria-hidden="true" />
-                  </button>
+                  </button> : null}
                 </header>
 
                 <div className="analise-ia-panels-container">
@@ -150,7 +151,7 @@ export default function AnaliseHumanaPopup() {
                 </footer>
               </section>
             </div>,
-            document.body,
+            embedded && embedHost.current ? embedHost.current : document.body,
           )
         : null}
     </>

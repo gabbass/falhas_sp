@@ -196,7 +196,7 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
         aria-haspopup="dialog"
         aria-expanded={aberto}
       >
-        {compactLabel ? "Documentação" : "Documentação"}
+        {compactLabel ? "Ler documentação completa" : "Documentação"}
       </button>
 
       {aberto && portalPronto
@@ -301,18 +301,14 @@ export default function DocumentacaoPopup({ compactLabel = false }: Documentacao
                               <thead>
                                 <tr>
                                   <th>Categoria</th>
-                                  <th>Cor</th>
                                   <th>Regra de leitura</th>
-                                  <th>Onde aparece</th>
                                 </tr>
                               </thead>
                               <tbody>
                                 {estados.map((estado) => (
                                   <tr key={estado.nome}>
                                     <td><span className="state-chip"><span className="doc-color" style={{ background: estado.cor }} />{estado.nome}</span></td>
-                                    <td className="nowrap"><code>{estado.cor}</code></td>
                                     <td>{estado.regra}</td>
-                                    <td>{estado.aparece}</td>
                                   </tr>
                                 ))}
                               </tbody>

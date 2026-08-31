@@ -3,7 +3,7 @@
 import data2025Raw from "../data/ocorrencias-summary.json";
 import data2024Raw from "../data/ocorrencias-summary-2024.json";
 import { Bot, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import LineBadge, { LineBadgesInText } from "./line-badge";
 
@@ -585,9 +585,10 @@ const fontesContexto = [
   },
 ];
 
-export default function AnaliseIaPopup() {
-  const [aberto, setAberto] = useState(false);
+export default function AnaliseIaPopup({ embedded = false }: { embedded?: boolean }) {
+  const [aberto, setAberto] = useState(embedded);
   const [portalPronto, setPortalPronto] = useState(false);
+  const embedHost = useRef<HTMLDivElement>(null);
   const [abaAtiva, setAbaAtiva] = useState<"tecnica" | "claude">("tecnica");
 
   useEffect(() => {
@@ -595,7 +596,7 @@ export default function AnaliseIaPopup() {
   }, []);
 
   useEffect(() => {
-    if (!aberto) return;
+    if (!aberto || embedded) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -610,11 +611,11 @@ export default function AnaliseIaPopup() {
       document.removeEventListener("keydown", onKeyDown);
       document.body.classList.remove("modal-open");
     };
-  }, [aberto]);
+  }, [aberto, embedded]);
 
   return (
     <>
-      <button
+      {embedded ? <div className="analysis-embed-host" ref={embedHost} /> : <button
         type="button"
         className="hero-tab-action analise-ia-trigger"
         onClick={() => setAberto(true)}
@@ -622,12 +623,12 @@ export default function AnaliseIaPopup() {
         aria-expanded={aberto}
       >
         Análise IA
-      </button>
+      </button>}
 
       {aberto && portalPronto
         ? createPortal(
             <div
-              className="eventos-relevantes-backdrop analise-ia-backdrop"
+              className={`eventos-relevantes-backdrop analise-ia-backdrop ${embedded ? "analysis-embedded-backdrop" : ""}`}
               role="presentation"
               onMouseDown={(event) => {
                 if (event.target === event.currentTarget) {
@@ -636,9 +637,9 @@ export default function AnaliseIaPopup() {
               }}
             >
               <section
-                className="eventos-relevantes-modal analise-ia-modal"
-                role="dialog"
-                aria-modal="true"
+                className={`eventos-relevantes-modal analise-ia-modal ${embedded ? "analysis-embedded-modal" : ""}`}
+                role={embedded ? "region" : "dialog"}
+                aria-modal={embedded ? undefined : "true"}
                 aria-labelledby="analise-ia-title"
                 aria-describedby="analise-ia-description"
               >
@@ -654,14 +655,14 @@ export default function AnaliseIaPopup() {
                       O objetivo é apoiar apuração operacional, fiscalização e padronização da coleta.
                     </p>
                   </div>
-                  <button
+                  {!embedded ? <button
                     type="button"
                     className="eventos-relevantes-close"
                     onClick={() => setAberto(false)}
                     aria-label="Fechar análise IA"
                   >
                     <X size={20} aria-hidden="true" />
-                  </button>
+                  </button> : null}
                 </header>
 
                 <nav className="analise-ia-tab-nav" role="tablist" aria-label="Abas de análise">
@@ -1529,7 +1530,7 @@ export default function AnaliseIaPopup() {
                 </footer>
               </section>
             </div>,
-            document.body,
+            embedded && embedHost.current ? embedHost.current : document.body,
           )
         : null}
     </>

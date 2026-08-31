@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from datetime import datetime
 
-from scripts.ccm_summary import build_summary, classify_status, split_operational_hours
+from scripts.ccm_summary import build_summary, canonical_operator, classify_status, split_operational_hours
 
 
 class ClassificationTests(unittest.TestCase):
@@ -46,6 +46,34 @@ class OperationalWindowTests(unittest.TestCase):
     def test_splits_across_months(self) -> None:
         result = split_operational_hours(datetime(2025, 1, 31, 23), datetime(2025, 2, 1, 6))
         self.assertEqual(result, {"2025-01": 1.0, "2025-02": 1.5})
+
+
+class HistoricalOperatorTests(unittest.TestCase):
+    def operator(self, line: str, timestamp: str, api_operator: str) -> str:
+        return canonical_operator({
+            "linha_codigo": line,
+            "data_hora": timestamp,
+            "operadora_final": api_operator,
+        })
+
+    def test_line_7_transition_is_not_applied_retroactively(self) -> None:
+        self.assertEqual(self.operator("7", "2025-11-25T23:59:59", "TIC Trens"), "CPTM")
+        self.assertEqual(self.operator("7", "2025-11-26T00:00:00", "TIC Trens"), "TIC Trens")
+
+    def test_trivia_lines_remain_cptm_through_first_semester_2026(self) -> None:
+        for line in ("11", "12", "13"):
+            with self.subTest(line=line):
+                self.assertEqual(self.operator(line, "2026-06-30T23:59:59", "Trivia Trens"), "CPTM")
+
+    def test_operator_ranking_splits_a_transition_period(self) -> None:
+        rows = [
+            {**source_row(1, "2025-11-25T05:00:00", "Operação Normal", period="2025"), "linha_codigo": "7", "linha_nome": "Linha 7-Rubi", "operadora_final": "TIC Trens"},
+            {**source_row(2, "2025-11-26T05:00:00", "Operação Parcial", "Falha em trem", period="2025"), "linha_codigo": "7", "linha_nome": "Linha 7-Rubi", "operadora_final": "TIC Trens"},
+        ]
+        summary = build_summary(rows, "2025", "fixture.json")
+        self.assertEqual([event["operador"] for event in summary["events"]], ["CPTM", "TIC Trens"])
+        self.assertEqual(summary["rankings"]["linhas"][0]["operador"], "CPTM / TIC Trens")
+        self.assertEqual({row["nome"] for row in summary["rankings"]["operadores"]}, {"CPTM", "TIC Trens"})
 
 
 def source_row(source_id: int, timestamp: str, status: str, description: str = "", period: str = "2026_1sem") -> dict:
