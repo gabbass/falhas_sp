@@ -2,6 +2,7 @@
 
 import data2025Raw from "../data/ocorrencias-summary.json";
 import data2024Raw from "../data/ocorrencias-summary-2024.json";
+import data2026H1Raw from "../data/ocorrencias-summary-2026.json";
 import { Bot, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -73,6 +74,7 @@ type MesResumo = {
 
 const data2025 = data2025Raw as SummaryPayload;
 const data2024 = data2024Raw as SummaryPayload;
+const data2026H1 = data2026H1Raw as SummaryPayload;
 
 const diasSemana = [
   "domingo",
@@ -1112,406 +1114,283 @@ export default function AnaliseIaPopup({ embedded = false }: { embedded?: boolea
                   <div className="analise-ia-body analise-ia-body--claude" role="tabpanel">
 
                     <section className="analise-ia-card analise-ia-sintese">
-                      <span className="analise-ia-section-tag" style={{background:"#1e3a5f",color:"#fff"}}>Análise Aprofundada 2024–2025</span>
-                      <h3>Falha operacional vs. manutenção programada: leituras completamente diferentes</h3>
+                      <span className="analise-ia-section-tag" style={{background:"#1e3a5f",color:"#fff"}}>Análise Aprofundada 2024–2026 (1º semestre)</span>
+                      <h3>Falha operacional vs. manutenção programada: a leitura por semestre muda a conclusão</h3>
                       <p style={{fontSize:"0.78rem",opacity:0.7,marginTop:"-0.5rem"}}>
-                        Leitura direta dos registros sanitizados. Todas as métricas citadas derivam das bases
-                        <em> ocorrencias_metro_2024_v3.xlsx</em> e <em>ocorrencias_metro_2025_v3.xlsx</em>.
-                        Contextos externos têm fontes indicadas. Análise descritiva e imparcial — causas técnicas e responsabilidades dependem de apuração formal.
+                        Leitura direta e recalculada a partir da base normalizada atual (2024 e 2025 completos, mais o 1º semestre de 2026 — {data2026H1.metadata.periodoLabel},
+                        recorte parcial). Os números substituem uma versão anterior desta análise, feita sobre uma base ainda não reprocessada — os totais de falha e manutenção
+                        de 2024/2025 mudaram de forma relevante desde então. Análise descritiva e imparcial: causas técnicas e responsabilidades dependem de apuração formal.
                       </p>
                       <div className="analise-ia-callout" style={{borderLeft:"4px solid #1e3a5f",background:"#f0f4ff"}}>
-                        <strong>Distinção fundamental:</strong> Manutenção programada é planejada, comunicada ao regulador e esperada pelo passageiro — representa escolha operacional. Falha operacional é imprevista, não planejada e diretamente ligada à confiabilidade real do sistema. Analisá-las juntas mascara o risco real. Este painel separa os dois desde o início.
+                        <strong>Distinção fundamental:</strong> Manutenção programada é planejada, comunicada ao regulador e esperada pelo passageiro — representa escolha operacional. Falha operacional é imprevista, não planejada e diretamente ligada à confiabilidade real do sistema. Analisá-las juntas mascara o risco real. Este painel separa os dois desde o início e agora acompanha três semestres consecutivos (1S24, 1S25 e 1S26) para julgar se a piora de 2025 foi um pico passageiro ou um novo patamar.
                       </div>
                     </section>
 
-                    {/* EVENTOS ESTRUTURAIS */}
+                    {/* PREMISSA */}
                     <section className="analise-ia-card">
-                      <span className="analise-ia-section-tag" style={{background:"#1C2C8C",color:"#fff"}}>Eventos Estruturais — Leitura cruzada com os dados operacionais</span>
-                      <h3>Cada evento estrutural deixou uma marca mensurável nos registros</h3>
+                      <span className="analise-ia-section-tag">Premissa da análise — Por que comparar semestre com semestre?</span>
+                      <h3>2025 inteiro mistura um 1º semestre crítico com um 2º semestre de acomodação</h3>
                       <p>
-                        Os 9 eventos estruturais registrados (2 em 2024, 7 em 2025) não são apenas contexto — cada um tem correspondência direta nos dados de falha e manutenção.
-                        Cruzar os dois permite separar o que é consequência esperada de um programa de modernização do que é deterioração não planejada.
-                      </p>
-                      <div className="analise-ia-causas">
-
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>📦 L15-Prata — 1º trem entregue na China (03/jul/2024) · chegada SP (27/nov/2024)</strong>
-                            <span>
-                              Em 2024, a L15-Prata acumulou <strong>64,8 h de falha</strong> — quase inteiramente de paralisações para testes de CBTC (sistema de controle).
-                              Os meses de set/2024 (14,5 h) e jul/2024 (11,8 h) concentram os picos, antes da chegada do trem ao Brasil.
-                              Após a chegada do 2º e 3º trens em <strong>fev/2025</strong>, o padrão inverte completamente:
-                              jan–ago/2025 soma apenas <strong>5,5 h de falha total</strong>, enquanto a manutenção programada cresce — set/2025 (52,4 h), out/2025 (30,0 h), nov/2025 (27,5 h).
-                              A chegada da frota nova deslocou o sistema de "paralisações por testes" para "manutenção planejada de integração". Evolução esperada e positiva.
-                            </span>
-                          </div>
-                          <em style={{color:"#27ae60"}}>2024: 64,8 h falha · 2025: 22,3 h falha + 122,8 h manutenção programada — transição bem-sucedida</em>
-                        </div>
-
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🚆 L8/L9 — Conclusão dos 36 trens (06/mar/2025) + Aditivo ETCS-N2 (29/mai/2025)</strong>
-                            <span>
-                              Em 2024, L8 e L9 tinham manutenção programada combinada de <strong>776 h</strong> — a maior do sistema.
-                              A L9 em particular acumulou 65,2 h só em jan/2024 e 64,9 h em fev/2024, ritmo de obra intensíssimo.
-                              Após a conclusão das entregas em mar/2025, a manutenção programada combinada caiu para <strong>418 h (−46%)</strong>.
-                              A falha, contudo, manteve-se controlada: L8 passou de 15,1 h para 19,1 h (+27%), e L9 de 51,7 h para 25,7 h (−50%).
-                              O aditivo ETCS-N2 de mai/2025 sinaliza que nova rodada de manutenção pesada está prevista — o pico de jul/2025 na L9 (63,5 h de manutenção) já reflete o início desse ciclo.
-                            </span>
-                          </div>
-                          <em style={{color:"#27ae60"}}>Razão falha/manutenção: L8 0,04× (2024) → 0,10× (2025) · L9 0,14× → 0,11× — perfil saudável mantido</em>
-                        </div>
-
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🔧 L11-Coral — Normalização da circulação (19/mai/2025, 2 meses antes do previsto)</strong>
-                            <span>
-                              A CPTM concluiu a via emergencial na região de Suzano antes do prazo — dado operacional positivo.
-                              Os dados confirmam a narrativa: <strong>antes de 19/mai, a L11 acumulou 66,6 h de falha em apenas 10 eventos</strong> — média de 6,7 h por evento, sinal de paralisações longas ligadas às obras.
-                              <strong>Depois de 19/mai, foram 48,3 h em 20 eventos</strong> — média de 2,4 h por evento, padrão mais fragmentado e de menor severidade individual.
-                              A normalização reduziu a duração média por evento em 64%, mas o volume acumulado pós-maio ainda é relevante (48,3 h em 7 meses), indicando que a linha mantém pressão operacional mesmo após a obra.
-                            </span>
-                          </div>
-                          <em style={{color:"#f39c12"}}>Antes 19/mai: 66,6 h (10 eventos, média 6,7 h) · Depois: 48,3 h (20 eventos, média 2,4 h)</em>
-                        </div>
-
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🔄 L7-Rubi — Três fases de transição TIC Trens (28/ago e 26/nov/2025)</strong>
-                            <span>
-                              Os dados revelam um padrão contraintuitivo nas três fases:
-                              <strong> Fase 1 (jan–27ago, CPTM): 68,9 h de falha em 30 eventos</strong> — maior volume, operação antiga sob gestão original.
-                              <strong> Fase 2 (28ago–25nov, supervisionado TIC+CPTM): 12,1 h em 8 eventos</strong> — menor volume do ano, período de supervisão ativa.
-                              <strong> Fase 3 (26nov–dez, TIC pleno): 17,1 h em 12 eventos</strong> — leve alta no primeiro mês de operação integral.
-                              A redução na fase supervisionada sugere que a presença conjunta dos dois operadores criou disciplina operacional. O desafio para 2026 é manter esse padrão sem a supervisão da CPTM.
-                              A manutenção programada registrada em 2025 foi de apenas <strong>17,6 h</strong> — muito baixa para uma linha recém-assumida com pacote de 21 mil dormentes e 10 km de trilhos anunciado.
-                            </span>
-                          </div>
-                          <em style={{color:"#e67e22"}}>Fase supervisionada foi a melhor do ano — risco: regressão após autonomia plena em 2026</em>
-                        </div>
-
-                      </div>
-                    </section>
-
-                    {/* BLOCO CENTRAL: SEPARAÇÃO FALHA vs MANUTENÇÃO */}
-                    <section className="analise-ia-card">
-                      <span className="analise-ia-section-tag">Premissa da análise — Por que separar?</span>
-                      <h3>Disponibilidade declarada ≠ confiabilidade real</h3>
-                      <p>
-                        A disponibilidade declarada de <strong>99,106% em 2025</strong> inclui tanto o tempo em falha quanto o tempo em manutenção programada no denominador, mas computa apenas o tempo disponível no numerador. Isso significa que uma linha com muita manutenção planejada e poucas falhas parece idêntica a uma linha com pouca manutenção e muitas falhas — o que é uma distorção analítica grave para fins regulatórios.
-                      </p>
-                      <p>
-                        A <strong>confiabilidade real</strong> — medida apenas pelo tempo em falha imprevista sobre o tempo total — conta uma história diferente:
+                        Comparar ano fechado com ano fechado esconde uma virada dentro do próprio 2025. Isolando os primeiros semestres — a única janela em que já existem três anos
+                        comparáveis (2024, 2025 e 2026) — fica visível que o 1º semestre de 2025 foi o ponto mais grave da série, e que o 1º semestre de 2026 recuou de forma
+                        expressiva, ainda que sem voltar ao patamar de 2024.
                       </p>
                       <div className="analise-ia-comparativo">
                         <div>
-                          <span>Falha operacional (imprevistos) 2024</span>
-                          <strong>430,3 h · 0,2319% do tempo</strong>
-                          <small>Confiabilidade real: 99,768%</small>
+                          <span>Falha imprevisível — 1º semestre</span>
+                          <strong>2024: 280,1 h · 2025: 774,4 h · 2026: 425,0 h</strong>
+                          <small>2025 vs. 2024: +176,5% · 2026 vs. 2025: −45,1% · 2026 vs. 2024: +51,7%</small>
                         </div>
                         <div>
-                          <span>Falha operacional (imprevistos) 2025</span>
-                          <strong>723,9 h · 0,3912% do tempo</strong>
-                          <small>Confiabilidade real: 99,609%</small>
+                          <span>Manutenção programada — 1º semestre</span>
+                          <strong>2024: 1.917,6 h · 2025: 508,5 h · 2026: 1.304,8 h</strong>
+                          <small>2025 vs. 2024: −73,5% · 2026 vs. 2025: +156,6% · 2026 vs. 2024: −32,0%</small>
                         </div>
                         <div>
-                          <span>Variação de confiabilidade real</span>
-                          <strong style={{color:"#c0392b"}}>−0,159 p.p.</strong>
-                          <small>3,4× maior que o recuo da disponibilidade declarada (−0,047 p.p.)</small>
+                          <span>Razão falha/manutenção — 1º semestre</span>
+                          <strong style={{color:"#c0392b"}}>2024: 0,15× · 2025: 1,52× · 2026: 0,33×</strong>
+                          <small>Em 2025 o 1º semestre sozinho já havia rompido o limiar de 1,0× (mais falha do que manutenção); em 2026 a razão volta a ser a melhor dos três anos.</small>
                         </div>
                       </div>
                       <p style={{marginTop:"0.75rem"}}>
-                        A queda real de confiabilidade é <strong>3,4 vezes maior</strong> do que o recuo da disponibilidade declarada sugere. A métrica agregada suaviza o problema porque a manutenção programada <em>caiu</em> de 1.142 h para 931 h — ou seja, o sistema ficou mais confiável do ponto de vista planejado, mas <strong>piorou do ponto de vista imprevisível</strong>. Esses são movimentos opostos que se parcialmente cancelam no indicador composto.
+                        No ano fechado, o quadro fica mais ameno porque o 2º semestre de 2025 compensou parte do estrago: a razão falha/manutenção do ano inteiro foi de <strong>0,168×</strong> em 2024
+                        para <strong>0,937×</strong> em 2025 — perto do limiar de 1,0×, mas sem ultrapassá-lo no agregado anual. A disponibilidade agregada, aliás, <em>subiu</em> de
+                        <strong> 95,392%</strong> em 2024 para <strong>97,309%</strong> em 2025 (+1,917 p.p.), porque a manutenção programada caiu mais (−64,9%, de 3.659,5 h para 1.285,5 h)
+                        do que a falha subiu (+95,6%, de 615,6 h para 1.204,0 h). Isso confirma o ponto central desta análise: <strong>a disponibilidade agregada mede o resultado líquido
+                        de dois movimentos opostos</strong> — menos tempo planejado fora do ar, mais tempo imprevisto fora do ar — e sozinha não avisa qual dos dois está piorando.
                       </p>
-                      <div className="analise-ia-comparativo analise-ia-comparativo-compacto">
-                        <div><span>Manutenção programada 2024</span><strong>1.142,0 h</strong><small>0,615% do tempo</small></div>
-                        <div><span>Manutenção programada 2025</span><strong>930,5 h</strong><small>0,503% do tempo · −18,5% ↓</small></div>
-                        <div><span>Razão falha/manutenção 2024</span><strong>0,38×</strong><small>manutenção dominava</small></div>
-                        <div><span>Razão falha/manutenção 2025</span><strong>0,78×</strong><small>falha se aproxima da manutenção</small></div>
-                      </div>
                     </section>
 
-                    {/* KPIs SEPARADOS */}
-                    <section className="analise-ia-grid-resumo" aria-label="KPIs separados falha vs manutenção">
+                    {/* KPIs 1S */}
+                    <section className="analise-ia-grid-resumo" aria-label="KPIs separados falha vs manutenção, por 1º semestre">
                       <article className="analise-ia-kpi-card" style={{borderTop:"3px solid #c0392b"}}>
-                        <span>Falha imprevisível 2025</span>
-                        <strong>723,9 h</strong>
-                        <p>2024: 430,3 h · +68,2% ↑</p>
+                        <span>Falha imprevisível — 1S 2026</span>
+                        <strong>425,0 h</strong>
+                        <p>1S 2025: 774,4 h (−45,1%) · 1S 2024: 280,1 h</p>
                       </article>
                       <article className="analise-ia-kpi-card" style={{borderTop:"3px solid #f39c12"}}>
-                        <span>Manutenção programada 2025</span>
-                        <strong>930,5 h</strong>
-                        <p>2024: 1.142,0 h · −18,5% ↓</p>
+                        <span>Manutenção programada — 1S 2026</span>
+                        <strong>1.304,8 h</strong>
+                        <p>1S 2025: 508,5 h (+156,6%) · 1S 2024: 1.917,6 h</p>
                       </article>
                       <article className="analise-ia-kpi-card" style={{borderTop:"3px solid #1e3a5f"}}>
-                        <span>Confiabilidade real 2025</span>
-                        <strong>99,609%</strong>
-                        <p>2024: 99,768% · −0,159 p.p.</p>
+                        <span>Disponibilidade agregada — 1S 2026</span>
+                        <strong>96,230%</strong>
+                        <p>1S 2025: 97,204% · 1S 2024: 95,237%</p>
                       </article>
                       <article className="analise-ia-kpi-card" style={{borderTop:"3px solid #27ae60"}}>
-                        <span>Razão falha/manutenção 2025</span>
-                        <strong>0,78×</strong>
-                        <p>2024: 0,38× — falha dobrou proporcionalmente</p>
+                        <span>Razão falha/manutenção — 1S 2026</span>
+                        <strong>0,33×</strong>
+                        <p>1S 2025: 1,52× (pico da série) · 1S 2024: 0,15×</p>
                       </article>
                     </section>
 
                     {/* SEÇÃO 1 */}
                     <section className="analise-ia-card analise-ia-sintese">
                       <span className="analise-ia-section-tag">1. O que aconteceu?</span>
-                      <h3>Manutenção caiu, mas falha imprevisível quase dobrou — perfis opostos por operador</h3>
+                      <h3>A rede recuperou o equilíbrio médio, mas trocou de vilão: de "CPTM/L11" para "TIC Trens/L7-Rubi"</h3>
                       <p>
-                        Em 2025, o sistema reduziu manutenção programada em 211,5 h (−18,5%) e ao mesmo tempo acumulou 293,6 h a mais de falha imprevisível (+68,2%). São movimentos na direção oposta: o esforço planejado diminuiu, mas o imprevisível cresceu com força. Para fins de fiscalização, o dado relevante é o segundo.
+                        A leitura de conjunto do 1º semestre de 2026 é, no agregado, uma recuperação real: a falha imprevisível caiu 45,1% frente ao mesmo período de 2025 e a manutenção
+                        programada mais que dobrou (+156,6%), levando a razão falha/manutenção de volta a um patamar saudável (0,33×, melhor que os 0,15× de 2024 e muito abaixo do
+                        1,52× de 2025). Isso é evidência de que boa parte da crise de 2025 foi mesmo concentrada e reversível — não uma degradação estrutural permanente da rede como um todo.
                       </p>
                       <p>
-                        A <strong>razão falha/manutenção</strong> é o indicador mais revelador: em 2024 era 0,38× (manutenção dominava amplamente). Em 2025 chegou a 0,78× — a falha imprevisível representa agora quase o dobro de sua proporção anterior em relação ao tempo planejado. Quando essa razão ultrapassa 1,0×, o sistema passa a ter mais horas de interrupção não planejada do que planejada — um limiar de alerta operacional.
+                        Só que a recuperação não é uniforme. Enquanto a <LineBadge nome="Linha 11-Coral" /> — a maior responsável pela piora de 2025 — praticamente normalizou, a
+                        <LineBadge nome="Linha 7-Rubi" /> (TIC Trens) fez o caminho inverso: acumulou <strong>172,2 h de falha em apenas 6 meses</strong>, mais do que os
+                        <strong> 165,0 h de todo o ano de 2025</strong> e mais de cinco vezes as <strong>32,7 h</strong> de 2024. O risco que a análise anterior já havia sinalizado
+                        para a TIC Trens — "regressão após autonomia plena" — se materializou, só que em outra linha se tornou o novo problema mais visível do sistema.
+                      </p>
+                    </section>
+
+                    {/* RECUPERAÇÃO L11 vs DETERIORAÇÃO L7 */}
+                    <section className="analise-ia-duas-colunas">
+                      <article className="analise-ia-card">
+                        <span className="analise-ia-section-tag" style={{background:"#166534",color:"#fff"}}>A recuperação — Linha 11-Coral</span>
+                        <h4>De 560 h de falha em 2025 para 17,1 h em 6 meses de 2026</h4>
+                        <p>
+                          O recálculo mostra que a crise de 2025 na L11-Coral foi maior do que o descrito anteriormente: <strong>560,0 h de falha no ano</strong>, quase toda ela
+                          concentrada em quatro meses — abril (326,3 h, o maior desvio estatístico de toda a série, 8,9 desvios-padrão acima da média), maio (117,0 h),
+                          novembro (47,9 h) e dezembro (62,0 h). Juntos, esses quatro meses somam <strong>98,8% de toda a falha da linha no ano</strong>.
+                        </p>
+                        <p>
+                          Em 2026, a manutenção programada da linha saltou para <strong>190,4 h</strong> em seis meses (ante 56,7 h em todo 2025) e a falha caiu para <strong>17,1 h</strong>
+                          — razão falha/manutenção de <strong>0,09×</strong>, uma das melhores do sistema. É o exemplo mais claro da série de que manutenção formalizada, quando
+                          de fato executada, reduz falha imprevisível de forma mensurável.
+                        </p>
+                      </article>
+                      <article className="analise-ia-card">
+                        <span className="analise-ia-section-tag" style={{background:"#c0392b",color:"#fff"}}>A deterioração — Linha 7-Rubi</span>
+                        <h4>172,2 h de falha em 6 meses, com quatro dos seis meses fora do padrão estatístico</h4>
+                        <p>
+                          Diferente da L11 em 2025, o problema da L7-Rubi em 2026 não é um evento único: é <strong>recorrente</strong>. Fevereiro (65,2 h, 5,8 desvios-padrão acima
+                          da média da rede), maio (39,7 h, 3,3σ), março (31,7 h, 2,5σ) e janeiro (23,1 h, 1,7σ) aparecem todos como desvios estatísticos — quatro de seis meses
+                          analisados. Em 2025, por comparação, a linha já havia saltado de 32,7 h (2024) para 165,0 h.
+                        </p>
+                        <p>
+                          A manutenção programada da linha também cresceu (144,8 h em 6 meses, ante 7,8 h em todo 2025), o que derruba a razão falha/manutenção de 21,15× para
+                          <strong> 1,19×</strong> — melhora relativa real, mas ainda acima do limiar de 1,0×, e com volume absoluto de falha que já superou o ano inteiro anterior.
+                          O pacote de modernização anunciado (dormentes e trilhos) parece estar sendo executado — mas a falha ainda cresce mais rápido do que a manutenção consegue conter.
+                        </p>
+                      </article>
+                    </section>
+
+                    <section className="analise-ia-card">
+                      <span className="analise-ia-section-tag">O que está por trás da falha na L7-Rubi em 2026</span>
+                      <h3>Chuva, obra registrada como falha e furto de cabos — não uma causa única</h3>
+                      <p>
+                        Olhando as descrições dos 48 eventos de falha da L7-Rubi no 1º semestre de 2026, três padrões se repetem: <strong>chuva e alagamento</strong> provocando
+                        falha de sinalização ou redução de velocidade (ex.: 09/fev e 14/fev, 19,5 h cada, ambos atribuídos a fortes chuvas do fim de semana); <strong>obras e
+                        intervenções de modernização registradas como falha</strong> em vez de manutenção programada (29/mar e 10/mai, 19,5 h cada, via única entre Perus e
+                        Caieiras "devido a manutenção" e "para intervenções de infraestrutura para a modernização da linha" — ambas contabilizadas como ocorrência operacional,
+                        não como manutenção); e <strong>interferência externa</strong>, incluindo furto de cabos causando falha de sinalização (05/mai, 10,8 h) e um incêndio
+                        próximo à via (23/jun, 8,8 h).
+                      </p>
+                      <p className="analise-ia-observacao">
+                        O segundo padrão é o mais relevante para o regulador: se intervenções de modernização estão sendo lançadas como "ocorrência operacional" em vez de
+                        "manutenção programada", parte da falha reportada da L7-Rubi em 2026 é, na prática, obra planejada mal classificada — o que infla artificialmente o
+                        indicador de falha da linha e, ao mesmo tempo, esconde o volume real de manutenção em execução.
                       </p>
                     </section>
 
                     {/* SEGMENTAÇÃO POR OPERADOR */}
                     <section className="analise-ia-card">
-                      <span className="analise-ia-section-tag">Segmentação 1 — Por operador: perfis completamente distintos</span>
-                      <h3>Cada operador tem uma combinação diferente de risco</h3>
+                      <span className="analise-ia-section-tag">Segmentação por operador — evolução 2024 → 2025 → 1S 2026</span>
+                      <h3>Cada operador troca de posição no ranking de risco de um período para o outro</h3>
                       <div className="analise-ia-causas">
                         <div className="analise-ia-causa-item">
                           <div>
-                            <strong>ViaMobilidade 8 e 9 — perfil "manutenção pesada, falha controlada"</strong>
-                            <span>Falha: 44,8 h (0,315%) · Manutenção: 418,2 h (2,938%) · Razão: 0,11×</span>
+                            <strong>CPTM (L10, L11, L12, L13) — de pior para melhor recuperação</strong>
+                            <span>Razão falha/manutenção: 0,15× (2024) → 4,76× (2025) → 0,22× (1S 2026). Falha: 128,2 h → 868,4 h → 94,4 h. Manutenção: 835,4 h → 182,6 h → 420,5 h.</span>
                           </div>
-                          <em style={{color:"#27ae60"}}>Confiabilidade real: 99,685%</em>
+                          <em style={{color:"#27ae60"}}>A recuperação da L11-Coral puxa quase sozinha essa reversão — mas as demais linhas CPTM também melhoraram em conjunto.</em>
                         </div>
                         <div className="analise-ia-causa-item">
                           <div>
-                            <strong>ViaMobilidade 5 (L5-Lilás) — perfil "equilibrado"</strong>
-                            <span>Falha: 24,3 h (0,341%) · Manutenção: 21,9 h (0,307%) · Razão: 1,11×</span>
+                            <strong>TIC Trens (L7-Rubi) — nova linha de maior risco absoluto</strong>
+                            <span>Razão: sem manutenção registrada em 2024 → 21,15× em 2025 (14,0 h de falha sob operação parcial) → 1,19× em 1S 2026 (172,2 h de falha, 144,8 h de manutenção).</span>
                           </div>
-                          <em style={{color:"#f39c12"}}>Confiabilidade real: 99,659% — razão próxima de 1, atenção crescente</em>
+                          <em style={{color:"#c0392b"}}>A razão melhora, mas o volume absoluto de falha em 6 meses já supera o de qualquer operador em qualquer ano completo da série.</em>
                         </div>
                         <div className="analise-ia-causa-item">
                           <div>
-                            <strong>Metrô SP (4 linhas) — perfil "manutenção moderada, falha relevante"</strong>
-                            <span>Falha: 177,7 h (0,624%) · Manutenção: 308,5 h (1,084%) · Razão: 0,58×</span>
+                            <strong>ViaMobilidade 8 e 9 (L8, L9) — único perfil estável nos três períodos</strong>
+                            <span>Razão: 0,10× (2024) → 0,05× (2025) → 0,05× (1S 2026). Falha: 283,0 h → 44,8 h → 33,6 h. Manutenção: 2.705,7 h → 818,3 h → 739,5 h.</span>
                           </div>
-                          <em style={{color:"#f39c12"}}>Confiabilidade real: 99,376% — maior volume absoluto de falha</em>
+                          <em style={{color:"#27ae60"}}>Continua sendo o padrão de referência do sistema: manutenção alta e sustentada, falha baixa e decrescente.</em>
                         </div>
                         <div className="analise-ia-causa-item">
                           <div>
-                            <strong>CPTM (4 linhas) — perfil "falha supera manutenção"</strong>
-                            <span>Falha: 271,6 h (0,954%) · Manutenção: 164,3 h (0,577%) · Razão: 1,65×</span>
+                            <strong>Metrô de São Paulo (L1, L2, L3, L15) — falha em queda, mas manutenção zerada em 2026</strong>
+                            <span>Razão: 1,42× (2024) → 0,59× (2025) → sem manutenção registrada em 1S 2026. Falha: 148,8 h → 155,4 h → 84,3 h. Manutenção: 104,7 h → 262,7 h → 0,0 h.</span>
                           </div>
-                          <em style={{color:"#c0392b"}}>Confiabilidade real: 99,046% — razão acima de 1: mais falha do que manutenção planejada</em>
+                          <em style={{color:"#f39c12"}}>A queda de falha é positiva, mas a ausência total de manutenção programada registrada em seis meses é um ponto novo a acompanhar — pode ser real (menos obras no período) ou lacuna de registro.</em>
                         </div>
                         <div className="analise-ia-causa-item">
                           <div>
-                            <strong>TIC Trens (L7-Rubi) — perfil "falha domina, manutenção quase ausente"</strong>
-                            <span>Falha: 98,1 h (1,378%) · Manutenção: 17,6 h (0,248%) · Razão: 5,56×</span>
+                            <strong>ViaQuatro (L4-Amarela) — melhora de volume, anomalia de registro inalterada</strong>
+                            <span>Falha: 28,7 h (2024) → 97,1 h (2025, quase toda em setembro) → 9,3 h (1S 2026). Manutenção: 0,0 h nos três períodos.</span>
                           </div>
-                          <em style={{color:"#c0392b"}}>Confiabilidade real: 98,622% — transição operacional visível nos dados</em>
-                        </div>
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>ViaQuatro (L4-Amarela) — perfil "falha total, manutenção zero registrada"</strong>
-                            <span>Falha: 107,5 h (1,510%) · Manutenção: 0,0 h (0,000%) · Razão: ∞</span>
-                          </div>
-                          <em style={{color:"#c0392b"}}>Confiabilidade real: 98,490% — anomalia estrutural: 107,5 h de falha sem uma única hora de manutenção registrada</em>
+                          <em style={{color:"#f39c12"}}>Segue sendo o único operador com zero hora de manutenção programada registrada em três anos consecutivos — independentemente do volume de falha.</em>
                         </div>
                       </div>
                     </section>
 
-                    {/* SEGMENTAÇÃO POR LINHA */}
-                    <section className="analise-ia-duas-colunas">
-                      <div className="analise-ia-card">
-                        <span className="analise-ia-section-tag">Segmentação 2 — Linhas com maior falha imprevisível 2025</span>
-                        <h4>Ranking por confiabilidade real (excluindo manutenção programada)</h4>
-                        <ul className="analise-ia-lista">
-                          <li><strong>L7-Rubi: 98,1 h falha · razão 5,56×</strong> — Transição TIC Trens. Falha predomina com larga margem sobre manutenção. Curva de aprendizado operacional esperada, mas razão 5,56× é o segundo maior do sistema.</li>
-                          <li><strong>L4-Amarela: 107,5 h falha · razão ∞</strong> — Maior razão do sistema por definição. Zero manutenção registrada + 107,5 h de falha = estrutura de reporte incompatível com a operação real. Via única em set/2025 (96,3 h) sem registro de obra.</li>
-                          <li><strong>L11-Coral: 114,9 h falha · razão 1,38×</strong> — Falha supera manutenção. 2024 tinha razão 14,14× (quase só falha, zero manutenção). Em 2025 a manutenção cresceu (obras formalizadas), mas a falha cresceu mais ainda.</li>
-                          <li><strong>L13-Jade: 68,1 h falha · razão 3,32×</strong> — Falha domina. 27,6 h de energia (cascata L11) + 19 h em nov por problema na L11. Alta dependência de outra linha.</li>
-                          <li><strong>L12-Safira: 36,2 h falha · razão 13,16×</strong> — Razão mais alta do sistema. Obras encerraram em 2024 (239,6 h de manutenção), restando apenas 2,8 h em 2025. O que sobrou é quase só falha imprevisível.</li>
-                        </ul>
-                      </div>
-                      <div className="analise-ia-card">
-                        <span className="analise-ia-section-tag">Segmentação 3 — Linhas com melhor separação planejado/imprevisível</span>
-                        <h4>Perfis de referência positiva</h4>
-                        <ul className="analise-ia-lista">
-                          <li><strong>L8-Diamante: 19,1 h falha · razão 0,10×</strong> — Melhor razão do sistema. 194,6 h de manutenção programada para apenas 19,1 h de falha. Programa de modernização ativo e controlado.</li>
-                          <li><strong>L9-Esmeralda: 25,7 h falha · razão 0,11×</strong> — Segunda melhor razão. 223,6 h de manutenção + apenas 25,7 h de falha. Em 2024, com 382,1 h de manutenção, havia 51,7 h de falha (razão 0,14×): melhorou em ambas as dimensões.</li>
-                          <li><strong>L2-Verde: 37,9 h falha · razão 0,33×</strong> — 115,3 h de manutenção (obras de via), falha baixa. Padrão saudável de intervenção planejada com baixo vazamento para falha imprevisível.</li>
-                          <li><strong>L15-Prata: 22,3 h falha · razão 0,18×</strong> — 122,8 h de manutenção (testes de novos trens), falha pequena. Melhora expressiva ante 2024 (64,8 h de falha, incluindo 51,8 h de falha total — todas ligadas a testes de CBTC).</li>
-                        </ul>
-                        <div className="analise-ia-callout" style={{marginTop:"1rem",borderLeft:"4px solid #27ae60",background:"#f0fdf4"}}>
-                          <strong>Padrão de referência:</strong> L8 e L9 mostram que alta manutenção programada com baixa falha imprevisível é o perfil correto em programas de modernização. A manutenção deve preceder a falha — não substituí-la.
-                        </div>
-                      </div>
-                    </section>
-
-                    {/* SEÇÃO 2 */}
-                    <section className="analise-ia-duas-colunas">
-                      <div className="analise-ia-card">
-                        <span className="analise-ia-section-tag">2. Por que isso aconteceu?</span>
-                        <h4>Causas da piora de confiabilidade real</h4>
-                        <ul className="analise-ia-lista">
-                          <li><strong>Transição TIC Trens (L7):</strong> Assunção plena em nov/2025. Operador novo em infraestrutura antiga. 98,1 h de falha com apenas 17,6 h de manutenção registrada indica que o operador ainda não formalizou programa de manutenção preventiva. Sem manutenção que precede a falha, a razão falha/manutenção inevitavelmente sobe.</li>
-                          <li><strong>ViaQuatro sem manutenção registrada:</strong> 107,5 h de falha em 2025, zero em manutenção — igual a 2024. Isso não é coincidência: é padrão de reporte. Ou a manutenção ocorre fora da janela operacional monitorada, ou não é registrada como tal. Em ambos os casos, o regulador não tem visibilidade sobre o estado preventivo da linha.</li>
-                          <li><strong>CPTM com razão 1,65×:</strong> Das 4 linhas CPTM, L11-Coral (razão 1,38×), L13-Jade (3,32×) e L12-Safira (13,16×) puxam a razão para cima. As obras formalizadas em L11 e L12 em 2024 revelaram infraestrutura que, ao saírem da manutenção intensiva, passou a falhar mais.</li>
-                          <li><strong>Falhas de energia crescem 83%:</strong> 30 → 55 eventos. Concentradas em linhas CPTM antigas (L10, L11, L12). Infraestrutura elétrica com sinais de desgaste — manutenção corretiva reativa, não preventiva.</li>
-                        </ul>
-                      </div>
-                      <div className="analise-ia-card">
-                        <span className="analise-ia-section-tag">Anomalias que a separação torna visíveis</span>
-                        <h4>O que só aparece quando se separa os dados</h4>
-                        <ul className="analise-ia-lista">
-                          <li><strong>L4-Amarela / ViaQuatro — razão infinita:</strong> Sem a separação, a disponibilidade de 98,49% parece razoável. Com a separação, fica claro que 100% do tempo afetado é falha imprevisível. Um operador com programa real de manutenção preventiva deveria ter pelo menos alguma hora de manutenção registrada. A ausência é o sinal, não a falha em si.</li>
-                          <li><strong>L12-Safira — razão 13,16×:</strong> Em 2024 havia 239,6 h de manutenção (obras intensas). Em 2025, apenas 2,8 h. O fim das obras deveria ter estabilizado a linha — mas resultou em 36,2 h de falha imprevisível, uma razão muito alta para uma linha recém-reformada. Sugere que as obras não endereçaram todas as causas raiz ou que novos problemas surgiram após a reforma.</li>
-                          <li><strong>L11-Coral — inversão de 2024 para 2025:</strong> Em 2024, razão 14,14× (praticamente zero manutenção, só falha). Em 2025, razão 1,38× (manutenção cresceu para 83,1 h, mas falha cresceu ainda mais para 114,9 h). O aumento de manutenção formalizada é positivo, mas não foi suficiente para conter o crescimento da falha imprevisível.</li>
-                          <li><strong>Cascata 20/abr — 69 h de falha pura:</strong> O evento multilinha de 20/abr não gerou nenhuma hora de manutenção programada — é 100% falha imprevisível distribuída em 4 linhas (L7, L10, L11, L13). Sem marcação de evento de alta severidade, esse volume some no agregado anual.</li>
-                        </ul>
-                      </div>
-                    </section>
-
-                    {/* SEÇÃO 3 */}
+                    {/* OUTLIERS */}
                     <section className="analise-ia-card">
-                      <span className="analise-ia-section-tag">3. O que pode acontecer?</span>
-                      <h4>Tendências prospectivas com foco em confiabilidade real</h4>
-                      <div className="analise-ia-duas-colunas" style={{margin:0,gap:"1rem"}}>
-                        <div>
-                          <ul className="analise-ia-lista">
-                            <li><strong>Razão falha/manutenção continuará subindo em linhas sem programa preventivo:</strong> TIC Trens (L7) e ViaQuatro (L4) não têm histórico de manutenção programada registrada. Sem intervenção formal no dado, a razão tende a crescer — e a confiabilidade real, a cair.</li>
-                            <li><strong>L8/L9 podem manter boa razão enquanto o ETCS-N2 estiver em implantação:</strong> A alta manutenção programada prevista para 2026 (aditivo contratual mai/2025) manterá a razão baixa — desde que a falha imprevisível não cresça junto. Se crescer, é sinal de problema na implantação.</li>
-                            <li><strong>L12-Safira é candidata a deterioração:</strong> Razão 13,16× após reforma intensa. Se a manutenção não for retomada em patamar moderado, a tendência é de falhas crescentes em infraestrutura recém-reformada mas sem acompanhamento preventivo.</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <ul className="analise-ia-lista">
-                            <li><strong>Nó Brás–Luz permanece como risco de falha sistêmica:</strong> O evento de 20/abr gerou ~69 h de falha pura em 4 linhas. Não há manutenção planejada que previna isso — é risco de infraestrutura compartilhada. A única mitigação real é redundância de rota e protocolo de resposta rápida.</li>
-                            <li><strong>Sazonalidade de chuvas em linhas de superfície:</strong> L1-Azul (46 eventos de chuva, 45,0 h) e L7-Rubi (17 eventos, 33,6 h) têm alta exposição. Manutenção de drenagem e proteção de via externa é o tipo de intervenção que, se feita preventivamente, reduz falha imprevisível em período chuvoso.</li>
-                            <li><strong>Se a razão falha/manutenção do sistema ultrapassar 1,0× em 2026:</strong> Seria o primeiro ano em que o sistema como um todo teria mais horas imprevisíveis do que planejadas. Em 2025 estava em 0,78×. Para o regulador, esse limiar deve ser monitorado explicitamente.</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </section>
-
-                    {/* SEÇÃO 4 */}
-                    <section className="analise-ia-card">
-                      <span className="analise-ia-section-tag">4. O que fazer?</span>
-                      <h4>Recomendações baseadas na separação falha / manutenção</h4>
-                      <div className="analise-ia-duas-colunas" style={{margin:0,gap:"1rem"}}>
-                        <div>
-                          <p><strong>Para o regulador (ARTESP):</strong></p>
-                          <ul className="analise-ia-lista">
-                            <li><strong>Adotar razão falha/manutenção como KPI regulatório:</strong> A disponibilidade declarada não distingue os dois. A razão falha/manutenção é simples de calcular, direta no significado e difícil de inflar artificialmente. Valor acima de 1,0× deve disparar revisão obrigatória do plano de manutenção preventiva do operador.</li>
-                            <li><strong>Exigir publicação do PMME com horas planejadas por linha/trimestre:</strong> Se o operador declara um plano de manutenção, as horas executadas devem aparecer nos registros. ViaQuatro com zero hora em dois anos consecutivos e TIC Trens com 17,6 h no primeiro ano são dados que precisam de explicação formal, não tolerância silenciosa.</li>
-                            <li><strong>Criar categoria "falha pós-obra":</strong> Quando uma linha sai de período intenso de manutenção (como L12-Safira em 2024→2025), os primeiros 12 meses deveriam ter monitoramento reforçado. A razão 13,16× da L12 em 2025 deveria ter gerado alerta automático.</li>
-                            <li><strong>Separar no painel oficial os dois indicadores:</strong> Disponibilidade por manutenção programada e disponibilidade por falha imprevisível são métricas com significados e responsabilidades diferentes. Publicá-las juntas como "disponibilidade" cria ambiguidade regulatória.</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <p><strong>Para os operadores:</strong></p>
-                          <ul className="analise-ia-lista">
-                            <li><strong>ViaQuatro — registrar toda intervenção como manutenção:</strong> Qualquer atividade que afete a capacidade operacional deve aparecer nos registros — programada ou corretiva. A via única de 5 dias em set/2025 sem nenhum registro de manutenção é o exemplo mais claro: seja uma obra emergencial, seja uma falha de via, ambos exigem classificação explícita.</li>
-                            <li><strong>TIC Trens — construir programa de manutenção preventiva visível:</strong> A razão 5,56× no primeiro ano de operação é esperada em transições. O risco é ela se tornar estrutural. O pacote anunciado (21 mil dormentes, 10 km de trilhos) precisa aparecer como manutenção programada nos registros de 2026, não só como falhas evitadas.</li>
-                            <li><strong>CPTM — priorizar manutenção preventiva em L11 e L13:</strong> Ambas têm razão falha/manutenção acima de 1,0×. O histórico de energia (L11: 33,7 h de falha elétrica; L13: 27,6 h por cascata de L11) indica infraestrutura elétrica que precisa de manutenção preventiva, não só corretiva.</li>
-                            <li><strong>Todos — comunicar ao regulador quando manutenção programada for adiada:</strong> Manutenção postergada vira falha futura. Se um operador cancela ou adia intervenção planejada, o regulador precisa saber — não para punir, mas para antecipar o risco de falha imprevisível correspondente.</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </section>
-
-                    <section className="analise-ia-card">
-                      <span className="analise-ia-section-tag" style={{background:"#7b2d00",color:"#fff"}}>Eventos Atípicos — Análise Estatística (Z-score)</span>
-                      <h3>3 outliers em 2025 respondem por 28,5% de todo o volume anual de falha</h3>
+                      <span className="analise-ia-section-tag" style={{background:"#7b2d00",color:"#fff"}}>Eventos atípicos — Análise estatística (Z-score), recalculada</span>
+                      <h3>2025 teve um evento catastrófico isolado; 2026 tem um problema crônico em uma linha</h3>
                       <p>
-                        Aplicando análise de Z-score sobre as horas de falha por linha/mês (média = 6,52 h, σ = 12,73 h),
-                        emergem <strong>3 eventos estatisticamente atípicos em 2025</strong> — todos acima de 3σ.
-                        Juntos, somam <strong>206,2 h = 28,5% do total anual de 723,9 h</strong>.
-                        Sem esses 3 outliers, o crescimento de falhas de 2025 sobre 2024 seria de +20,3% — significativo, mas muito diferente do +68,2% que o número bruto mostra.
-                        Isso tem implicação direta na interpretação regulatória: <strong>parte relevante da piora anual vem de episódios pontuais, não de degradação sistêmica uniforme</strong>.
+                        Aplicando a mesma análise de desvio-padrão sobre horas de falha por linha/mês: em <strong>2025</strong> (média 10,9 h, desvio 35,6 h, 110 combinações
+                        linha/mês), o maior outlier da série inteira é <strong>Linha 11-Coral em abril/2025, com 326,3 h — 8,9 desvios-padrão acima da média e sozinho
+                        responsável por 27,1% de toda a falha da rede no ano</strong>. Nenhum outro mês de nenhuma linha, em nenhum dos três períodos analisados, chega perto
+                        desse valor.
                       </p>
-
                       <div className="analise-ia-causas">
                         <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🔴 Outlier 1 — L4-Amarela · setembro/2025 · 7,1σ · 96,3 h</strong>
-                            <span>
-                              Via única entre Vila Sônia e São Paulo-Morumbi por 5 dias consecutivos (10–14/set).
-                              Cada dia operou praticamente a jornada inteira em capacidade reduzida (~19,3 h/dia).
-                              <strong> Causa não declarada nos registros</strong> — apenas "opera em via única", sem obra, sem falha de equipamento identificada, sem manutenção programada registrada.
-                              Representa 13,3% de toda a falha operacional da rede em 2025, gerada por uma única linha em 5 dias.
-                            </span>
-                          </div>
-                          <em style={{color:"#c0392b"}}>13,3% do total anual · ViaQuatro · causa não documentada</em>
+                          <div><strong>🔴 L11-Coral · abril/2025 · 8,9σ · 326,3 h</strong></div>
+                          <em style={{color:"#c0392b"}}>27,1% do total anual da rede em um único mês de uma única linha</em>
                         </div>
-
                         <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🔴 Outlier 2 — L11-Coral · abril/2025 · 4,5σ · 63,4 h</strong>
-                            <span>
-                              Mês dominado por três causas independentes acumuladas:
-                              (1) <strong>20/abr: interrupção Brás–Luz</strong> — 17,98 h de falha cascata com L7, L10, L13;
-                              (2) <strong>07/abr e 04/abr: fortes chuvas</strong> — 14,98 h + 6,83 h + 3,98 h = 25,8 h acumuladas;
-                              (3) <strong>11/abr: manutenção de ponte ferroviária</strong> — 13,22 h (registrada como falha parcial, não como manutenção programada).
-                              A L11-Coral em abril é um caso de convergência de múltiplas causas distintas no mesmo período — não um evento único.
-                            </span>
-                          </div>
-                          <em style={{color:"#c0392b"}}>8,8% do total anual · CPTM · 3 causas distintas convergentes</em>
+                          <div><strong>🔴 L11-Coral · maio/2025 · 3,0σ · 117,0 h</strong></div>
+                          <em style={{color:"#c0392b"}}>Continuação do mesmo episódio — abril e maio somam 443,3 h, 79% da falha anual da linha</em>
                         </div>
-
                         <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🟡 Outlier 3 — L1-Azul · janeiro/2025 · 3,1σ · 46,5 h</strong>
-                            <span>
-                              Inteiramente causado por <strong>alagamento de 24–26/jan</strong> na região Tucuruví–Jardim São Paulo/Ayrton Senna.
-                              46 eventos registrados em apenas 3 dias, com o trecho operando em velocidade reduzida ou interrompido de forma intermitente.
-                              Os registros descrevem explicitamente "avarias causadas pela chuva" persistindo por dois dias após o evento climático — indicando dano de infraestrutura residual, não apenas interrupção durante a chuva.
-                              Contexto: CEMADEN registrou acumulado crítico na zona norte de SP em 24/jan/2025.
-                            </span>
-                          </div>
-                          <em style={{color:"#e67e22"}}>6,4% do total anual · Metrô SP · dano residual de infraestrutura por chuva</em>
+                          <div><strong>🟠 L7-Rubi · fevereiro/2025 · 2,5σ · 99,7 h</strong></div>
+                          <em style={{color:"#e67e22"}}>Primeiro sinal do que se tornaria o padrão recorrente de 2026</em>
+                        </div>
+                        <div className="analise-ia-causa-item">
+                          <div><strong>🟠 L4-Amarela · setembro/2025 · 2,4σ · 96,3 h</strong></div>
+                          <em style={{color:"#e67e22"}}>Praticamente toda a falha anual da linha (97,1 h) concentrada em um mês</em>
                         </div>
                       </div>
-
-                      <h4 style={{marginTop:"1.25rem"}}>Comparação com outliers de 2024 — causas radicalmente diferentes</h4>
-                      <p>Em 2024 também havia 3 outliers acima de 2σ (média = 4,30 h, σ = 5,55 h, limiar = 15,40 h). A natureza de cada um revela muito sobre o tipo de problema:</p>
-                      <div className="analise-ia-causas">
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🔴 L2-Verde · agosto/2024 · 6,5σ · 40,3 h</strong>
-                            <span>36,9 h (92%) são "Dados/Status Indisponíveis" em dois dias separados (25/ago: 19,3 h e 11/ago: 17,6 h). <strong>Não é falha operacional — é falha de telemetria/reporte.</strong> O sistema de monitoramento não estava reportando o estado da linha. Esse outlier inflou o dado de 2024 com um problema de coleta, não de operação.</span>
-                          </div>
-                          <em style={{color:"#7f8c8d"}}>Causa: falha de sistema de dados, não falha de operação</em>
-                        </div>
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🔴 L4-Amarela · setembro/2024 · 3,2σ · 22,2 h</strong>
-                            <span>Fechamento de estações Higienópolis-Mackenzie, República e Luz por <strong>obras da Linha 6-Laranja</strong> — causa externa à operação da L4. A linha foi afetada por intervenção de outro empreendimento, não por falha própria.</span>
-                          </div>
-                          <em style={{color:"#7f8c8d"}}>Causa: obra externa (L6-Laranja), não falha interna da L4</em>
-                        </div>
-                        <div className="analise-ia-causa-item">
-                          <div>
-                            <strong>🔴 L11-Coral · dezembro/2024 · 3,1σ · 21,6 h</strong>
-                            <span><strong>Avaria de trem de carga em 18/dez</strong> — 19,07 h acumuladas. Intrusão de material ferroviário de carga na malha de passageiros. Causa externa à operação de passageiros, fora do controle direto da CPTM/concessionária.</span>
-                          </div>
-                          <em style={{color:"#7f8c8d"}}>Causa: trem de carga externo — interferência na malha compartilhada</em>
-                        </div>
-                      </div>
-
-                      <div className="analise-ia-callout" style={{marginTop:"1rem",borderLeft:"4px solid #7b2d00",background:"#fff7f0"}}>
-                        <strong>Conclusão sobre outliers:</strong> Os outliers de 2024 têm causas predominantemente externas ou de coleta (telemetria, obra de outra linha, trem de carga). Os de 2025 têm causas operacionais internas — via única sem documentação, infraestrutura danificada por chuva, convergência de falhas em abril. Isso muda o diagnóstico: em 2024 os picos eram ruído externo; em 2025 são sinais de vulnerabilidade operacional real. Remover os outliers de 2025 ainda deixa um crescimento de +20,3% na base regular — que também exige explicação.
-                      </div>
+                      <p style={{marginTop:"1rem"}}>
+                        Em <strong>2026 (1º semestre)</strong> (média 6,3 h, desvio 10,1 h, 67 combinações linha/mês), não há nenhum mês isolado comparável ao de abril/2025 — mas
+                        há uma concentração diferente e potencialmente mais preocupante: <strong>quatro dos seis meses analisados aparecem como desvio estatístico, e todos
+                        pertencem à mesma linha, a L7-Rubi</strong> (fevereiro 65,2 h/5,8σ, maio 39,7 h/3,3σ, março 31,7 h/2,5σ, janeiro 23,1 h/1,7σ). Um evento único e catastrófico,
+                        como o de 2025, tende a ser mais fácil de isolar, investigar e corrigir. Um padrão que se repete mês após mês na mesma linha é o sinal mais forte de
+                        problema estrutural ainda não resolvido.
+                      </p>
                     </section>
 
+                    {/* CAUSAS */}
+                    <section className="analise-ia-card">
+                      <span className="analise-ia-section-tag">Causas da falha — evolução por família, recalculada</span>
+                      <h3>Sinalização e energia ganham peso relativo em 2026; "obra registrada como falha" praticamente desaparece</h3>
+                      <p>
+                        Reclassificando as descrições de todos os eventos de falha pelo mesmo esquema de causas usado na aba técnica, três movimentos se destacam entre 2024,
+                        2025 e o 1º semestre de 2026:
+                      </p>
+                      <div className="analise-ia-mini-ranking">
+                        <div className="analise-ia-mini-ranking-item">
+                          <strong>Sinalização, controle e via</strong>
+                          <span>2024: 13,8% · 2025: 13,8% · 1S 2026: 25,2% — quase dobra de peso relativo, puxada pela L7-Rubi</span>
+                        </div>
+                        <div className="analise-ia-mini-ranking-item">
+                          <strong>Energia e rede aérea</strong>
+                          <span>2024: 12,5% · 2025: 12,9% · 1S 2026: 19,5% — em alta constante nos três períodos</span>
+                        </div>
+                        <div className="analise-ia-mini-ranking-item">
+                          <strong>Clima, chuva e alagamento</strong>
+                          <span>2024: 4,4% · 2025: 18,5% · 1S 2026: 15,7% — saltou em 2025 e não voltou ao patamar de 2024</span>
+                        </div>
+                        <div className="analise-ia-mini-ranking-item">
+                          <strong>Obras/manutenção registrada como falha</strong>
+                          <span>2024: 30,3% · 2025: 29,0% · 1S 2026: 0,4% — queda abrupta (parte migrou para a categoria "sinalização/via", como no caso da L7-Rubi)</span>
+                        </div>
+                        <div className="analise-ia-mini-ranking-item">
+                          <strong>Registros sem enquadramento claro</strong>
+                          <span>2024: 15,6% · 2025: 18,6% · 1S 2026: 28,1% — problema de qualidade de descrição que piora, não melhora</span>
+                        </div>
+                      </div>
+                      <p className="analise-ia-observacao">
+                        O crescimento da fatia "sem enquadramento claro" em 2026 é o dado mais preocupante desta seção: quase 3 em cada 10 horas de falha do semestre não têm
+                        descrição suficiente para classificação automática de causa. Isso reduz a capacidade de fiscalização exatamente no período em que a atenção deveria
+                        estar mais concentrada na L7-Rubi.
+                      </p>
+                    </section>
+
+                    {/* CONCLUSÃO */}
                     <section className="analise-ia-card analise-ia-fecho">
                       <span className="analise-ia-section-tag">Conclusão</span>
-                      <h3>O sistema piora em confiabilidade real 3,4× mais do que a disponibilidade declarada indica</h3>
+                      <h3>A rede se recuperou na média — mas o risco não desapareceu, só trocou de endereço</h3>
                       <p>
-                        Separar falha imprevisível de manutenção programada revela que a queda real de confiabilidade do sistema em 2025 foi de <strong>−0,159 p.p.</strong> — não os −0,047 p.p. que o indicador agregado mostra. A diferença existe porque manutenção programada caiu (positivo) enquanto falha imprevisível cresceu (negativo), e o indicador único mistura os dois.
+                        Olhando só o agregado, 2026 conta uma história positiva: a razão falha/manutenção do 1º semestre caiu de 1,52× (o pico da série, em 2025) para 0,33× —
+                        a melhor marca dos três anos comparáveis, melhor até que 2024. A recuperação da <LineBadge nome="Linha 11-Coral" />, de longe a maior responsável pela
+                        piora de 2025 (560,0 h de falha, 98,8% concentrada em quatro meses), para apenas 17,1 h em seis meses de 2026, é a evidência mais forte de que boa parte
+                        da crise anterior era reversível com manutenção formal.
                       </p>
                       <p>
-                        Os perfis por operador contam histórias radicalmente diferentes: <strong>ViaMobilidade 8/9 tem manutenção pesada e falha controlada</strong> (razão 0,11×, o melhor do sistema); <strong>ViaQuatro e TIC Trens têm falha dominando com manutenção ausente ou irrisória</strong> (razões ∞ e 5,56×); <strong>CPTM ultrapassou o limiar de 1,0×</strong>, com mais horas imprevisíveis do que planejadas. Para fins regulatórios, essas diferenças têm implicações contratuais distintas.
+                        Mas a recuperação não é generalizada: a <LineBadge nome="Linha 7-Rubi" /> sob a TIC Trens acumulou em seis meses de 2026 mais falha do que em todo o ano
+                        de 2025, com quatro dos seis meses aparecendo como desvio estatístico — um padrão crônico, não um evento isolado. Parte dessa falha, além disso, parece
+                        ser obra de modernização lançada como ocorrência operacional em vez de manutenção programada, o que dificulta separar o problema real do problema de
+                        registro. Some-se a isso um recuo geral na qualidade das descrições (28,1% da falha de 2026 ficou "sem enquadramento claro", o maior valor da série) e o
+                        quadro é de uma rede que corrigiu seu maior problema de 2025 mas abriu um novo foco de risco, com menos visibilidade sobre a causa do que antes.
                       </p>
                       <p>
-                        A recomendação central é simples: <strong>publicar a razão falha/manutenção como KPI regulatório explícito</strong>, com limiar de alerta em 1,0× e exigência de plano de resposta quando ultrapassado. Com esse único número, o regulador tem uma medida que não pode ser inflada por mais manutenção planejada e que aponta diretamente para onde o sistema está falhando sem aviso.
+                        A recomendação da análise anterior segue válida e agora tem um caso concreto para testar: <strong>publicar a razão falha/manutenção como KPI regulatório
+                        explícito, por linha e por operador</strong>, com limiar de alerta em 1,0×. Aplicado hoje, esse único número apontaria imediatamente a L7-Rubi (1,19×) e a
+                        L12-Safira (1,94×) como as duas linhas que exigem acompanhamento prioritário no 2º semestre de 2026 — exatamente o tipo de sinal que a disponibilidade
+                        agregada, sozinha, não teria mostrado a tempo.
                       </p>
                     </section>
 
@@ -1521,7 +1400,7 @@ export default function AnaliseIaPopup({ embedded = false }: { embedded?: boolea
 
                 <footer className="eventos-relevantes-footer analise-ia-footer">
                   <span>
-                    Bases consideradas: {data2024.metadata.periodoLabel} e {data2025.metadata.periodoLabel}
+                    Bases consideradas: {data2024.metadata.periodoLabel}, {data2025.metadata.periodoLabel} e {data2026H1.metadata.periodoLabel} (parcial)
                   </span>
                   <small>
                     Leitura descritiva dos registros sanitizados. Causas técnicas e responsabilidades dependem de apuração operacional,
