@@ -2,6 +2,8 @@
 
 import data2025Raw from "../data/ocorrencias-summary.json";
 import data2024Raw from "../data/ocorrencias-summary-2024.json";
+import data2024H1Raw from "../data/ocorrencias-summary-2024-1sem.json";
+import data2025H1Raw from "../data/ocorrencias-summary-2025-1sem.json";
 import data2026H1Raw from "../data/ocorrencias-summary-2026.json";
 import { Bot, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -74,6 +76,8 @@ type MesResumo = {
 
 const data2025 = data2025Raw as SummaryPayload;
 const data2024 = data2024Raw as SummaryPayload;
+const data2024H1 = data2024H1Raw as SummaryPayload;
+const data2025H1 = data2025H1Raw as SummaryPayload;
 const data2026H1 = data2026H1Raw as SummaryPayload;
 
 const diasSemana = [
@@ -105,6 +109,12 @@ const fmtPct1 = (valor: number) =>
   new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
+  }).format(valor);
+
+const fmtRazao = (valor: number) =>
+  new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(valor);
 
 const fmtPp = (valor: number) =>
@@ -320,6 +330,31 @@ function obterVariacoesPorLinha() {
     .filter((linha): linha is NonNullable<typeof linha> => linha !== null);
 }
 
+function obterComparativoLinhasSemestrais() {
+  const mapa2024 = new Map(data2024H1.rankings.linhas.map((linha) => [linha.nome, linha]));
+  const mapa2025 = new Map(data2025H1.rankings.linhas.map((linha) => [linha.nome, linha]));
+
+  return data2026H1.rankings.linhas
+    .map((linha2026) => {
+      const linha2024 = mapa2024.get(linha2026.nome);
+      const linha2025 = mapa2025.get(linha2026.nome);
+
+      if (!linha2024 || !linha2025) return null;
+
+      return {
+        nome: linha2026.nome,
+        falha2024: linha2024.horasFalha,
+        falha2025: linha2025.horasFalha,
+        falha2026: linha2026.horasFalha,
+        deltaFalha2026vs2025: linha2026.horasFalha - linha2025.horasFalha,
+        manutencao2026: linha2026.horasManutencaoProgramada,
+        disponibilidade2026: linha2026.disponibilidadePct,
+      };
+    })
+    .filter((linha): linha is NonNullable<typeof linha> => linha !== null)
+    .sort((a, b) => b.falha2026 - a.falha2026);
+}
+
 function classificarCausa(descricao: string | undefined) {
   const texto = normalizarTexto(descricao);
 
@@ -478,6 +513,59 @@ function obterResumoLinhaPorPadroes(
 
 const estatisticas2024 = obterEstatisticasFalha(data2024);
 const estatisticas2025 = obterEstatisticasFalha(data2025);
+const estatisticas2024H1 = obterEstatisticasFalha(data2024H1);
+const estatisticas2025H1 = obterEstatisticasFalha(data2025H1);
+const estatisticas2026H1 = obterEstatisticasFalha(data2026H1);
+const comparativoLinhasSemestrais = obterComparativoLinhasSemestrais();
+const linhasCriticas2026H1 = comparativoLinhasSemestrais.slice(0, 6);
+const causas2026H1 = obterCausas(data2026H1);
+const mesesCriticos2026H1 = obterMesesMaisCriticos(data2026H1);
+const residuoClassificacao2026H1 = causas2026H1.find(
+  (causa) => causa.nome === "Registros sem enquadramento claro",
+) ?? {
+  nome: "Registros sem enquadramento claro",
+  qtd: 0,
+  horas: 0,
+  participacaoPct: 0,
+};
+const variacaoFalha2026vs2025H1 = pctChange(
+  data2026H1.kpis.horasFalha,
+  data2025H1.kpis.horasFalha,
+);
+const variacaoFalha2026vs2024H1 = pctChange(
+  data2026H1.kpis.horasFalha,
+  data2024H1.kpis.horasFalha,
+);
+const variacaoManutencao2026vs2025H1 = pctChange(
+  data2026H1.kpis.horasManutencaoProgramada,
+  data2025H1.kpis.horasManutencaoProgramada,
+);
+const variacaoQtdFalhas2026vs2025H1 = pctChange(
+  estatisticas2026H1.qtd,
+  estatisticas2025H1.qtd,
+);
+const variacaoDuracaoMedia2026vs2025H1 = pctChange(
+  estatisticas2026H1.media,
+  estatisticas2025H1.media,
+);
+const deltaDisponibilidade2026vs2025H1 =
+  data2026H1.kpis.disponibilidadePct - data2025H1.kpis.disponibilidadePct;
+const deltaDisponibilidade2026vs2024H1 =
+  data2026H1.kpis.disponibilidadePct - data2024H1.kpis.disponibilidadePct;
+const participacaoLinha7EmFalhas2026H1 =
+  data2026H1.kpis.horasFalha === 0
+    ? 0
+    : ((comparativoLinhasSemestrais.find((linha) => linha.nome === "Linha 7-Rubi")?.falha2026 ?? 0) /
+        data2026H1.kpis.horasFalha) *
+      100;
+const participacaoTop3Linhas2026H1 =
+  data2026H1.kpis.horasFalha === 0
+    ? 0
+    : (comparativoLinhasSemestrais
+        .slice(0, 3)
+        .reduce((acc, linha) => acc + linha.falha2026, 0) /
+        data2026H1.kpis.horasFalha) *
+      100;
 const variacoesLinhas = obterVariacoesPorLinha();
 const causas2025 = obterCausas(data2025);
 const causas2025Exibidas = causas2025.filter(
@@ -653,8 +741,8 @@ export default function AnaliseIaPopup({ embedded = false }: { embedded?: boolea
                     </span>
                     <h2 id="analise-ia-title">Análise IA</h2>
                     <p id="analise-ia-description">
-                      Leitura dos registros de 2024 e 2025 com foco em eventos, volumes, concentração temporal e qualidade da informação.
-                      O objetivo é apoiar apuração operacional, fiscalização e padronização da coleta.
+                      Leitura comparável dos primeiros semestres de 2024, 2025 e 2026, com foco em falhas, manutenção,
+                      concentração por linha e qualidade da informação.
                     </p>
                   </div>
                   {!embedded ? <button
@@ -675,7 +763,7 @@ export default function AnaliseIaPopup({ embedded = false }: { embedded?: boolea
                     className={"analise-ia-tab-btn" + (abaAtiva === "tecnica" ? " analise-ia-tab-btn--ativa" : "")}
                     onClick={() => setAbaAtiva("tecnica")}
                   >
-                    ChatGPT 5.5 Raciocínio Expandido
+                    Análise ChatGPT
                   </button>
                   <button
                     type="button"
@@ -690,6 +778,214 @@ export default function AnaliseIaPopup({ embedded = false }: { embedded?: boolea
 
                 <div className="analise-ia-panels-container">
                 {abaAtiva === "tecnica" && (
+                <div className="analise-ia-body" role="tabpanel">
+                  <section className="analise-ia-grid-resumo" aria-label="Resumo do primeiro semestre de 2026">
+                    <article className="analise-ia-kpi-card">
+                      <span>Falha operacional · 1S26</span>
+                      <strong>{fmtHoras(data2026H1.kpis.horasFalha)} h</strong>
+                      <p>
+                        1S25: {fmtHoras(data2025H1.kpis.horasFalha)} h · {fmtPct1(variacaoFalha2026vs2025H1)}%
+                      </p>
+                    </article>
+
+                    <article className="analise-ia-kpi-card">
+                      <span>Manutenção programada · 1S26</span>
+                      <strong>{fmtHoras(data2026H1.kpis.horasManutencaoProgramada)} h</strong>
+                      <p>
+                        1S25: {fmtHoras(data2025H1.kpis.horasManutencaoProgramada)} h · +{fmtPct1(variacaoManutencao2026vs2025H1)}%
+                      </p>
+                    </article>
+
+                    <article className="analise-ia-kpi-card">
+                      <span>Disponibilidade · 1S26</span>
+                      <strong>{fmtPct(data2026H1.kpis.disponibilidadePct)}%</strong>
+                      <p>
+                        1S25: {fmtPct(data2025H1.kpis.disponibilidadePct)}% · {fmtPp(deltaDisponibilidade2026vs2025H1)}
+                      </p>
+                    </article>
+
+                    <article className="analise-ia-kpi-card">
+                      <span>Falha / manutenção · 1S26</span>
+                      <strong>{fmtRazao(data2026H1.kpis.horasFalha / data2026H1.kpis.horasManutencaoProgramada)}×</strong>
+                      <p>
+                        1S25: {fmtRazao(data2025H1.kpis.horasFalha / data2025H1.kpis.horasManutencaoProgramada)}× · 1S24: {fmtRazao(data2024H1.kpis.horasFalha / data2024H1.kpis.horasManutencaoProgramada)}×
+                      </p>
+                    </article>
+                  </section>
+
+                  <section className="analise-ia-card analise-ia-sintese">
+                    <span className="analise-ia-section-tag">Síntese executiva atualizada</span>
+                    <h3>O 1º semestre de 2026 reverte parte do choque de 2025, mas ainda não retorna ao nível de falhas de 2024</h3>
+                    <p>
+                      Em uma comparação entre janelas equivalentes, as horas de falha operacional caíram de
+                      <strong> {fmtHoras(data2025H1.kpis.horasFalha)} h</strong> no 1º semestre de 2025 para
+                      <strong> {fmtHoras(data2026H1.kpis.horasFalha)} h</strong> no 1º semestre de 2026, redução de
+                      <strong> {fmtPct1(Math.abs(variacaoFalha2026vs2025H1))}%</strong>. Ainda assim, o valor de 2026 permanece
+                      <strong> {fmtPct1(variacaoFalha2026vs2024H1)}%</strong> acima das
+                      <strong> {fmtHoras(data2024H1.kpis.horasFalha)} h</strong> do 1º semestre de 2024.
+                    </p>
+                    <p>
+                      A disponibilidade caiu <strong>{fmtPp(deltaDisponibilidade2026vs2025H1)}</strong> contra 2025, embora as falhas tenham diminuído.
+                      O principal motivo contábil é o retorno da manutenção programada, que subiu
+                      <strong> {fmtPct1(variacaoManutencao2026vs2025H1)}%</strong>. Por isso, disponibilidade e confiabilidade precisam ser lidas juntas:
+                      uma mede todo o tempo restritivo; a outra exige separar o que foi planejado do que ocorreu sem programação.
+                    </p>
+                    <div className="analise-ia-callout">
+                      <strong>Conclusão central:</strong> 2026 mostra recuperação relevante frente ao pico de 2025, mas a melhora é desigual.
+                      A <LineBadge nome="Linha 11-Coral" /> recua fortemente, enquanto a <LineBadge nome="Linha 7-Rubi" /> concentra
+                      {" "}<strong>{fmtPct1(participacaoLinha7EmFalhas2026H1)}%</strong> das horas de falha da rede no semestre.
+                    </div>
+                  </section>
+
+                  <section className="analise-ia-card">
+                    <span className="analise-ia-section-tag">Como a base foi comparada</span>
+                    <h3>Três primeiros semestres, com a mesma janela operacional</h3>
+                    <p>
+                      A análise usa os recortes de 01 de janeiro a 30 de junho de 2024, 2025 e 2026. Falha operacional reúne
+                      <strong> ocorrência operacional</strong> e <strong>falha total / paralisação</strong>. Manutenção programada permanece separada.
+                      Encerramentos normais não são falhas, e registros sem duração confiável continuam auditáveis sem somar horas.
+                    </p>
+                    <p className="analise-ia-observacao">
+                      Os resultados descrevem os registros normalizados da CCM/ARTESP. Eles não medem pontualidade, passageiros afetados,
+                      viagens canceladas ou falhas por trem-quilômetro, e não permitem atribuir causa técnica ou responsabilidade sem apuração adicional.
+                    </p>
+                  </section>
+
+                  <section className="analise-ia-card">
+                    <span className="analise-ia-section-tag">1. O que aconteceu?</span>
+                    <h3>Houve mais ocorrências, mas elas foram muito mais curtas do que no 1º semestre de 2025</h3>
+                    <p>
+                      A quantidade de eventos classificados como falha passou de
+                      <strong> {fmtInt(estatisticas2025H1.qtd)}</strong> para
+                      <strong> {fmtInt(estatisticas2026H1.qtd)}</strong> ({fmtPct1(variacaoQtdFalhas2026vs2025H1)}%).
+                      Ao mesmo tempo, a duração média caiu de
+                      <strong> {fmtHoras(estatisticas2025H1.media)} h</strong> para
+                      <strong> {fmtHoras(estatisticas2026H1.media)} h</strong> ({fmtPct1(variacaoDuracaoMedia2026vs2025H1)}%).
+                      A mediana também recuou, de <strong>{fmtHoras(estatisticas2025H1.mediana)} h</strong> para
+                      <strong> {fmtHoras(estatisticas2026H1.mediana)} h</strong>.
+                    </p>
+                    <p>
+                      Isso muda a interpretação: a rede registrou maior frequência de ocorrências, porém menor severidade média e menor volume total de horas.
+                      O ganho agregado não elimina a pressão localizada. As três linhas com mais horas de falha respondem por
+                      <strong> {fmtPct1(participacaoTop3Linhas2026H1)}%</strong> do total do semestre.
+                    </p>
+                  </section>
+
+                  <section className="analise-ia-card">
+                    <span className="analise-ia-section-tag">Linhas em destaque</span>
+                    <h3>A recuperação da rede convive com uma nova concentração na Linha 7-Rubi</h3>
+                    <div className="analise-ia-tabela-wrap">
+                      <table className="analise-ia-tabela">
+                        <thead>
+                          <tr>
+                            <th>Linha</th>
+                            <th>Falha 1S24</th>
+                            <th>Falha 1S25</th>
+                            <th>Falha 1S26</th>
+                            <th>Δ 1S26 vs. 1S25</th>
+                            <th>Manutenção 1S26</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {linhasCriticas2026H1.map((linha) => (
+                            <tr key={linha.nome}>
+                              <td><LineBadge nome={linha.nome} /></td>
+                              <td>{fmtHoras(linha.falha2024)} h</td>
+                              <td>{fmtHoras(linha.falha2025)} h</td>
+                              <td>{fmtHoras(linha.falha2026)} h</td>
+                              <td>{fmtHoras(linha.deltaFalha2026vs2025)} h</td>
+                              <td>{fmtHoras(linha.manutencao2026)} h</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="analise-ia-observacao">
+                      A <LineBadge nome="Linha 7-Rubi" /> soma {fmtHoras(linhasCriticas2026H1[0]?.falha2026 ?? 0)} h e lidera o semestre.
+                      A <LineBadge nome="Linha 11-Coral" />, que concentrou {fmtHoras(comparativoLinhasSemestrais.find((linha) => linha.nome === "Linha 11-Coral")?.falha2025 ?? 0)} h no 1S25,
+                      cai para {fmtHoras(comparativoLinhasSemestrais.find((linha) => linha.nome === "Linha 11-Coral")?.falha2026 ?? 0)} h no 1S26.
+                      A troca de liderança mostra por que o agregado da rede não deve substituir a fiscalização por linha.
+                    </p>
+                  </section>
+
+                  <section className="analise-ia-duas-colunas">
+                    <article className="analise-ia-card">
+                      <span className="analise-ia-section-tag">2. O que os registros sugerem?</span>
+                      <h3>As descrições apontam famílias recorrentes, mas não provam causa raiz</h3>
+                      <div className="analise-ia-mini-ranking">
+                        {causas2026H1.slice(0, 6).map((causa) => (
+                          <div key={causa.nome} className="analise-ia-mini-ranking-item">
+                            <strong>{causa.nome}</strong>
+                            <span>{fmtHoras(causa.horas)} h · {fmtPct1(causa.participacaoPct)}% · {fmtInt(causa.qtd)} registros</span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="analise-ia-observacao">
+                        Registros sem enquadramento claro somam <strong>{fmtHoras(residuoClassificacao2026H1.horas)} h</strong>, ou
+                        <strong> {fmtPct1(residuoClassificacao2026H1.participacaoPct)}%</strong> das horas de falha. Melhorar as descrições é parte do controle operacional,
+                        porque reduz a dependência de inferência por palavras-chave.
+                      </p>
+                    </article>
+
+                    <article className="analise-ia-card">
+                      <span className="analise-ia-section-tag">Concentração temporal</span>
+                      <h3>Os meses críticos precisam ser investigados junto com as linhas que os puxaram</h3>
+                      <div className="analise-ia-mini-ranking">
+                        {mesesCriticos2026H1.map((mes) => (
+                          <div key={mes.mes} className="analise-ia-mini-ranking-item">
+                            <strong>{mes.label}</strong>
+                            <span>{fmtHoras(mes.horas)} h · {fmtPct1(mes.participacaoPct)}% · {fmtInt(mes.qtd)} ocorrências</span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="analise-ia-observacao">
+                        A recorrência mensal ajuda a separar um evento isolado de um padrão persistente. A etapa seguinte deve cruzar mês, linha,
+                        descrição, duração e ação corretiva, sem transformar correlação temporal em causalidade automática.
+                      </p>
+                    </article>
+                  </section>
+
+                  <section className="analise-ia-duas-colunas">
+                    <article className="analise-ia-card">
+                      <span className="analise-ia-section-tag">3. O que acompanhar?</span>
+                      <h3>Três sinais podem mudar a leitura no 2º semestre</h3>
+                      <ul className="analise-ia-lista">
+                        <li><strong>Persistência na Linha 7-Rubi:</strong> verificar se a concentração continua ou recua após as intervenções registradas.</li>
+                        <li><strong>Qualidade da recuperação da Linha 11-Coral:</strong> confirmar se a queda de horas se sustenta fora da comparação semestral.</li>
+                        <li><strong>Manutenção e disponibilidade:</strong> acompanhar se o maior volume planejado reduz falhas futuras, sem presumir uma relação causal imediata.</li>
+                      </ul>
+                    </article>
+
+                    <article className="analise-ia-card">
+                      <span className="analise-ia-section-tag">4. O que fazer?</span>
+                      <h3>Prioridades de análise e transparência</h3>
+                      <ol className="analise-ia-lista analise-ia-lista-ordenada">
+                        <li>Publicar falha e manutenção separadamente por linha, com comparação entre períodos equivalentes.</li>
+                        <li>Abrir apuração específica para as linhas que concentram horas ou repetem picos mensais.</li>
+                        <li>Padronizar descrições, causa informada, linha de origem e linhas afetadas por cascata.</li>
+                        <li>Acrescentar indicadores de exposição, como passageiros afetados, viagens canceladas e trem-quilômetro.</li>
+                      </ol>
+                    </article>
+                  </section>
+
+                  <section className="analise-ia-card analise-ia-fecho">
+                    <span className="analise-ia-section-tag">Conclusão</span>
+                    <h3>Melhora real no agregado, atenção concentrada por linha e cautela na explicação das causas</h3>
+                    <p>
+                      O 1º semestre de 2026 é melhor do que o mesmo período de 2025 em horas totais e duração média das falhas, mas ainda supera 2024 em volume de falha.
+                      A disponibilidade fica entre os dois anos: <strong>{fmtPct(data2026H1.kpis.disponibilidadePct)}%</strong>, contra
+                      <strong> {fmtPct(data2025H1.kpis.disponibilidadePct)}%</strong> no 1S25 e
+                      <strong> {fmtPct(data2024H1.kpis.disponibilidadePct)}%</strong> no 1S24 ({fmtPp(deltaDisponibilidade2026vs2024H1)} sobre 2024).
+                    </p>
+                    <p>
+                      A principal mensagem não é que a rede inteira piorou ou melhorou de forma uniforme. O quadro é de recuperação parcial,
+                      com deslocamento do foco crítico para a <LineBadge nome="Linha 7-Rubi" /> e forte redução na <LineBadge nome="Linha 11-Coral" />.
+                      Essa conclusão é compatível com os dados; qualquer diagnóstico técnico sobre causa, manutenção ou responsabilidade precisa de evidência operacional adicional.
+                    </p>
+                  </section>
+                </div>
+                )}
+                {false && abaAtiva === "tecnica" && (
                 <div className="analise-ia-body">
                   <section className="analise-ia-grid-resumo" aria-label="Resumo executivo">
                     <article className="analise-ia-kpi-card">
@@ -1400,10 +1696,12 @@ export default function AnaliseIaPopup({ embedded = false }: { embedded?: boolea
 
                 <footer className="eventos-relevantes-footer analise-ia-footer">
                   <span>
-                    Bases consideradas: {data2024.metadata.periodoLabel}, {data2025.metadata.periodoLabel} e {data2026H1.metadata.periodoLabel} (parcial)
+                    {abaAtiva === "tecnica"
+                      ? `Bases comparáveis: ${data2024H1.metadata.periodoLabel}, ${data2025H1.metadata.periodoLabel} e ${data2026H1.metadata.periodoLabel}`
+                      : `Bases consideradas: ${data2024.metadata.periodoLabel}, ${data2025.metadata.periodoLabel} e ${data2026H1.metadata.periodoLabel} (parcial)`}
                   </span>
                   <small>
-                    Leitura descritiva dos registros sanitizados. Causas técnicas e responsabilidades dependem de apuração operacional,
+                    Leitura descritiva dos registros normalizados. Causas técnicas e responsabilidades dependem de apuração operacional,
                     relatórios de manutenção e documentação formal dos operadores e do poder concedente.
                   </small>
                 </footer>
